@@ -560,7 +560,7 @@
     .subnav-divider-item button {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 4px;
       padding: 12px;
     }
 
@@ -1403,7 +1403,7 @@
     .event-live-badge {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 24px;
       margin: 0 0 32px;
       background: #f5222d;
       color: #fff;
@@ -1919,6 +1919,13 @@
       width: 36px;
       height: 38px;
       color: var(--ink);
+    }
+
+    .toolbar-reading-style {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -.5px;
+      line-height: 1;
     }
 
     .toolbar-bookmark-icon {
@@ -3646,7 +3653,7 @@
         <div class="bottombar-left"></div>
         <div class="bottombar-icons">
           <button type="button" data-language-settings aria-label="Language settings">${TOOLBAR_TRANSLATE}</button>
-          <button type="button" data-reading-settings aria-label="Reading settings">${TOOLBAR_SETTINGS}</button>
+          <button type="button" data-reading-settings aria-label="Reading settings"><span class="toolbar-reading-style" data-reading-mode-indicator>1.5x</span></button>
           <button type="button" data-bookmark aria-label="Bookmark" aria-pressed="false">${TOOLBAR_BOOKMARK}</button>
           <button type="button" data-share aria-label="Share">${TOOLBAR_SHARE}</button>
         </div>
@@ -3729,6 +3736,7 @@
         const bookmarkBtn = screenEl.querySelector("[data-bookmark]");
         const languageBtn = screenEl.querySelector("[data-language-settings]");
         const settingsBtn = screenEl.querySelector("[data-reading-settings]");
+        const readingModeIndicator = settingsBtn.querySelector("[data-reading-mode-indicator]");
         const shareBtn = screenEl.querySelector("[data-share]");
         const tour = screenEl.querySelector(".reader-tour");
         const tourTrigger = screenEl.querySelector("[data-tour-trigger]");
@@ -3822,6 +3830,7 @@
         }
 
         function refreshBottombar() {
+          readingModeIndicator.textContent = READING_MODE_ICONS[screenEl.dataset.readingMode];
           screenEl.querySelectorAll(".welcome-choice").forEach((button) => {
             button.setAttribute("aria-pressed", String(button.dataset.readingMode === screenEl.dataset.readingMode));
           });

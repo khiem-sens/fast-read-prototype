@@ -43,6 +43,8 @@ assert.equal(choices.innerHTML, 'choices:quick');
 assert.equal(classes.has('show'), true);
 assert.match(html, /hurry:\s*"2x"[\s\S]*quick:\s*"1\.5x"[\s\S]*deep:\s*"1x"/, 'summary styles use text markers');
 assert.match(html, /reading-icon-box">\$\{marker\}<\/span>/, 'both screens render the shared text marker');
+assert.match(html, /data-reading-mode-indicator>1\.5x<\/span>/, 'the toolbar starts with the quick summary marker');
+assert.match(html, /readingModeIndicator\.textContent = READING_MODE_ICONS\[screenEl\.dataset\.readingMode\];/, 'the toolbar marker follows reading-mode changes');
 let stopped = false;
 listeners.deepclick({stopPropagation() { stopped = true; }});
 assert.equal(selected, 'deep');
