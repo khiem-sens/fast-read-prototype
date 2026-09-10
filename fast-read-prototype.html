@@ -3891,6 +3891,11 @@
           });
         }
 
+        function isLikePromptPost(post) {
+          const selectedRelatedTopics = state.selectedTopics.filter((topic) => !state.savedTopics.includes(topic)).slice(0, 2);
+          return post.isSurprise || post.tags.some((tag) => selectedRelatedTopics.includes(tag.l));
+        }
+
         function refreshBottombar() {
           readingModeIndicator.textContent = READING_MODE_ICONS[screenEl.dataset.readingMode];
           screenEl.querySelectorAll(".welcome-choice").forEach((button) => {
@@ -3901,7 +3906,7 @@
           const post = currentPost();
           const liked = state.likedPosts.has(post.id);
           const showingLikeConfirmation = state.likeConfirmationPostId === post.id;
-          const showLike = item && item.kind === "post" && (!liked || showingLikeConfirmation);
+          const showLike = item && item.kind === "post" && (showingLikeConfirmation || (!liked && isLikePromptPost(post)));
           likeBtn.classList.toggle("show", showLike);
           likeBtn.setAttribute("aria-pressed", String(liked));
           likeLabel.textContent = showingLikeConfirmation ? "Got it!" : "More content like this";
@@ -4105,7 +4110,7 @@
           saveSummaryTopics(tab);
           const candidates = shuffle(ALL_LATEST.filter((post) => !post.tags.some((tag) => state.savedTopics.includes(tag.l))));
           const surpriseTopic = candidates.map((post) => post.tags[0].l).find((topic) => candidates.filter((post) => post.tags[0].l === topic).length >= 3);
-          const items = candidates.filter((post) => !surpriseTopic || post.tags[0].l === surpriseTopic).slice(0, surpriseTopic ? 3 : 2).map((post) => Object.assign({ kind: "post" }, post));
+          const items = candidates.filter((post) => !surpriseTopic || post.tags[0].l === surpriseTopic).slice(0, surpriseTopic ? 3 : 2).map((post) => Object.assign({ kind: "post", isSurprise: true }, post));
           if (!items.length) return;
           state.surpriseActive = true;
           state.extended[tab].push({ topic: `surprise-${Date.now()}`, items });
