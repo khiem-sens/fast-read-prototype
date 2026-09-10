@@ -17,8 +17,14 @@ assert.match(html, /Number\(day\.dataset\.streakCount\) <= streak\.count/, 'only
 assert.match(html, /data-summary-topic/);
 assert.match(html, /data-summary-continue/);
 assert.match(html, /data-summary-surprise/);
-assert.match(html, /data-summary-surprise>Surprise Me!/);
-assert.doesNotMatch(html, /data-summary-surprise[^>]*hidden/);
+const renderSource = html.slice(html.indexOf('      function renderEventContent'), html.indexOf('      const READING_MODE_ICONS'));
+const { renderEventContent, renderSummaryContent } = new Function('esc', 'tr', 'streakDayStrip', `${renderSource}; return { renderEventContent, renderSummaryContent };`)(s => s, s => s, () => '');
+assert.doesNotMatch(renderSummaryContent({ selected: ['AI'], recs: [], coveredTopics: 1 }), /data-summary-surprise/, 'Surprise Me is absent while topics are selected');
+assert.match(renderSummaryContent({ selected: [], recs: [], coveredTopics: 1 }), /data-summary-surprise/, 'Surprise Me returns after all topics are cleared');
+assert.match(renderEventContent({ image: 'event.png', title: 'Live event', location: 'Singapore', dateStart: 'Sep 8', dateEnd: 'Sep 8', tz: 'GMT+8' }), /data-live-status[\s\S]*event-card/, 'the Live Now badge sits above the event card');
+assert.match(html, /\.event-live-badge \.dot::after[\s\S]*animation:\s*eventWave/, 'the Live Now dot has a wave animation');
+assert.match(html, /\.event-live-badge\s*\{[^}]*gap:\s*24px;/, 'the wave has space before the Live Now label');
+assert.match(html, /\.event-slide\s*\{[\s\S]*?justify-content:\s*center;[\s\S]*?overflow:\s*hidden;/, 'the event is centered without an internal scrollbar');
 assert.match(html, /function surpriseSummary\(tab\)\s*\{\s*saveSummaryTopics\(tab\);/);
 assert.match(html, /function surpriseSummary\(tab\)[\s\S]*?state\.savedTopics\.includes\(tag\.l\)/);
 assert.match(html, /state\.surpriseActive = true;[\s\S]*?refreshBottombar\(\);/);

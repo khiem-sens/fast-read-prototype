@@ -254,15 +254,17 @@
     }
 
     .reading-icon-box {
-      display: contents;
-    }
-
-    .welcome-choice img {
-      width: 23px;
-      height: 23px;
-      object-fit: contain;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: #fff;
+      color: var(--purple);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
       flex-shrink: 0;
-      filter: brightness(0) saturate(100%) invert(31%) sepia(32%) saturate(1684%) hue-rotate(247deg) brightness(89%) contrast(89%);
     }
 
     .welcome-choice strong {
@@ -285,8 +287,8 @@
       padding-right: 54px;
     }
 
-    .welcome-choice[aria-pressed="true"] img {
-      filter: brightness(0);
+    .welcome-choice[aria-pressed="true"] .reading-icon-box {
+      color: var(--ink);
     }
 
     .welcome-choice[aria-pressed="true"]::after {
@@ -335,10 +337,21 @@
       flex-direction: column;
     }
 
-    .post-tags { order: 1; }
-    .post-title { order: 2; }
-    .post-takeaway { order: 3; }
-    .post-bullets { order: 4; }
+    .post-tags {
+      order: 1;
+    }
+
+    .post-title {
+      order: 2;
+    }
+
+    .post-takeaway {
+      order: 3;
+    }
+
+    .post-bullets {
+      order: 4;
+    }
 
     .screen[data-reading-mode="hurry"] .post-bullets {
       display: none;
@@ -547,7 +560,7 @@
     .subnav-divider-item button {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 12px;
       padding: 12px;
     }
 
@@ -1356,19 +1369,10 @@
       width: 100%;
       height: 100%;
       box-sizing: border-box;
-      padding: clamp(56px, 12vh, 96px) 24px 40px;
+      justify-content: center;
+      padding: 24px;
       background: #f7f7f7;
-      overflow-y: auto;
-    }
-
-    .event-heading {
-      margin: 0 0 36px;
-      color: #949494;
-      font-size: 13px;
-      font-weight: 325;
-      letter-spacing: .02em;
-      line-height: 1.2;
-      text-transform: uppercase;
+      overflow: hidden;
     }
 
     .event-card {
@@ -1382,7 +1386,6 @@
     }
 
     .event-media {
-      position: relative;
       width: 100%;
       aspect-ratio: 16/9;
       overflow: hidden;
@@ -1398,38 +1401,47 @@
     }
 
     .event-live-badge {
-      position: absolute;
-      top: 0;
-      right: 0;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 14px;
+      margin: 0 0 32px;
       background: #f5222d;
       color: #fff;
       padding: 4px 10px;
       font-weight: 700;
       font-size: 16px;
       line-height: 24px;
+      flex-shrink: 0;
     }
 
     .event-live-badge .dot {
+      position: relative;
       width: 7px;
       height: 7px;
       border-radius: 999px;
       background: #fff;
       display: inline-block;
-      animation: eventPulse 1.2s ease-in-out infinite;
+      z-index: 0;
     }
 
-    @keyframes eventPulse {
+    .event-live-badge .dot::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border: 2px solid rgba(255, 255, 255, .7);
+      border-radius: inherit;
+      animation: eventWave 1.4s ease-out infinite;
+    }
 
-      0%,
-      100% {
+    @keyframes eventWave {
+      from {
+        transform: scale(.5);
         opacity: 1;
       }
 
-      50% {
-        opacity: 0.25;
+      to {
+        transform: scale(1.4);
+        opacity: 0;
       }
     }
 
@@ -1522,15 +1534,24 @@
     }
 
     @media (max-height: 700px) {
-      .event-slide { padding-top: 36px; }
-      .event-heading { margin-bottom: 22px; }
-      .event-card { padding: 16px; }
-      .event-info { gap: 13px; }
-      .event-title { font-size: 22px; }
+      .event-card {
+        padding: 16px;
+      }
+
+      .event-info {
+        gap: 13px;
+      }
+
+      .event-title {
+        font-size: 22px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .event-live-badge .dot { animation: none; }
+      .event-live-badge .dot::after {
+        animation: none;
+        opacity: 0;
+      }
     }
 
     .summary-content {
@@ -1578,7 +1599,10 @@
     }
 
     @keyframes summary-streak-in {
-      to { opacity: 1; transform: translateY(0); }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .summary-streak-days {
@@ -1599,7 +1623,9 @@
       font-weight: 700;
     }
 
-    .summary-streak-day.complete { color: var(--teal); }
+    .summary-streak-day.complete {
+      color: var(--teal);
+    }
 
     .summary-streak-mark {
       display: grid;
@@ -1789,7 +1815,11 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .summary-streak.show { animation: none; opacity: 1; transform: none; }
+      .summary-streak.show {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
     }
 
     /* Bottom bar */
@@ -2144,7 +2174,9 @@
       max-height: 76dvh;
     }
 
-    .ts-sheet .sheet-handle { display: none; }
+    .ts-sheet .sheet-handle {
+      display: none;
+    }
 
     .ts-picker {
       display: flex;
@@ -2270,7 +2302,9 @@
       height: 16px;
     }
 
-    .ts-sheet .ts-content { overflow-y: auto; }
+    .ts-sheet .ts-content {
+      overflow-y: auto;
+    }
 
     .ts-sheet .ts-pills {
       display: grid;
@@ -2422,13 +2456,12 @@
       width: 34px;
       height: 28px;
       border-radius: 2px;
-      background: #f1f1f1;
+      background: #faf1fb;
       flex-shrink: 0;
     }
 
-    .reading-sheet .welcome-choice img {
-      width: 18px;
-      height: 18px;
+    .reading-sheet .welcome-choice[aria-pressed="true"] .reading-icon-box {
+      background: #fff;
     }
 
     .reading-sheet .welcome-choice strong {
@@ -2947,11 +2980,10 @@
       function renderEventContent(item) {
         return `
       <div class="event-slide">
-        <p class="event-heading">Happening Event</p>
+        <div class="event-live-badge" data-live-status><span class="dot"></span>Live Now</div>
         <div class="event-card">
           <div class="event-media">
             <img src="${item.image}" alt="${esc(item.title)}" draggable="false">
-            <div class="event-live-badge"><span class="dot"></span>${esc(tr("live"))}</div>
           </div>
           <div class="event-info">
             <h2 class="event-title">${esc(item.title)}</h2>
@@ -2990,16 +3022,15 @@
         <p class="summary-sub">I want to read more about...</p>
         <div class="summary-topics-list">${cards}</div>
         <button class="summary-continue-btn" type="button" data-summary-continue ${hasSelectedTopics ? "" : "disabled"}>Continue Reading</button>
-        <button class="summary-surprise-btn" type="button" data-summary-surprise>Surprise Me!<span>Discover content beyond your usual circle</span></button>
+        ${hasSelectedTopics ? "" : '<button class="summary-surprise-btn" type="button" data-summary-surprise>Surprise Me!<span>Discover content beyond your usual circle</span></button>'}
         <button class="summary-home-btn" data-back-home>${esc(tr("backHome"))}</button>
       </div>`;
       }
 
-      const readingModeIcon = (paths) => `data:image/svg+xml,${encodeURIComponent(`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`)}`;
       const READING_MODE_ICONS = {
-        hurry: readingModeIcon('<path d="M3 6.69748C2.99985 6.42262 3.07522 6.15301 3.21789 5.91808C3.36055 5.68314 3.56503 5.49193 3.80898 5.36531C4.05294 5.23868 4.32699 5.18153 4.60122 5.20008C4.87545 5.21862 5.13932 5.31216 5.364 5.47048L12 10.152V6.69748C11.9998 6.42262 12.0752 6.15301 12.2179 5.91808C12.3606 5.68314 12.565 5.49193 12.809 5.36531C13.0529 5.23868 13.327 5.18153 13.6012 5.20008C13.8755 5.21862 14.1393 5.31216 14.364 5.47048L21.882 10.7745C22.0782 10.913 22.2383 11.0966 22.3489 11.3098C22.4594 11.5231 22.517 11.7598 22.517 12C22.517 12.2402 22.4594 12.4769 22.3489 12.6901C22.2383 12.9034 22.0782 13.087 21.882 13.2255L14.364 18.5295C14.1394 18.6877 13.8757 18.7813 13.6016 18.7999C13.3275 18.8185 13.0536 18.7614 12.8096 18.635C12.5657 18.5086 12.3612 18.3176 12.2185 18.0828C12.0757 17.8481 12.0001 17.5787 12 17.304V13.848L5.364 18.528C5.13963 18.6861 4.87618 18.7796 4.60234 18.7983C4.32851 18.817 4.05478 18.7603 3.81098 18.6342C3.56717 18.5081 3.36263 18.3176 3.21964 18.0833C3.07664 17.849 3.00067 17.58 3 17.3055V6.69748ZM12 11.988L4.5 6.69748V17.3025L12 12.012V11.988ZM13.5 17.304L21.018 12L13.5 6.69748V17.304Z" fill="#A762AE"/>'),
-        quick: readingModeIcon('<path d="M19 3H18V1H16V3H8V1H6V3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5V19C3 19.5304 3.21071 20.0391 3.58579 20.4142C3.96086 20.7893 4.46957 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.89 20.11 3 19 3ZM19 19H5V9H19V19ZM19 7H5V5H19M7 11H12V16H7" fill="#232323"/>'),
-        deep: readingModeIcon('<path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19Z" fill="#A762AE"/><path d="M7 12H9V17H7V12ZM15 7H17V17H15V7ZM11 14H13V17H11V14ZM11 10H13V12H11V10Z" fill="#A762AE"/>'),
+        hurry: "2x",
+        quick: "1.5x",
+        deep: "1x",
       };
       const READING_MODES = [
         ["hurry", "hurry", "hurryDesc", READING_MODE_ICONS.hurry],
@@ -3008,9 +3039,9 @@
       ];
 
       function renderReadingChoices(selectedMode) {
-        return `<div class="welcome-choices">${READING_MODES.map(([mode, title, description, icon]) => `
+        return `<div class="welcome-choices">${READING_MODES.map(([mode, title, description, marker]) => `
       <button class="welcome-choice" data-reading-mode="${mode}" aria-pressed="${mode === selectedMode}">
-        <span class="reading-icon-box"><img src="${icon}" alt=""></span><span><strong>${esc(tr(title))}</strong><span>${esc(tr(description))}</span></span>
+        <span class="reading-icon-box">${marker}</span><span><strong>${esc(tr(title))}</strong><span>${esc(tr(description))}</span></span>
       </button>`).join("")}</div>`;
       }
 

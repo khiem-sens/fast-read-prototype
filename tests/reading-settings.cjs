@@ -41,6 +41,8 @@ const sheet = createReadingModeSheet(root, () => 'quick', mode => { selected = m
 sheet.open();
 assert.equal(choices.innerHTML, 'choices:quick');
 assert.equal(classes.has('show'), true);
+assert.match(html, /hurry:\s*"2x"[\s\S]*quick:\s*"1\.5x"[\s\S]*deep:\s*"1x"/, 'summary styles use text markers');
+assert.match(html, /reading-icon-box">\$\{marker\}<\/span>/, 'both screens render the shared text marker');
 let stopped = false;
 listeners.deepclick({stopPropagation() { stopped = true; }});
 assert.equal(selected, 'deep');
