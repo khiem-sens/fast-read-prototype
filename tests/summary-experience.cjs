@@ -4,11 +4,15 @@ const assert = require('node:assert/strict');
 
 const html = fs.readFileSync(require('node:path').join(__dirname, '../fast-read-prototype.html'), 'utf8');
 const streakSource = html.slice(html.indexOf('      function localDayKey('), html.indexOf('      const CURATED_HOME_CARDS'));
-const { nextStreak } = new Function(`${streakSource}; return { nextStreak };`)();
+const { nextStreak, streakDayStrip } = new Function(`${streakSource}; return { nextStreak, streakDayStrip };`)();
 
 assert.deepEqual(nextStreak(null, '2026-09-09'), { day: '2026-09-09', count: 1 });
 assert.deepEqual(nextStreak({ day: '2026-09-08', count: 4 }, '2026-09-09'), { day: '2026-09-09', count: 5 });
 assert.deepEqual(nextStreak({ day: '2026-09-06', count: 4 }, '2026-09-09'), { day: '2026-09-09', count: 1 });
+const fiveDayStrip = streakDayStrip(5);
+assert.equal((fiveDayStrip.match(/summary-streak-day/g) || []).length, 5, 'streak display has five days');
+assert.match(fiveDayStrip, /data-streak-count="2"[\s\S]*data-streak-count="6"/, 'a five-day streak displays counts 2 through 6');
+assert.match(html, /Number\(day\.dataset\.streakCount\) <= streak\.count/, 'only completed streak counts receive checks');
 
 assert.match(html, /data-summary-topic/);
 assert.match(html, /data-summary-continue/);
