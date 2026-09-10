@@ -30,7 +30,7 @@ assert.match(html, /if \(summaryStreakShown \|\| currentItem\(\)\.kind !== "summ
 assert.doesNotMatch(html, /STREAK_NOTICE_KEY/);
 assert.match(html, /setTimeout\(\(\) => toast\.classList\.remove\("show"\), 5000\);/);
 assert.match(html, /function createVFeed[\s\S]*?onPointerDrag\(clip,\s*\{\s*shouldStart\(e\)\s*\{\s*return !\(e\.target\.closest && e\.target\.closest\("button, a"\)\);/);
-assert.match(html, /function createHFeed[\s\S]*?onPointerDrag\(clip,\s*\{\s*shouldStart\(e\)\s*\{\s*return !\(e\.target\.closest && e\.target\.closest\("button, a"\)\);/);
+assert.doesNotMatch(html, /createHFeed|screen-reader2|Switch to option/);
 assert.match(html, /\.summary-topic-card\s*\{[\s\S]*?min-height:\s*44px;/);
 assert.match(html, /\.summary-continue-btn,\s*\.summary-surprise-btn\s*\{[\s\S]*?min-height:\s*48px;/);
 

@@ -25,4 +25,8 @@ const generatedPost = {...basePost, id:'generated', takeaway:'A specific generat
 assert.match(render(basePost), new RegExp(takeaways[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 assert.match(render(generatedPost), /A specific generated article takeaway\./);
 assert.match(render(basePost), /<strong>Key takeaway:<\/strong>/);
+assert.match(html, /\.post-title \{ order: 2; \}/);
+assert.match(html, /\.post-takeaway \{ order: 3; \}/);
+assert.match(html, /\.post-bullets \{ order: 4; \}/);
+assert.match(html, /\.screen\[data-reading-mode="hurry"\] \.post-bullets\s*\{\s*display: none;/);
 console.log('PASS: every base and generated post renders a meaningful key takeaway');

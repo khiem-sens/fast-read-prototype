@@ -53,5 +53,5 @@ assert.match(html, /showModeChangeHint\(mode\)/);
 assert.match(html, /hurryChanged: "Summary style changed to super short\."/);
 assert.match(html, /quickChanged: "Summary style changed to balanced\."/);
 assert.match(html, /deepChanged: "Summary style changed to more context\."/);
-assert.match(html, /onSwitch: \(tab\) => \{ readerTab = tab; showScreen\("reader", true\); \}/);
+assert.doesNotMatch(html, /onSwitch|screen-reader2|Switch to option/);
 console.log('PASS: settings opens the shared three-option sheet and applies a selected reading mode');

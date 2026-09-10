@@ -4,14 +4,14 @@ const assert = require('node:assert/strict');
 const html = fs.readFileSync(require('node:path').join(__dirname, '../fast-read-prototype.html'), 'utf8');
 for (const [, script] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) new Function(script);
 assert.match(html, /\.vfeed-clip\s*\{[^}]*touch-action:\s*pinch-zoom;/);
-assert.match(html, /\.hfeed-clip\s*\{[^}]*touch-action:\s*pan-y;/);
+assert.doesNotMatch(html, /hfeed|option 2|screen-reader2/);
 const element = () => ({
   style: {}, children: [], listeners: {}, clientHeight: 600, clientWidth: 400, scrollHeight: 600, scrollTop: 0,
   appendChild(child) { this.children.push(child); },
   addEventListener(type, callback) { this.listeners[type] = callback; },
   setPointerCapture() {}, releasePointerCapture() {},
 });
-const source = html.slice(html.indexOf('  function onPointerDrag('), html.indexOf('  function createHFeed('));
+const source = html.slice(html.indexOf('  function onPointerDrag('), html.indexOf('  function createTabSlider('));
 const createFeed = new Function('document', 'window', 'renderFeedItem', 'setTimeout', source + '; return createVFeed;')(
   { createElement: element }, { addEventListener() {} }, () => '', callback => callback()
 );
@@ -63,37 +63,4 @@ swipe(450);
 assert.equal(tape.children[0].scrollTop, 0, 'scroll back to top of first article');
 assert.equal(index, 0, 'cannot navigate before first article');
 
-const horizontalSource = html.slice(html.indexOf('function onPointerDrag('), html.indexOf('function createTabSlider('));
-const createHorizontalFeed = new Function('document', 'window', 'renderFeedItem', 'setTimeout', horizontalSource + '; return createHFeed;')(
-  { createElement: element }, { addEventListener() {} }, () => '', callback => callback()
-);
-let horizontalIndex = 0;
-const horizontalContainer = element();
-const horizontalFeed = createHorizontalFeed(horizontalContainer, {
-  getPosts: () => [{kind:'post'}, {kind:'post'}, {kind:'post'}],
-  getIndex: () => horizontalIndex,
-  setIndex: value => { horizontalIndex = value; },
-});
-horizontalFeed.render();
-const horizontalClip = horizontalContainer.children[0];
-function swipeHorizontal(dx) {
-  const target = horizontalClip.children[0].children[horizontalIndex];
-  const event = { target, pointerId: 2, pointerType: 'touch', clientX: 200, clientY: 200, preventDefault() {} };
-  horizontalClip.listeners.pointerdown({...event, type:'pointerdown'});
-  horizontalClip.listeners.pointermove({...event, type:'pointermove', clientX:200 + dx, clientY:205});
-  horizontalClip.listeners.pointerup({...event, type:'pointerup', clientX:200 + dx, clientY:205});
-}
-swipeHorizontal(-120);
-assert.equal(horizontalIndex, 1, 'option 2 swipes left to the next post');
-swipeHorizontal(120);
-assert.equal(horizontalIndex, 0, 'option 2 swipes right to the previous post');
-function cancelledHorizontalSwipe(dx) {
-  const target = horizontalClip.children[0].children[horizontalIndex];
-  const event = { target, pointerId: 3, pointerType: 'touch', clientX: 200, clientY: 200, preventDefault() {} };
-  horizontalClip.listeners.pointerdown({...event, type:'pointerdown'});
-  horizontalClip.listeners.pointermove({...event, type:'pointermove', clientX:200 + dx, clientY:205});
-  horizontalClip.listeners.pointercancel({...event, type:'pointercancel', clientX:200 + dx, clientY:205});
-}
-cancelledHorizontalSwipe(-120);
-assert.equal(horizontalIndex, 1, 'option 2 completes a horizontal swipe when mobile Safari cancels the pointer on release');
-console.log('PASS: touch navigation, dots, long-article scrolling, cancellation, and script syntax');
+console.log('PASS: vertical touch navigation, long-article scrolling, cancellation, and script syntax');
