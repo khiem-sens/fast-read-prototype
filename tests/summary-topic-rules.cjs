@@ -40,6 +40,7 @@ for (const page of ["index.html", "fast-read-prototype.html"]) {
   assert.match(saveSource, /state\.selectedTopics = selected;/, `${page}: selected cards drive this reading session`);
   assert.doesNotMatch(saveSource, /savedTopics\.push/, `${page}: choosing a card does not change the profile`);
   assert.match(html, /function continueSummary\(tab\)[\s\S]*?appendTopicPosts\(tab, selected\);/, `${page}: Continue Reading shows posts from selected topics`);
+  assert.match(html, /function topicDemoPosts\(topic\)[\s\S]*?tags: \[\{ l: topic, c: TEAL \}\]/, `${page}: each selected unfamiliar topic keeps its topic on its posts`);
   assert.match(html, /function surpriseSummary\(tab\)[\s\S]*?!post\.tags\.some\(\(tag\) => state\.savedTopics\.includes\(tag\.l\)\)/, `${page}: Surprise Me excludes profile topics`);
   assert.match(html, /const showLike = item && item\.kind === "post" && \(!liked \|\| showingLikeConfirmation\);/, `${page}: selected related-topic posts retain the normal like prompt`);
   assert.match(html, /class="ts-suggestions-panel" data-suggestions[\s\S]*?You might like/, `${page}: related topics have their own You might like section`);
