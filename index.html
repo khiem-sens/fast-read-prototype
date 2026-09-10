@@ -3640,6 +3640,7 @@
           activeTab: initialTabGetter(),
           latestIndex: 0,
           curatedIndex: 0,
+          surpriseActive: false,
           selectedTopics: [],
           savedTopics: DEFAULT_SAVED_TOPICS.slice(),
           bookmarked: new Set(),
@@ -3914,7 +3915,12 @@
           bookmarkBtn.setAttribute("aria-label", isBm ? tr("bookmarked") : tr("bookmark"));
 
           if (state.activeTab === "latest") {
-            if (state.selectedTopics.length) {
+            if (state.surpriseActive) {
+              bottombarLeft.innerHTML = `
+            <button class="topstories-btn" data-open-topstories>
+              <span class="label">Surprise Me!</span>
+            </button>`;
+            } else if (state.selectedTopics.length) {
               const selectedLabel = state.selectedTopics.length === 1
                 ? topicLabel(state.selectedTopics[0])
                 : `${state.selectedTopics.length} topics`;
@@ -3962,7 +3968,7 @@
 
         const topStories = createTopStoriesPanel(screenEl, state, {
           onSaveTopics() { state.summaryRecs = { latest: null, curated: null }; rerenderFeeds(); },
-          onSelectTopics() { state.latestIndex = 0; rerenderFeeds(); },
+          onSelectTopics() { state.surpriseActive = false; state.latestIndex = 0; rerenderFeeds(); },
         });
         const readingModeSheet = createReadingModeSheet(
           screenEl,
@@ -4080,7 +4086,10 @@
 
         function continueSummary(tab) {
           const selected = saveSummaryTopics(tab);
-          if (selected.length) appendTopicPosts(tab, selected);
+          if (selected.length) {
+            state.surpriseActive = false;
+            appendTopicPosts(tab, selected);
+          }
         }
 
         function surpriseSummary(tab) {
@@ -4088,6 +4097,7 @@
           const candidates = shuffle(ALL_LATEST.filter((post) => !post.tags.some((tag) => state.savedTopics.includes(tag.l))));
           const items = candidates.slice(0, 2).map((post) => Object.assign({ kind: "post" }, post));
           if (!items.length) return;
+          state.surpriseActive = true;
           state.extended[tab].push({ topic: `surprise-${Date.now()}`, items });
           rerenderFeeds();
           const feed = tab === "latest" ? feedLatest() : feedCurated();
