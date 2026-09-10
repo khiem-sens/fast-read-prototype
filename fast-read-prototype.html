@@ -1758,10 +1758,6 @@
       color: #232323;
     }
 
-    .summary-surprise-btn[hidden] {
-      display: none;
-    }
-
     .summary-surprise-btn span {
       display: block;
       margin-top: 7px;
@@ -2963,7 +2959,7 @@
         <p class="summary-sub">I want to read more about...</p>
         <div class="summary-topics-list">${cards}</div>
         <button class="summary-continue-btn" type="button" data-summary-continue ${hasSelectedTopics ? "" : "disabled"}>Continue Reading</button>
-        <button class="summary-surprise-btn" type="button" data-summary-surprise ${hasSelectedTopics ? "" : "hidden"}>Surprise Me!<span>Discover content beyond your usual circle</span></button>
+        <button class="summary-surprise-btn" type="button" data-summary-surprise>Surprise Me!<span>Discover content beyond your usual circle</span></button>
         <button class="summary-home-btn" data-back-home>${esc(tr("backHome"))}</button>
       </div>`;
       }
@@ -4088,8 +4084,7 @@
         }
 
         function surpriseSummary(tab) {
-          const selected = saveSummaryTopics(tab);
-          if (!selected.length) return;
+          saveSummaryTopics(tab);
           const candidates = shuffle(ALL_LATEST.filter((post) => !post.tags.some((tag) => state.savedTopics.includes(tag.l))));
           const items = candidates.slice(0, 2).map((post) => Object.assign({ kind: "post" }, post));
           if (!items.length) return;

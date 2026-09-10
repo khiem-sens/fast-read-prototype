@@ -13,7 +13,9 @@ assert.deepEqual(nextStreak({ day: '2026-09-06', count: 4 }, '2026-09-09'), { da
 assert.match(html, /data-summary-topic/);
 assert.match(html, /data-summary-continue/);
 assert.match(html, /data-summary-surprise/);
-assert.match(html, /const hasSelectedTopics = selected\.length > 0;[\s\S]*?data-summary-surprise \$\{hasSelectedTopics \? "" : "hidden"\}/);
+assert.match(html, /data-summary-surprise>Surprise Me!/);
+assert.doesNotMatch(html, /data-summary-surprise[^>]*hidden/);
+assert.match(html, /function surpriseSummary\(tab\)\s*\{\s*saveSummaryTopics\(tab\);/);
 assert.match(html, /function surpriseSummary\(tab\)[\s\S]*?state\.savedTopics\.includes\(tag\.l\)/);
 assert.match(html, /state\.summaryRecs\[tab\] = null;/);
 assert.match(html, /state\.selectedTopics\.length === 1[\s\S]*?topicLabel\(state\.selectedTopics\[0\]\)/);
