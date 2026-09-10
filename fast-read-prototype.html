@@ -430,7 +430,7 @@
       justify-content: center;
       flex-shrink: 0;
       width: 52px;
-      height: 60px;
+      height: 37px;
     }
 
     .bookmark-badge {
@@ -1834,6 +1834,48 @@
       height: 72px;
       padding: 0 20px;
       z-index: 10;
+    }
+
+    .reader-likebar {
+      position: absolute;
+      right: 0;
+      bottom: 72px;
+      left: 0;
+      z-index: 11;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 60px;
+      padding: 0 20px;
+      background: #f8e8fa;
+      color: var(--purple);
+      border: 0;
+      border-top: 1px solid #f1d7f4;
+      font-size: 14px;
+      font-weight: 360;
+      pointer-events: none;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease, visibility .2s;
+    }
+
+    .reader-likebar.show {
+      pointer-events: auto;
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reader-likebar[aria-pressed="true"] {
+      background: #f2dcf5;
+    }
+
+    .reader-likebar svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
     }
 
     .bottombar-left {
@@ -3599,6 +3641,8 @@
           selectedTopics: [],
           savedTopics: DEFAULT_SAVED_TOPICS.slice(),
           bookmarked: new Set(),
+          likedPosts: new Set(),
+          likeConfirmationPostId: null,
           summaryRecs: { latest: null, curated: null },
           summarySelections: { latest: [], curated: [] },
           coveredTopicCount: 2,
@@ -3649,6 +3693,10 @@
       </div>
       <button class="reader-tour-trigger" type="button" data-tour-trigger aria-label="Open Quick Read guide">?</button>
       <div class="tabslide-host"></div>
+      <button class="reader-likebar" type="button" data-like aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h4v11Zm2 0V10l3-7a2 2 0 0 1 2 2v4h4.5a2 2 0 0 1 2 2.3l-1.2 7A3 3 0 0 1 18.3 21H11Z"/></svg>
+        <span data-like-label>More content like this</span>
+      </button>
       <div class="reader-bottombar">
         <div class="bottombar-left"></div>
         <div class="bottombar-icons">
@@ -3733,6 +3781,8 @@
         const tabCarets = screenEl.querySelectorAll(".tab-caret");
         const tabSlideHost = screenEl.querySelector(".tabslide-host");
         const bottombarLeft = screenEl.querySelector(".bottombar-left");
+        const likeBtn = screenEl.querySelector("[data-like]");
+        const likeLabel = likeBtn.querySelector("[data-like-label]");
         const bookmarkBtn = screenEl.querySelector("[data-bookmark]");
         const languageBtn = screenEl.querySelector("[data-language-settings]");
         const settingsBtn = screenEl.querySelector("[data-reading-settings]");
@@ -3837,6 +3887,12 @@
           const item = currentItem();
           screenEl.classList.toggle("showing-summary", item && item.kind === "summary");
           const post = currentPost();
+          const liked = state.likedPosts.has(post.id);
+          const showingLikeConfirmation = state.likeConfirmationPostId === post.id;
+          const showLike = item && item.kind === "post" && (!liked || showingLikeConfirmation);
+          likeBtn.classList.toggle("show", showLike);
+          likeBtn.setAttribute("aria-pressed", String(liked));
+          likeLabel.textContent = showingLikeConfirmation ? "Got it!" : "More content like this";
           const isBm = state.bookmarked.has(post.id);
           bookmarkBtn.setAttribute("aria-pressed", String(isBm));
           bookmarkBtn.setAttribute("aria-label", isBm ? tr("bookmarked") : tr("bookmark"));
@@ -3910,6 +3966,52 @@
         languageBtn.addEventListener("click", () => languageSheet.open());
         settingsBtn.addEventListener("click", () => readingModeSheet.open());
         shareBtn.addEventListener("click", () => shareSheet.open());
+        likeBtn.addEventListener("click", () => {
+          const post = currentPost();
+          if (state.likedPosts.has(post.id)) return;
+
+          state.likedPosts.add(post.id);
+          state.likeConfirmationPostId = post.id;
+
+          const topic =
+            post.tags.find((tag) => !state.savedTopics.includes(tag.l)) ||
+            post.tags[0];
+
+          const likesForTopic = [...state.likedPosts].filter((id) => {
+            const likedPost = ALL_LATEST.find(
+              (candidate) => candidate.id === id
+            );
+
+            const likedTopic =
+              likedPost &&
+              (likedPost.tags.find(
+                (tag) => !state.savedTopics.includes(tag.l)
+              ) ||
+                likedPost.tags[0]);
+
+            return likedTopic && likedTopic.l === topic.l;
+          }).length;
+
+          if (
+            likesForTopic === 3 &&
+            !state.savedTopics.includes(topic.l)
+          ) {
+            state.savedTopics.push(topic.l);
+            state.summaryRecs = { latest: null, curated: null };
+
+            showCenterHint(
+              `${topicLabel(topic.l)} added to your favorite topics`
+            );
+          }
+
+          refreshBottombar();
+
+          setTimeout(() => {
+            if (state.likeConfirmationPostId !== post.id) return;
+            state.likeConfirmationPostId = null;
+            refreshBottombar();
+          }, 2000);
+        });
         bookmarkBtn.addEventListener("click", () => {
           const post = currentPost();
           if (state.bookmarked.has(post.id)) state.bookmarked.delete(post.id);
@@ -4008,7 +4110,8 @@
         function surpriseSummary(tab) {
           saveSummaryTopics(tab);
           const candidates = shuffle(ALL_LATEST.filter((post) => !post.tags.some((tag) => state.savedTopics.includes(tag.l))));
-          const items = candidates.slice(0, 2).map((post) => Object.assign({ kind: "post" }, post));
+          const surpriseTopic = candidates.map((post) => post.tags[0].l).find((topic) => candidates.filter((post) => post.tags[0].l === topic).length >= 3);
+          const items = candidates.filter((post) => !surpriseTopic || post.tags[0].l === surpriseTopic).slice(0, surpriseTopic ? 3 : 2).map((post) => Object.assign({ kind: "post" }, post));
           if (!items.length) return;
           state.surpriseActive = true;
           state.extended[tab].push({ topic: `surprise-${Date.now()}`, items });
