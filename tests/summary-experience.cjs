@@ -20,6 +20,9 @@ assert.match(html, /function surpriseSummary\(tab\)[\s\S]*?state\.savedTopics\.i
 assert.match(html, /state\.surpriseActive = true;[\s\S]*?refreshBottombar\(\);/);
 assert.match(html, /if \(state\.surpriseActive\)[\s\S]*?<span class="label">Surprise Me!<\/span>/);
 assert.match(html, /onSelectTopics\(\) \{ state\.surpriseActive = false;/);
+assert.match(html, /data-surprise-filter[\s\S]*?Displaying content outside of your favorite topics/);
+assert.match(html, /surpriseButton\.classList\.toggle\("selected", surpriseSelected\);/);
+assert.match(html, /surpriseButton\.addEventListener\("click", \(\) => \{ cbs\.onSurprise\(\); close\(\); \}\);/);
 assert.match(html, /state\.summaryRecs\[tab\] = null;/);
 assert.match(html, /state\.selectedTopics\.length === 1[\s\S]*?topicLabel\(state\.selectedTopics\[0\]\)/);
 assert.match(html, /function currentItem\(\)[\s\S]*?return feed\[currentIndex\(\)\] \|\| feed\[0\];/);

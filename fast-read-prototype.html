@@ -2215,6 +2215,45 @@
       border-radius: 4px;
     }
 
+    .ts-surprise {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-height: 98px;
+      margin-top: 16px;
+      padding: 17px 16px;
+      border: 1px solid #dedede;
+      border-radius: 4px;
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .ts-surprise.selected {
+      border-color: var(--purple);
+      background: #faecfc;
+    }
+
+    .ts-surprise strong,
+    .ts-surprise-description {
+      display: block;
+    }
+
+    .ts-surprise strong {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .28px;
+    }
+
+    .ts-surprise-description {
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 325;
+      line-height: 1.45;
+    }
+
     .ts-favorites-head {
       display: flex;
       align-items: center;
@@ -3407,18 +3446,24 @@
           </div>
           <div class="ts-content hide-scrollbar"></div>
         </section>
+        <button type="button" class="ts-surprise" data-surprise-filter aria-pressed="false">
+          <span><strong>Surprise Me!</strong><span class="ts-surprise-description">Displaying content outside of your favorite topics</span></span>
+          <span class="ts-picker-check" aria-hidden="true"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7"/></svg></span>
+        </button>
       </div>`;
         root.appendChild(overlay);
         const content = overlay.querySelector(".ts-content");
         const topStoriesButton = overlay.querySelector("[data-top-stories]");
+        const surpriseButton = overlay.querySelector("[data-surprise-filter]");
         let isEditing = false;
         let editingTopics = state.savedTopics.slice();
         let pendingTopics = state.selectedTopics.slice();
+        let surpriseSelected = state.surpriseActive;
         let showAll = false;
 
         function close() { overlay.classList.remove("show"); }
         function open() {
-          isEditing = false; editingTopics = state.savedTopics.slice(); pendingTopics = state.selectedTopics.slice(); showAll = false;
+          isEditing = false; editingTopics = state.savedTopics.slice(); surpriseSelected = state.surpriseActive; pendingTopics = surpriseSelected ? [] : state.selectedTopics.slice(); showAll = false;
           overlay.querySelector("[data-top-stories-label]").textContent = tr("topStories");
           overlay.querySelector("[data-favorite-topics-label]").textContent = tr("favoriteTopics");
           overlay.querySelector("[data-edit]").setAttribute("aria-label", tr("editTopics"));
@@ -3426,11 +3471,13 @@
         }
 
         function renderContent() {
-          const isTopStories = pendingTopics.length === 0;
-          const selectionChanged = pendingTopics.length !== state.selectedTopics.length
-            || pendingTopics.some((topic) => !state.selectedTopics.includes(topic));
+          const isTopStories = pendingTopics.length === 0 && !surpriseSelected;
+          const selectionChanged = !surpriseSelected && (pendingTopics.length !== state.selectedTopics.length
+            || pendingTopics.some((topic) => !state.selectedTopics.includes(topic)));
           topStoriesButton.classList.toggle("selected", isTopStories);
           topStoriesButton.setAttribute("aria-pressed", String(isTopStories));
+          surpriseButton.classList.toggle("selected", surpriseSelected);
+          surpriseButton.setAttribute("aria-pressed", String(surpriseSelected));
           if (!isEditing) {
             content.innerHTML = `<div class="ts-pills">${state.savedTopics.map((t) => {
               const selected = pendingTopics.includes(t);
@@ -3442,6 +3489,7 @@
                 const i = pendingTopics.indexOf(t);
                 if (i >= 0) pendingTopics.splice(i, 1);
                 else pendingTopics.push(t);
+                surpriseSelected = false;
                 renderContent();
               });
             });
@@ -3497,6 +3545,7 @@
           cbs.onSelectTopics(state.selectedTopics);
           close();
         });
+        surpriseButton.addEventListener("click", () => { cbs.onSurprise(); close(); });
         overlay.querySelector("[data-edit]").addEventListener("click", () => { isEditing = true; renderContent(); });
 
         return { open, close };
@@ -3969,6 +4018,7 @@
         const topStories = createTopStoriesPanel(screenEl, state, {
           onSaveTopics() { state.summaryRecs = { latest: null, curated: null }; rerenderFeeds(); },
           onSelectTopics() { state.surpriseActive = false; state.latestIndex = 0; rerenderFeeds(); },
+          onSurprise() { surpriseSummary(state.activeTab); },
         });
         const readingModeSheet = createReadingModeSheet(
           screenEl,
