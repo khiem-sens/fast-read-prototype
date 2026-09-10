@@ -1846,7 +1846,7 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      height: 60px;
+      height: 37px;
       padding: 0 20px;
       background: #f8e8fa;
       color: var(--purple);
@@ -2282,6 +2282,18 @@
       border-radius: 4px;
     }
 
+    .ts-suggestions-panel {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .ts-suggestions-panel .ts-favorites-title {
+      display: block;
+      margin-bottom: 14px;
+    }
+
     .ts-surprise {
       display: flex;
       align-items: flex-start;
@@ -2697,7 +2709,7 @@
       };
 
       const COPY = {
-        en: { latest: "Latest", curated: "Curated For You", fullArticle: "Full article", takeaway: "Key takeaway:", advertisement: "Advertisement", live: "Live", enterNow: "JOIN NOW", later: "Later", caughtUp: "You're all caught up!", finished: "That's everything, for now!", latestNext: "You've read all the latest stories. Based on what you follow, here's what to read next:", curatedNext: "You've read all the curated picks. Based on what you follow, here's what to read next:", backHome: "Back to Homepage", topStories: "Top Stories", favoriteTopics: "Your favorite topics", allTopics: "All topics", readingQuestion: "How do you want to read today?", chooseLanguage: "Choose language", welcomeTo: "WELCOME TO", enter: "Enter", hurry: "In a hurry", hurryDesc: "Super short with key takeaway", quick: "Quick catch-up", quickDesc: "Balanced summaries", deep: "Go deeper", deepDesc: "More context & insights", swipeUp: "Swipe up to read more", swipeSide: "Swipe sideways to browse", close: "Close", languageSettings: "Language settings", readingSettings: "Reading settings", bookmark: "Bookmark", share: "Share" },
+        en: { latest: "Latest", curated: "Curated For You", fullArticle: "Full article", takeaway: "Key takeaway:", advertisement: "Advertisement", live: "Live", enterNow: "JOIN NOW", later: "Later", caughtUp: "You're all caught up!", finished: "That's everything, for now!", latestNext: "You've read all the latest stories. Based on what you follow, here's what to read next:", curatedNext: "You've read all the curated picks. Based on what you follow, here's what to read next:", backHome: "Back to Homepage", topStories: "Top Stories", favoriteTopics: "Your favorite topics", allTopics: "All topics", readingQuestion: "How do you want to read today?", chooseLanguage: "Change summary language", welcomeTo: "WELCOME TO", enter: "Enter", hurry: "In a hurry", hurryDesc: "Super short with key takeaway", quick: "Quick catch-up", quickDesc: "Balanced summaries", deep: "Go deeper", deepDesc: "More context & insights", swipeUp: "Swipe up to read more", swipeSide: "Swipe sideways to browse", close: "Close", languageSettings: "Language settings", readingSettings: "Reading settings", bookmark: "Bookmark", share: "Share" },
         id: { latest: "Terbaru", curated: "Pilihan untuk Anda", fullArticle: "Artikel lengkap", takeaway: "Inti sari:", advertisement: "Iklan", live: "Langsung", enterNow: "Masuk sekarang", later: "Nanti", caughtUp: "Anda sudah membaca semuanya!", finished: "Itu semua untuk saat ini!", latestNext: "Anda telah membaca semua berita terbaru. Berdasarkan topik yang Anda ikuti, berikut bacaan selanjutnya:", curatedNext: "Anda telah membaca semua pilihan. Berdasarkan topik yang Anda ikuti, berikut bacaan selanjutnya:", backHome: "Kembali ke Beranda", topStories: "Berita Utama", favoriteTopics: "Topik favorit Anda", allTopics: "Semua topik", readingQuestion: "Bagaimana Anda ingin membaca hari ini?", chooseLanguage: "Pilih bahasa", welcomeTo: "SELAMAT DATANG DI", enter: "Masuk", hurry: "Sedang terburu-buru", hurryDesc: "Sangat singkat dengan inti sari", quick: "Ikuti dengan cepat", quickDesc: "Ringkasan seimbang", deep: "Pelajari lebih dalam", deepDesc: "Lebih banyak konteks dan wawasan", swipeUp: "Geser ke atas untuk membaca lebih lanjut", swipeSide: "Geser ke samping untuk menjelajah", close: "Tutup", languageSettings: "Pengaturan bahasa", readingSettings: "Pengaturan bacaan", bookmark: "Simpan", share: "Bagikan" },
         ms: { latest: "Terkini", curated: "Pilihan untuk Anda", fullArticle: "Artikel penuh", takeaway: "Inti pati:", advertisement: "Iklan", live: "Langsung", enterNow: "Masuk sekarang", later: "Kemudian", caughtUp: "Anda sudah membaca semuanya!", finished: "Itu sahaja buat masa ini!", latestNext: "Anda telah membaca semua berita terkini. Berdasarkan topik yang anda ikuti, inilah bacaan seterusnya:", curatedNext: "Anda telah membaca semua pilihan. Berdasarkan topik yang anda ikuti, inilah bacaan seterusnya:", backHome: "Kembali ke Laman Utama", topStories: "Berita Utama", favoriteTopics: "Topik kegemaran anda", allTopics: "Semua topik", readingQuestion: "Bagaimanakah anda mahu membaca hari ini?", chooseLanguage: "Pilih bahasa", welcomeTo: "SELAMAT DATANG KE", enter: "Masuk", hurry: "Tergesa-gesa", hurryDesc: "Sangat ringkas dengan inti pati", quick: "Ikuti dengan cepat", quickDesc: "Ringkasan seimbang", deep: "Ketahui lebih lanjut", deepDesc: "Lebih banyak konteks dan pandangan", swipeUp: "Leret ke atas untuk membaca lagi", swipeSide: "Leret ke sisi untuk meneroka", close: "Tutup", languageSettings: "Tetapan bahasa", readingSettings: "Tetapan bacaan", bookmark: "Simpan", share: "Kongsi" },
         vi: { latest: "Mới nhất", curated: "Dành riêng cho bạn", fullArticle: "Bài viết đầy đủ", takeaway: "Điểm chính:", advertisement: "Quảng cáo", live: "Trực tiếp", enterNow: "Tham gia ngay", later: "Để sau", caughtUp: "Bạn đã đọc hết!", finished: "Tạm thời chỉ có vậy!", latestNext: "Bạn đã đọc tất cả tin mới nhất. Dựa trên các chủ đề bạn theo dõi, đây là nội dung nên đọc tiếp:", curatedNext: "Bạn đã đọc tất cả bài tuyển chọn. Dựa trên các chủ đề bạn theo dõi, đây là nội dung nên đọc tiếp:", backHome: "Về trang chủ", topStories: "Tin nổi bật", favoriteTopics: "Chủ đề yêu thích", allTopics: "Tất cả chủ đề", readingQuestion: "Hôm nay bạn muốn đọc theo cách nào?", chooseLanguage: "Chọn ngôn ngữ", welcomeTo: "CHÀO MỪNG ĐẾN", enter: "Bắt đầu", hurry: "Đọc thật nhanh", hurryDesc: "Siêu ngắn với điểm chính", quick: "Cập nhật nhanh", quickDesc: "Tóm tắt cân bằng", deep: "Đọc chuyên sâu", deepDesc: "Thêm bối cảnh và góc nhìn", swipeUp: "Vuốt lên để đọc tiếp", swipeSide: "Vuốt ngang để xem bài", close: "Đóng", languageSettings: "Cài đặt ngôn ngữ", readingSettings: "Cài đặt cách đọc", bookmark: "Lưu bài", share: "Chia sẻ" },
@@ -2714,14 +2726,15 @@
       Object.assign(COPY.id, { bookmarked: "Disimpan" });
       Object.assign(COPY.ms, { bookmarked: "Disimpan" });
       Object.assign(COPY.vi, { bookmarked: "Đã lưu" });
-      function tr(key) { return (COPY[selectedLanguage] && COPY[selectedLanguage][key]) || COPY.en[key] || key; }
+      function tr(key) { return COPY.en[key] || key; }
+      function postTr(key) { return (COPY[selectedLanguage] && COPY[selectedLanguage][key]) || COPY.en[key] || key; }
 
       const TOPIC_I18N = {
         id: { "Artificial Intelligence": "Kecerdasan Buatan", "Civic Engagement": "Partisipasi Warga", "Cross-border Innovation": "Inovasi Lintas Batas", Cybersecurity: "Keamanan Siber", Data: "Data", Defence: "Pertahanan", "Digital Economy": "Ekonomi Digital", "Digital Government": "Pemerintahan Digital", "Digital Public Infrastructure": "Infrastruktur Publik Digital", Education: "Pendidikan", "Emerging Tech": "Teknologi Baru", "Future of Work": "Masa Depan Kerja", Healthcare: "Kesehatan", Inclusivity: "Inklusivitas", Leadership: "Kepemimpinan", Resilience: "Ketahanan", "Smart Cities": "Kota Cerdas", Sustainability: "Keberlanjutan", "Trade & Economy": "Perdagangan & Ekonomi", Transport: "Transportasi", "Women in GovTech": "Perempuan dalam GovTech", "Guest Column": "Kolom Tamu" },
         ms: { "Artificial Intelligence": "Kecerdasan Buatan", "Civic Engagement": "Penglibatan Awam", "Cross-border Innovation": "Inovasi Rentas Sempadan", Cybersecurity: "Keselamatan Siber", Data: "Data", Defence: "Pertahanan", "Digital Economy": "Ekonomi Digital", "Digital Government": "Kerajaan Digital", "Digital Public Infrastructure": "Infrastruktur Awam Digital", Education: "Pendidikan", "Emerging Tech": "Teknologi Baharu", "Future of Work": "Masa Depan Kerja", Healthcare: "Kesihatan", Inclusivity: "Keterangkuman", Leadership: "Kepimpinan", Resilience: "Daya Tahan", "Smart Cities": "Bandar Pintar", Sustainability: "Kelestarian", "Trade & Economy": "Perdagangan & Ekonomi", Transport: "Pengangkutan", "Women in GovTech": "Wanita dalam GovTech", "Guest Column": "Kolum Tetamu" },
         vi: { "Artificial Intelligence": "Trí tuệ nhân tạo", "Civic Engagement": "Sự tham gia của người dân", "Cross-border Innovation": "Đổi mới xuyên biên giới", Cybersecurity: "An ninh mạng", Data: "Dữ liệu", Defence: "Quốc phòng", "Digital Economy": "Kinh tế số", "Digital Government": "Chính phủ số", "Digital Public Infrastructure": "Hạ tầng công số", Education: "Giáo dục", "Emerging Tech": "Công nghệ mới", "Future of Work": "Tương lai việc làm", Healthcare: "Y tế", Inclusivity: "Hòa nhập", Leadership: "Lãnh đạo", Resilience: "Khả năng chống chịu", "Smart Cities": "Thành phố thông minh", Sustainability: "Bền vững", "Trade & Economy": "Thương mại & Kinh tế", Transport: "Giao thông", "Women in GovTech": "Phụ nữ trong GovTech", "Guest Column": "Chuyên mục khách mời" },
       };
-      function topicLabel(topic) { return (TOPIC_I18N[selectedLanguage] && TOPIC_I18N[selectedLanguage][topic]) || topic; }
+      function topicLabel(topic) { return topic; }
 
       const POST_I18N = {
         id: {
@@ -2871,14 +2884,16 @@
 
       function pickRecommendedTopics(saved, count) {
         const valid = topicsWithLatestArticles();
+        const favorites = saved.filter((topic) => valid.has(topic)).slice(0, Math.min(3, count));
         const candidates = new Set();
         saved.forEach((t) => (TOPIC_RELATIONS[t] || []).forEach((rt) => { if (saved.indexOf(rt) === -1 && valid.has(rt)) candidates.add(rt); }));
         let pool = shuffle(Array.from(candidates));
-        if (pool.length < count) {
+        const relatedCount = Math.max(0, count - favorites.length);
+        if (pool.length < relatedCount) {
           const rest = shuffle(Array.from(valid).filter((t) => saved.indexOf(t) === -1 && pool.indexOf(t) === -1));
           pool = pool.concat(rest);
         }
-        return pool.slice(0, count);
+        return favorites.concat(pool.slice(0, Math.min(2, relatedCount)));
       }
       const INITIAL_VISIBLE = 10;
       const DEFAULT_SAVED_TOPICS = ["Cybersecurity", "Digital Economy", "Digital Government"];
@@ -3000,7 +3015,7 @@
         const bullets = post.bullets.map((b) => `<li>${esc(b)}</li>`).join("");
         const takeaway = post.takeaway || POST_TAKEAWAYS[post.id] || post.bullets[0];
         return `
-      <div class="post-content">
+      <div class="post-content" lang="${selectedLanguage}">
         <div class="post-cover"><img src="${post.image}" alt="${esc(post.title)}" draggable="false"></div>
         <div class="post-body">
           <div class="post-tags">${tags}</div>
@@ -3008,7 +3023,7 @@
           <ul class="post-bullets">${bullets}</ul>
           <div class="post-takeaway">
             <img src="${ASSETS.iconGroup}" alt="">
-            <p><strong>${esc(tr("takeaway"))}</strong> ${esc(takeaway)}</p>
+            <p><strong>${esc(postTr("takeaway"))}</strong> ${esc(takeaway)}</p>
           </div>
         </div>
         <button class="post-fullarticle" type="button" data-open-article="${esc(post.url)}">
@@ -3394,13 +3409,19 @@
           </div>
           <div class="ts-content hide-scrollbar"></div>
         </section>
+        <section class="ts-suggestions-panel" data-suggestions hidden>
+          <span class="ts-favorites-title">You might like</span>
+          <div class="ts-suggestions-content"></div>
+        </section>
         <button type="button" class="ts-surprise" data-surprise-filter aria-pressed="false">
-          <span><strong>Surprise Me!</strong><span class="ts-surprise-description">Displaying content outside of your favorite topics</span></span>
+          <span><strong>Surprise Me!</strong><span class="ts-surprise-description">See something different from your usual picks</span></span>
           <span class="ts-picker-check" aria-hidden="true"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7"/></svg></span>
         </button>
       </div>`;
         root.appendChild(overlay);
         const content = overlay.querySelector(".ts-content");
+        const suggestionsPanel = overlay.querySelector("[data-suggestions]");
+        const suggestionsContent = overlay.querySelector(".ts-suggestions-content");
         const topStoriesButton = overlay.querySelector("[data-top-stories]");
         const surpriseButton = overlay.querySelector("[data-surprise-filter]");
         let isEditing = false;
@@ -3419,6 +3440,7 @@
         }
 
         function renderContent() {
+          const suggestedTopics = pendingTopics.filter((topic) => !state.savedTopics.includes(topic)).slice(0, 2);
           const isTopStories = pendingTopics.length === 0 && !surpriseSelected;
           const selectionChanged = !surpriseSelected && (pendingTopics.length !== state.selectedTopics.length
             || pendingTopics.some((topic) => !state.selectedTopics.includes(topic)));
@@ -3427,11 +3449,13 @@
           surpriseButton.classList.toggle("selected", surpriseSelected);
           surpriseButton.setAttribute("aria-pressed", String(surpriseSelected));
           if (!isEditing) {
+            suggestionsPanel.hidden = suggestedTopics.length === 0;
             content.innerHTML = `<div class="ts-pills">${state.savedTopics.map((t) => {
               const selected = pendingTopics.includes(t);
               return `<button class="ts-pill${selected ? " active" : ""}" data-topic="${esc(t)}" aria-pressed="${selected}"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`;
             }).join("")}</div>${selectionChanged ? '<button type="button" class="ts-confirm" data-confirm>OK</button>' : ""}`;
-            content.querySelectorAll("[data-topic]").forEach((btn) => {
+            suggestionsContent.innerHTML = `<div class="ts-pills">${suggestedTopics.map((t) => `<button class="ts-pill active" data-topic="${esc(t)}" aria-pressed="true"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`).join("")}</div>`;
+            overlay.querySelectorAll("[data-topic]").forEach((btn) => {
               btn.addEventListener("click", () => {
                 const t = btn.getAttribute("data-topic");
                 const i = pendingTopics.indexOf(t);
@@ -3448,6 +3472,7 @@
               close();
             });
           } else {
+            suggestionsPanel.hidden = true;
             const visible = showAll ? ALL_TOPICS : ALL_TOPICS.slice(0, INITIAL_VISIBLE);
             content.innerHTML = `
           <div class="ts-edit">
@@ -3476,8 +3501,8 @@
             content.querySelector("[data-save]").addEventListener("click", () => {
               state.savedTopics = editingTopics.slice();
               cbs.onSaveTopics(state.savedTopics);
-              pendingTopics = pendingTopics.filter((topic) => state.savedTopics.includes(topic));
-              const nextSelectedTopics = state.selectedTopics.filter((topic) => state.savedTopics.includes(topic));
+              pendingTopics = pendingTopics.filter((topic) => state.savedTopics.includes(topic)).concat(pendingTopics.filter((topic) => !state.savedTopics.includes(topic)).slice(0, 2));
+              const nextSelectedTopics = state.selectedTopics.filter((topic) => state.savedTopics.includes(topic)).concat(state.selectedTopics.filter((topic) => !state.savedTopics.includes(topic)).slice(0, 2));
               if (nextSelectedTopics.length !== state.selectedTopics.length) {
                 state.selectedTopics = nextSelectedTopics;
                 cbs.onSelectTopics(state.selectedTopics);
@@ -3615,7 +3640,6 @@
           options.querySelectorAll("[data-language]").forEach((button) => {
             button.addEventListener("click", () => {
               selectedLanguage = button.dataset.language;
-              document.documentElement.lang = selectedLanguage;
               close();
               onSelect();
             });
@@ -3642,6 +3666,7 @@
           savedTopics: DEFAULT_SAVED_TOPICS.slice(),
           bookmarked: new Set(),
           likedPosts: new Set(),
+          likedTopics: [],
           likeConfirmationPostId: null,
           summaryRecs: { latest: null, curated: null },
           summarySelections: { latest: [], curated: [] },
@@ -3812,20 +3837,6 @@
           tour.querySelector("[data-tour-next]").focus({ preventScroll: true });
         }
 
-        function applyReaderLanguage() {
-          tabBtns[0].textContent = tr("latest");
-          tabBtns[1].textContent = tr("curated");
-          screenEl.querySelector("[data-close]").setAttribute("aria-label", tr("close"));
-          languageBtn.setAttribute("aria-label", tr("languageSettings"));
-          settingsBtn.setAttribute("aria-label", tr("readingSettings"));
-          bookmarkBtn.setAttribute("aria-label", tr("bookmark"));
-          shareBtn.setAttribute("aria-label", tr("share"));
-          welcomeOverlay.querySelector(".welcome-eyebrow").textContent = tr("welcomeTo");
-          welcomeOverlay.querySelector(".welcome-subtitle").textContent = tr("readingQuestion");
-          welcomeOverlay.querySelector(".welcome-choices").outerHTML = renderReadingChoices(screenEl.dataset.readingMode);
-          welcomeOverlay.querySelector("[data-enter-digest]").textContent = tr("enter");
-        }
-
         const slider = createTabSlider(tabSlideHost, {});
 
         const vLatest = createVFeed(slider.paneLatest, {
@@ -3959,7 +3970,6 @@
           }
         );
         const languageSheet = createLanguageSheet(screenEl, () => {
-          applyReaderLanguage();
           rerenderFeeds();
         });
         const shareSheet = createShareSheet(screenEl, currentPost);
@@ -3977,25 +3987,10 @@
             post.tags.find((tag) => !state.savedTopics.includes(tag.l)) ||
             post.tags[0];
 
-          const likesForTopic = [...state.likedPosts].filter((id) => {
-            const likedPost = ALL_LATEST.find(
-              (candidate) => candidate.id === id
-            );
+          state.likedTopics.push(topic.l);
+          const likesForTopic = state.likedTopics.filter((likedTopic) => likedTopic === topic.l).length;
 
-            const likedTopic =
-              likedPost &&
-              (likedPost.tags.find(
-                (tag) => !state.savedTopics.includes(tag.l)
-              ) ||
-                likedPost.tags[0]);
-
-            return likedTopic && likedTopic.l === topic.l;
-          }).length;
-
-          if (
-            likesForTopic === 3 &&
-            !state.savedTopics.includes(topic.l)
-          ) {
+          if (likesForTopic === 3 && !state.savedTopics.includes(topic.l)) {
             state.savedTopics.push(topic.l);
             state.summaryRecs = { latest: null, curated: null };
 
@@ -4082,6 +4077,7 @@
           const selected = state.summarySelections[tab];
           const index = selected.indexOf(topic);
           if (index >= 0) selected.splice(index, 1);
+          else if (!state.savedTopics.includes(topic) && selected.filter((selectedTopic) => !state.savedTopics.includes(selectedTopic)).length >= 2) return;
           else selected.push(topic);
           rerenderFeeds();
         }
@@ -4089,9 +4085,6 @@
         function saveSummaryTopics(tab) {
           const selected = state.summarySelections[tab].slice();
           if (!selected.length) return [];
-          selected.forEach((topic) => {
-            if (!state.savedTopics.includes(topic)) state.savedTopics.push(topic);
-          });
           state.selectedTopics = selected;
           state.coveredTopicCount += selected.length;
           state.summarySelections[tab] = [];
@@ -4164,7 +4157,6 @@
         function activate() {
           closeTour(false);
           state.activeTab = initialTabGetter();
-          applyReaderLanguage();
           refreshTabUI();
           rerenderFeeds();
           slider.setActive(state.activeTab, false);
