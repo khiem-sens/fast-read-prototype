@@ -5,33 +5,12 @@ const assert = require("node:assert/strict");
 
 for (const page of ["index.html", "fast-read-prototype.html"]) {
   const html = fs.readFileSync(path.join(__dirname, "..", page), "utf8");
-  const recommendationSource = html.slice(
-    html.indexOf("      function pickRecommendedTopics"),
-    html.indexOf("      const INITIAL_VISIBLE"),
-  );
-  const pickRecommendedTopics = new Function(
-    "topicsWithLatestArticles",
-    "TOPIC_RELATIONS",
-    "shuffle",
-    `${recommendationSource}; return pickRecommendedTopics;`,
-  )(
-    () => new Set([
-      "Cybersecurity", "Digital Economy", "Digital Government",
-      "Resilience", "Defence", "Data", "Trade & Economy", "Cross-border Innovation",
-    ]),
-    {
-      Cybersecurity: ["Resilience", "Defence", "Data"],
-      "Digital Economy": ["Trade & Economy", "Cross-border Innovation"],
-      "Digital Government": ["Data"],
-    },
-    (items) => items,
-  );
   const profileTopics = ["Cybersecurity", "Digital Economy", "Digital Government"];
-  const summaryTopics = pickRecommendedTopics(profileTopics, 5);
+  const summaryTopics = ["Defence", "Emerging Tech", "Resilience", "Leadership", "Trade & Economy"];
 
-  assert.deepEqual(summaryTopics.slice(0, 3), profileTopics, `${page}: first three cards are profile topics`);
+  assert.match(html, /const SUMMARY_TOPICS = \["Defence", "Emerging Tech", "Resilience", "Leadership", "Trade & Economy"\];/, `${page}: summary offers the requested five topics`);
   assert.equal(summaryTopics.length, 5, `${page}: summary contains five topic cards`);
-  assert(summaryTopics.slice(3).every((topic) => !profileTopics.includes(topic)), `${page}: final two cards are outside the profile`);
+  assert(summaryTopics.every((topic) => !profileTopics.includes(topic)), `${page}: every summary topic is outside the profile`);
 
   const saveSource = html.slice(
     html.indexOf("        function saveSummaryTopics"),
@@ -41,11 +20,8 @@ for (const page of ["index.html", "fast-read-prototype.html"]) {
   assert.doesNotMatch(saveSource, /savedTopics\.push/, `${page}: choosing a card does not change the profile`);
   assert.match(html, /function continueSummary\(tab\)[\s\S]*?appendTopicPosts\(tab, selected\);/, `${page}: Continue Reading shows posts from selected topics`);
   assert.match(html, /function topicDemoPosts\(topic\)[\s\S]*?tags: \[\{ l: topic, c: TEAL \}\]/, `${page}: each selected unfamiliar topic keeps its topic on its posts`);
-  assert.match(html, /function surpriseSummary\(tab\)[\s\S]*?!post\.tags\.some\(\(tag\) => state\.savedTopics\.includes\(tag\.l\)\)[\s\S]*?isSurprise: true/, `${page}: Surprise Me excludes profile topics and marks its posts for the like prompt`);
-  assert.match(html, /function isLikePromptPost\(post\)[\s\S]*?selectedRelatedTopics[\s\S]*?post\.isSurprise \|\| post\.tags\.some/, `${page}: only Surprise Me and selected related-topic posts receive the normal like prompt`);
-  assert.match(html, /class="ts-suggestions-panel" data-suggestions[\s\S]*?You might like/, `${page}: related topics have their own You might like section`);
-  assert.match(html, /const suggestedTopics = pendingTopics\.filter\(\(topic\) => !state\.savedTopics\.includes\(topic\)\)\.slice\(0, 2\);/, `${page}: the You might like section has no more than two topics`);
+  assert.match(html, /function isLikePromptPost\(post\) \{\s*return state\.topicSelectionGroup === "explore" && post\.tags\.some\(\(tag\) => state\.selectedTopics\.includes\(tag\.l\)\);/, `${page}: every selected More to Explore post receives the like prompt`);
   assert.match(html, /else if \(!state\.savedTopics\.includes\(topic\) && selected\.filter\(\(selectedTopic\) => !state\.savedTopics\.includes\(selectedTopic\)\)\.length >= 2\) return;/, `${page}: the summary cannot select more than two related topics`);
 }
 
-console.log("PASS: five-card summaries preserve the 3 profile / 2 related-topic rule and selected topics stay outside the profile");
+console.log("PASS: five fixed summary topics stay outside the profile and selected More to Explore posts receive likes");

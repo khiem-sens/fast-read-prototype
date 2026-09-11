@@ -2958,6 +2958,7 @@
       }
       const INITIAL_VISIBLE = 10;
       const DEFAULT_SAVED_TOPICS = ["Cybersecurity", "Digital Economy", "Digital Government"];
+      const SUMMARY_TOPICS = ["Defence", "Emerging Tech", "Resilience", "Leadership", "Trade & Economy"];
       const STORY_GROUP_LABELS = {
         topStoriesWeek: "Top Stories This Week",
         peopleLikeYou: "Trending Among Your Peers",
@@ -3510,12 +3511,14 @@
         let isEditing = false;
         let editingTopics = state.savedTopics.slice();
         let pendingTopics = state.selectedTopics.slice();
+        let pendingExplore = state.topicSelectionGroup === "explore";
         let surpriseSelected = state.surpriseActive;
         let showAll = false;
 
         function close() { overlay.classList.remove("show"); }
         function open() {
           isEditing = false; editingTopics = state.savedTopics.slice(); surpriseSelected = state.surpriseActive; pendingTopics = surpriseSelected ? [] : state.selectedTopics.slice(); showAll = false;
+          pendingExplore = state.topicSelectionGroup === "explore";
           overlay.querySelector("[data-favorite-topics-label]").textContent = "Read By Topics";
           overlay.querySelector("[data-edit]").setAttribute("aria-label", tr("editTopics"));
           renderContent(); overlay.classList.add("show");
@@ -3525,7 +3528,7 @@
           const suggestedTopics = state.moreToExploreTopics;
           const activeStoryGroup = pendingTopics.length ? null : state.storyGroup;
           const activeFeedTab = pendingTopics.length || activeStoryGroup ? null : state.activeTab;
-          const selectionChanged = !surpriseSelected && (pendingTopics.length !== state.selectedTopics.length
+          const selectionChanged = !surpriseSelected && (pendingExplore !== (state.topicSelectionGroup === "explore") || pendingTopics.length !== state.selectedTopics.length
             || pendingTopics.some((topic) => !state.selectedTopics.includes(topic)));
           storyGroupButtons.forEach((button) => {
             const selected = button.dataset.storyGroup === activeStoryGroup;
@@ -3540,12 +3543,18 @@
           if (!isEditing) {
             suggestionsPanel.hidden = suggestedTopics.length === 0;
             content.innerHTML = `<div class="ts-pills">${state.savedTopics.map((t) => {
-              const selected = pendingTopics.includes(t);
+              const selected = !pendingExplore && pendingTopics.includes(t);
               return `<button class="ts-pill${selected ? " active" : ""}" data-topic="${esc(t)}" aria-pressed="${selected}"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`;
             }).join("")}</div>${selectionChanged ? '<button type="button" class="ts-confirm" data-confirm>OK</button>' : ""}`;
-            suggestionsContent.innerHTML = `<div class="ts-pills">${suggestedTopics.map((t) => `<button class="ts-pill active" data-topic="${esc(t)}" aria-pressed="true"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`).join("")}</div>`;
+            suggestionsContent.innerHTML = `<div class="ts-pills">${suggestedTopics.map((t) => {
+              const selected = pendingExplore && pendingTopics.includes(t);
+              return `<button class="ts-pill${selected ? " active" : ""}" data-topic="${esc(t)}" aria-pressed="${selected}"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`;
+            }).join("")}</div>`;
             overlay.querySelectorAll("[data-topic]").forEach((btn) => {
               btn.addEventListener("click", () => {
+                const explore = suggestionsContent.contains(btn);
+                if (pendingExplore !== explore) pendingTopics = [];
+                pendingExplore = explore;
                 const t = btn.getAttribute("data-topic");
                 const i = pendingTopics.indexOf(t);
                 if (i >= 0) pendingTopics.splice(i, 1);
@@ -3557,7 +3566,7 @@
             const confirm = content.querySelector("[data-confirm]");
             if (confirm) confirm.addEventListener("click", () => {
               state.selectedTopics = pendingTopics.slice();
-              cbs.onSelectTopics(state.selectedTopics);
+              cbs.onSelectTopics(state.selectedTopics, pendingExplore);
               close();
             });
           } else {
@@ -3760,6 +3769,7 @@
           surpriseActive: false,
           selectedTopics: [],
           moreToExploreTopics: [],
+          topicSelectionGroup: null,
           savedTopics: DEFAULT_SAVED_TOPICS.slice(),
           bookmarked: new Set(),
           likedPosts: new Set(),
@@ -3767,6 +3777,8 @@
           likeConfirmationPostId: null,
           summaryRecs: { latest: null, curated: null },
           summarySelections: { latest: [], curated: [] },
+          latestPosts: shuffle(ALL_LATEST),
+          curatedPosts: shuffle(ALL_CURATED),
           coveredTopicCount: 2,
           coveredTopicLabels: ["Guest Column", "Artificial Intelligence"],
           showAllCoveredTopics: false,
@@ -3776,19 +3788,12 @@
           extended: { latest: [], curated: [] },
         };
 
-        function filteredLatest() { return state.selectedTopics.length ? ALL_LATEST.filter((p) => state.selectedTopics.some((topic) => matchesTopic(p, topic))) : ALL_LATEST; }
-        function filteredCurated() { return ALL_CURATED; }
+        function shufflePosts() { state.latestPosts = shuffle(ALL_LATEST); state.curatedPosts = shuffle(ALL_CURATED); }
+        function filteredLatest() { return state.selectedTopics.length ? state.latestPosts.filter((p) => state.selectedTopics.some((topic) => matchesTopic(p, topic))) : state.latestPosts; }
+        function filteredCurated() { return state.curatedPosts; }
         function summaryItem(tab) {
           if (!state.summaryRecs[tab]) {
-            const selectedTopics = state.summarySelections[tab];
-            const topics = Array.from(new Set(
-              selectedTopics.concat(
-                pickRecommendedTopics(state.savedTopics, 5).filter(
-                  (topic) => selectedTopics.includes(topic) || !state.coveredTopicLabels.includes(topic)
-                )
-              )
-            )).slice(0, 5);
-            state.summaryRecs[tab] = topics.map((t) => ({ topic: t }));
+            state.summaryRecs[tab] = SUMMARY_TOPICS.map((topic) => ({ topic }));
           }
           return {
             kind: "summary",
@@ -4004,8 +4009,7 @@
         }
 
         function isLikePromptPost(post) {
-          const selectedRelatedTopics = state.selectedTopics.filter((topic) => !state.savedTopics.includes(topic)).slice(0, 2);
-          return post.tags.some((tag) => selectedRelatedTopics.includes(tag.l));
+          return state.topicSelectionGroup === "explore" && post.tags.some((tag) => state.selectedTopics.includes(tag.l));
         }
 
         function refreshBottombar() {
@@ -4028,14 +4032,15 @@
           bookmarkBtn.setAttribute("aria-pressed", String(isBm));
           bookmarkBtn.setAttribute("aria-label", isBm ? tr("bookmarked") : tr("bookmark"));
 
-          if (state.activeTab === "latest") {
+          {
             if (state.moreToExploreTopics.length || state.selectedTopics.length) {
-              const topics = state.moreToExploreTopics.length ? state.moreToExploreTopics : state.selectedTopics;
+              const showingExplore = state.topicSelectionGroup === "explore" || !state.selectedTopics.length;
+              const topics = showingExplore ? (state.selectedTopics.length ? state.selectedTopics : state.moreToExploreTopics) : state.selectedTopics;
               const selectedLabel = `${topics.length} ${topics.length === 1 ? "topic" : "topics"}`;
               bottombarLeft.innerHTML = `
             <button class="topstories-btn" data-open-topstories>
               <div class="sel-wrap">
-                <span class="sel-eyebrow">${state.moreToExploreTopics.length ? "More to Explore" : "Read By Topics"}</span>
+                <span class="sel-eyebrow">${showingExplore ? "More to Explore" : "Read By Topics"}</span>
                 <span class="sel-value">${esc(selectedLabel)}</span>
               </div>
             </button>`;
@@ -4048,9 +4053,6 @@
             bottombarLeft.style.flex = "1";
             const btn = bottombarLeft.querySelector("[data-open-topstories]");
             if (btn) btn.addEventListener("click", () => topStories.open());
-          } else {
-            bottombarLeft.innerHTML = "";
-            bottombarLeft.style.flex = "1";
           }
         }
 
@@ -4071,9 +4073,9 @@
 
         const topStories = createTopStoriesPanel(screenEl, state, {
           onSaveTopics() { state.summaryRecs = { latest: null, curated: null }; rerenderFeeds(); },
-          onSelectTopics(topics) { state.moreToExploreTopics = state.moreToExploreTopics.length ? topics.slice() : []; state.storyGroup = topics.length ? null : state.storyGroup; state.surpriseActive = false; state.latestIndex = 0; rerenderFeeds(); },
-          onSelectFeedTab(tab) { state.activeTab = tab; state.storyGroup = null; state.selectedTopics = []; state.moreToExploreTopics = []; state.surpriseActive = false; state.latestIndex = 0; state.curatedIndex = 0; rerenderFeeds(); slider.setActive(tab, true); },
-          onSelectStoryGroup(group) { state.storyGroup = group; state.surpriseActive = false; state.selectedTopics = []; state.moreToExploreTopics = []; state.latestIndex = 0; rerenderFeeds(); },
+          onSelectTopics(topics, explore = state.topicSelectionGroup === "explore") { state.topicSelectionGroup = topics.length ? (explore ? "explore" : "read") : null; state.storyGroup = topics.length ? null : state.storyGroup; state.surpriseActive = false; shufflePosts(); if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0; rerenderFeeds(); },
+          onSelectFeedTab(tab) { state.activeTab = tab; state.storyGroup = null; state.selectedTopics = []; state.topicSelectionGroup = null; state.surpriseActive = false; shufflePosts(); state.latestIndex = 0; state.curatedIndex = 0; refreshTabUI(); rerenderFeeds(); slider.setActive(tab, false); },
+          onSelectStoryGroup(group) { state.storyGroup = group; state.surpriseActive = false; state.selectedTopics = []; state.topicSelectionGroup = null; shufflePosts(); if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0; rerenderFeeds(); },
         });
         const readingModeSheet = createReadingModeSheet(
           screenEl,
@@ -4203,6 +4205,7 @@
           const newTopics = selected.filter((topic) => !state.coveredTopicLabels.includes(topic));
           state.selectedTopics = selected;
           state.moreToExploreTopics = selected;
+          state.topicSelectionGroup = "explore";
           state.coveredTopicLabels = Array.from(new Set(state.coveredTopicLabels.concat(newTopics)));
           state.coveredTopicCount = state.coveredTopicLabels.length;
           state.showAllCoveredTopics = false;
@@ -4214,6 +4217,7 @@
           const selected = saveSummaryTopics(tab);
           if (selected.length) {
             state.surpriseActive = false;
+            shufflePosts();
             appendTopicPosts(tab, selected);
           }
         }
@@ -4256,7 +4260,7 @@
 
         function activate() {
           closeTour(false);
-          state.activeTab = "latest";
+          state.activeTab = initialTabGetter() === "curated" ? "curated" : "latest";
           refreshTabUI();
           rerenderFeeds();
           slider.setActive(state.activeTab, false);
