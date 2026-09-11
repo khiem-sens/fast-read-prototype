@@ -842,7 +842,7 @@
     /* ===================== Reader screens ===================== */
     .reader-tabbar {
       position: absolute;
-      top: 46px;
+      top: 0;
       right: 0;
       z-index: 20;
       width: 40px;
@@ -1233,7 +1233,7 @@
 
     .post-cover {
       width: calc(100% - 40px);
-      margin: 64px 20px 0;
+      margin: 20px 20px 0;
       background: #e5e7eb;
       aspect-ratio: 200/112;
       overflow: hidden;
@@ -2234,7 +2234,7 @@
       background: #faecfc;
     }
 
-    .ts-picker + .ts-picker {
+    .ts-picker+.ts-picker {
       margin-top: 16px;
     }
 
@@ -3835,8 +3835,8 @@
         const vLatest = createVFeed(slider.paneLatest, {
           getPosts: feedLatest, getIndex: () => state.latestIndex,
           setIndex: (i) => { state.latestIndex = i; refreshBottombar(); maybeShowSummaryStreak(); },
-          onHDrag: () => {},
-          onHDragEnd: () => {},
+          onHDrag: () => { },
+          onHDragEnd: () => { },
         });
         const vCurated = createVFeed(slider.paneCurated, {
           getPosts: feedCurated, getIndex: () => state.curatedIndex,
