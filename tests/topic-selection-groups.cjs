@@ -9,19 +9,20 @@ class Element {
   constructor() { this.listeners = {}; this.children = []; this.classList = { add() {}, remove() {} }; }
   set innerHTML(html) {
     this.html = html;
-    this.children = [...html.matchAll(/<button[^>]*data-(topic="([^"]*)"|confirm)[^>]*>/g)].map(([tag, attr, topic]) => {
+    this.children = [...html.matchAll(/<button\b[^>]*>/g)].map(([tag]) => {
       const button = new Element();
-      button.topic = topic;
+      button.topic = (tag.match(/data-topic="([^"]*)"/) || [])[1];
+      button.confirm = tag.includes('data-confirm-read') ? 'read' : tag.includes('data-confirm-explore') ? 'explore' : null;
       button.pressed = tag.includes('aria-pressed="true"');
       return button;
     });
   }
-  getAttribute() { return this.topic; }
+  getAttribute(name) { return name === 'data-topic' ? this.topic : this.confirm; }
   setAttribute() {}
   addEventListener(event, callback) { this.listeners[event] = callback; }
   click() { this.listeners.click(); }
   contains(button) { return this.children.includes(button); }
-  querySelector() { return this.children.find(button => button.topic === undefined); }
+  querySelector(selector) { return this.children.find(button => selector === '[data-confirm-read]' ? button.confirm === 'read' : selector === '[data-confirm-explore]' ? button.confirm === 'explore' : false); }
 }
 for (const file of ['index.html', 'fast-read-prototype.html']) {
   const html = fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
@@ -45,14 +46,16 @@ for (const file of ['index.html', 'fast-read-prototype.html']) {
   favorites()[0].click(); // Same topic, different group must still be a change.
   assert.deepEqual(selected(favorites()), ['Cybersecurity']);
   assert.deepEqual(selected(suggestions()), []);
-  assert.ok(nodes['.ts-content'].querySelector('[data-confirm]'));
+  assert.ok(nodes['.ts-content'].querySelector('[data-confirm-read]'));
   suggestions()[1].click();
   assert.deepEqual(selected(favorites()), []);
   assert.deepEqual(selected(suggestions()), ['Digital Economy']);
+  assert.equal(nodes['.ts-content'].querySelector('[data-confirm-read]'), undefined);
+  assert.ok(nodes['.ts-suggestions-content'].querySelector('[data-confirm-explore]'));
   suggestions()[1].click();
   assert.deepEqual(selected(suggestions()), []);
   favorites()[0].click();
-  nodes['.ts-content'].querySelector('[data-confirm]').click();
+  nodes['.ts-content'].querySelector('[data-confirm-read]').click();
   panel.open();
   assert.deepEqual(selected(favorites()), ['Cybersecurity']);
   assert.deepEqual(selected(suggestions()), []);

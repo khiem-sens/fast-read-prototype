@@ -3528,8 +3528,10 @@
           const suggestedTopics = state.moreToExploreTopics;
           const activeStoryGroup = pendingTopics.length ? null : state.storyGroup;
           const activeFeedTab = pendingTopics.length || activeStoryGroup ? null : state.activeTab;
-          const selectionChanged = !surpriseSelected && (pendingExplore !== (state.topicSelectionGroup === "explore") || pendingTopics.length !== state.selectedTopics.length
-            || pendingTopics.some((topic) => !state.selectedTopics.includes(topic)));
+          const selectionsMatch = pendingTopics.length === state.selectedTopics.length
+            && pendingTopics.every((topic) => state.selectedTopics.includes(topic));
+          const favoriteSelectionChanged = !surpriseSelected && !pendingExplore && (state.topicSelectionGroup !== "read" || !selectionsMatch);
+          const exploreSelectionChanged = !surpriseSelected && pendingExplore && (state.topicSelectionGroup !== "explore" || !selectionsMatch);
           storyGroupButtons.forEach((button) => {
             const selected = button.dataset.storyGroup === activeStoryGroup;
             button.classList.toggle("selected", selected);
@@ -3545,11 +3547,11 @@
             content.innerHTML = `<div class="ts-pills">${state.savedTopics.map((t) => {
               const selected = !pendingExplore && pendingTopics.includes(t);
               return `<button class="ts-pill${selected ? " active" : ""}" data-topic="${esc(t)}" aria-pressed="${selected}"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`;
-            }).join("")}</div>${selectionChanged ? '<button type="button" class="ts-confirm" data-confirm>OK</button>' : ""}`;
+            }).join("")}</div>${favoriteSelectionChanged ? '<button type="button" class="ts-confirm" data-confirm-read>OK</button>' : ""}`;
             suggestionsContent.innerHTML = `<div class="ts-pills">${suggestedTopics.map((t) => {
               const selected = pendingExplore && pendingTopics.includes(t);
               return `<button class="ts-pill${selected ? " active" : ""}" data-topic="${esc(t)}" aria-pressed="${selected}"><span>${esc(topicLabel(t))}</span><svg class="ts-pill-check" viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7"/></svg></button>`;
-            }).join("")}</div>`;
+            }).join("")}</div>${exploreSelectionChanged ? '<button type="button" class="ts-confirm" data-confirm-explore>OK</button>' : ""}`;
             overlay.querySelectorAll("[data-topic]").forEach((btn) => {
               btn.addEventListener("click", () => {
                 const explore = suggestionsContent.contains(btn);
@@ -3563,12 +3565,15 @@
                 renderContent();
               });
             });
-            const confirm = content.querySelector("[data-confirm]");
-            if (confirm) confirm.addEventListener("click", () => {
+            function confirmSelection(explore) {
               state.selectedTopics = pendingTopics.slice();
-              cbs.onSelectTopics(state.selectedTopics, pendingExplore);
+              cbs.onSelectTopics(state.selectedTopics, explore);
               close();
-            });
+            }
+            const readConfirm = content.querySelector("[data-confirm-read]");
+            if (readConfirm) readConfirm.addEventListener("click", () => confirmSelection(false));
+            const exploreConfirm = suggestionsContent.querySelector("[data-confirm-explore]");
+            if (exploreConfirm) exploreConfirm.addEventListener("click", () => confirmSelection(true));
           } else {
             suggestionsPanel.hidden = true;
             const visible = showAll ? ALL_TOPICS : ALL_TOPICS.slice(0, INITIAL_VISIBLE);
