@@ -45,6 +45,9 @@ assert.match(html, /hurry:\s*"2x"[\s\S]*quick:\s*"1\.5x"[\s\S]*deep:\s*"1x"/, 's
 assert.match(html, /reading-icon-box">\$\{marker\}<\/span>/, 'both screens render the shared text marker');
 assert.match(html, /data-reading-mode-indicator>1\.5x<\/span>/, 'the toolbar starts with the quick summary marker');
 assert.match(html, /readingModeIndicator\.textContent = READING_MODE_ICONS\[screenEl\.dataset\.readingMode\];/, 'the toolbar marker follows reading-mode changes');
+assert.match(html, /const visibleBullets = readingMode === "hurry" \? \[\] : post\.bullets\.slice\(0, readingMode === "quick" \? 2 : post\.bullets\.length\);/, 'the 1.5x mode renders only two summary paragraphs');
+assert.match(html, /getReadingMode: \(\) => screenEl\.dataset\.readingMode/, 'feeds render with the selected summary style');
+assert.match(html, /screenEl\.dataset\.readingMode = mode;\s*rerenderFeeds\(\);\s*showModeChangeHint\(mode\);/, 'the bottom-panel selection rerenders the feed');
 let stopped = false;
 listeners.deepclick({stopPropagation() { stopped = true; }});
 assert.equal(selected, 'deep');
