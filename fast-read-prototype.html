@@ -4050,9 +4050,10 @@
               </div>
             </button>`;
             } else {
+              const label = state.storyGroup ? STORY_GROUP_LABELS[state.storyGroup] : tr(state.activeTab);
               bottombarLeft.innerHTML = `
             <button class="topstories-btn" data-open-topstories>
-              <span class="label">${esc(STORY_GROUP_LABELS[state.storyGroup] || tr("topStories"))}</span>
+              <span class="label">${esc(label)}</span>
             </button>`;
             }
             bottombarLeft.style.flex = "1";

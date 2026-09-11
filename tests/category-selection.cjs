@@ -11,6 +11,7 @@ for (const page of ["index.html", "fast-read-prototype.html"]) {
   assert.match(feedTabHandler, /state\.selectedTopics = \[\]; state\.topicSelectionGroup = null;[\s\S]*?shufflePosts\(\);[\s\S]*?slider\.setActive\(tab, false\);/, `${page}: picker swaps feeds without the tab slide`);
   assert.doesNotMatch(feedTabHandler, /moreToExploreTopics\s*=/, `${page}: More to Explore remains after switching feeds`);
   assert.match(html, /state\.activeTab = initialTabGetter\(\) === "curated" \? "curated" : "latest";/, `${page}: the curated homepage Quick Digest opens Curated`);
+  assert.match(html, /const label = state\.storyGroup \? STORY_GROUP_LABELS\[state\.storyGroup\] : tr\(state\.activeTab\);/, `${page}: the toolbar names the active feed when no story group is selected`);
   assert.doesNotMatch(html, /if \(state\.activeTab === "latest"\) \{\s*if \(state\.moreToExploreTopics\.length \|\| state\.selectedTopics\.length\)/, `${page}: Curated has the category picker in its toolbar`);
 }
 
