@@ -1322,22 +1322,6 @@
       font-weight: 700;
     }
 
-    .post-fullarticle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 16px 20px;
-      color: var(--purple);
-    }
-
-    .post-fullarticle span {
-      font-size: 14px;
-      letter-spacing: 0.01em;
-      font-weight: 325;
-    }
-
     .ad-content {
       display: flex;
       flex-direction: column;
@@ -1831,14 +1815,13 @@
       z-index: 11;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      height: 37px;
+      justify-content: space-between;
+      gap: 16px;
+      height: 40px;
       padding: 0 20px;
-      background: #f8e8fa;
+      background: #fff;
       color: var(--ink);
-      border: 0;
-      border-top: 1px solid #f1d7f4;
+      border-top: 1px solid #e8e8e8;
       font-size: 14px;
       font-weight: 360;
       pointer-events: none;
@@ -1855,15 +1838,73 @@
       transform: translateY(0);
     }
 
-    .reader-likebar[aria-pressed="true"] {
-      background: #f2dcf5;
+    .reader-like-action {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 0;
+      color: #595959;
+      font-size: 12px;
+      font-weight: 360;
+    }
+
+    .reader-like-action.show {
+      display: flex;
+    }
+
+    .reader-like-action svg {
+      width: 20px;
+      height: 20px;
+      color: var(--ink);
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .reader-like-action .like-filled {
+      display: none;
+    }
+
+    .reader-like-action[aria-pressed="true"] {
       color: var(--purple);
     }
 
-    .reader-likebar svg {
-      width: 20px;
-      height: 20px;
+    .reader-like-action[aria-pressed="true"] svg {
+      color: var(--purple);
       fill: currentColor;
+    }
+
+    .reader-like-action[aria-pressed="true"] .like-outline {
+      display: none;
+    }
+
+    .reader-like-action[aria-pressed="true"] .like-filled {
+      display: block;
+    }
+
+    .reader-fullarticle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      padding: 0;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .28px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .reader-fullarticle-label {
+      padding-bottom: 2px;
+      border-bottom: 1px solid #b6b6b6;
+    }
+
+    .reader-fullarticle-arrow {
+      font-size: 16px;
+      font-weight: 325;
+      line-height: 1;
     }
 
     .bottombar-left {
@@ -2216,7 +2257,10 @@
     .ts-sheet {
       padding: 20px 20px 40px;
       border-radius: 18px 18px 0 0;
-      max-height: 76dvh;
+      max-height: min(600px, 80dvh);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
     }
 
     .ts-sheet .sheet-handle {
@@ -3032,10 +3076,6 @@
             <p><strong>${esc(postTr("takeaway"))}</strong> ${esc(takeaway)}</p>
           </div>
         </div>
-        <button class="post-fullarticle" type="button" data-open-article="${esc(post.url)}">
-          <span>${esc(tr("fullArticle"))}</span>
-          <img src="${ASSETS.iconArrow}" alt="" width="16" height="16">
-        </button>
       </div>`;
       }
 
@@ -3426,7 +3466,7 @@
           <div class="ts-content hide-scrollbar"></div>
         </section>
         <section class="ts-suggestions-panel" data-suggestions hidden>
-          <span class="ts-favorites-title">You might like</span>
+          <span class="ts-favorites-title">More to Explore</span>
           <div class="ts-suggestions-content"></div>
         </section>
       </div>`;
@@ -3725,10 +3765,16 @@
       </div>
       <button class="reader-tour-trigger" type="button" data-tour-trigger aria-label="Open Quick Read guide">?</button>
       <div class="tabslide-host"></div>
-      <button class="reader-likebar" type="button" data-like aria-pressed="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h4v11Zm2 0V10l3-7a2 2 0 0 1 2 2v4h4.5a2 2 0 0 1 2 2.3l-1.2 7A3 3 0 0 1 18.3 21H11Z"/></svg>
-        <span data-like-label>More content like this</span>
-      </button>
+      <div class="reader-likebar">
+        <button class="reader-like-action" type="button" data-like aria-pressed="false">
+          <svg class="like-outline" viewBox="0 0 20 20" aria-hidden="true"><path d="M17.5003 6.66666C17.9448 6.66666 18.3337 6.83333 18.667 7.16666C19.0003 7.5 19.167 7.88888 19.167 8.33333V10C19.167 10.0972 19.1531 10.2014 19.1253 10.3125C19.0975 10.4236 19.0698 10.5278 19.042 10.625L16.542 16.5C16.417 16.7778 16.2087 17.0139 15.917 17.2083C15.6253 17.4028 15.3198 17.5 15.0003 17.5H5.83366V6.66666L10.8337 1.70833C11.042 1.5 11.2887 1.37861 11.5737 1.34416C11.8587 1.30972 12.1328 1.36166 12.3962 1.5C12.6595 1.63833 12.8539 1.83277 12.9795 2.08333C13.105 2.33388 13.1328 2.59083 13.0628 2.85416L12.1253 6.66666H17.5003ZM7.50033 7.375V15.8333H15.0003L17.5003 10V8.33333H10.0003L11.1253 3.75L7.50033 7.375ZM3.33366 17.5C2.87533 17.5 2.4831 17.3369 2.15699 17.0108C1.83088 16.6847 1.66755 16.2922 1.66699 15.8333V8.33333C1.66699 7.875 1.83033 7.48277 2.15699 7.15666C2.48366 6.83055 2.87588 6.66722 3.33366 6.66666H5.83366V8.33333H3.33366V15.8333H5.83366V17.5H3.33366Z"/></svg>
+          <svg class="like-filled" viewBox="0 0 20 20" aria-hidden="true"><path d="M11.808 0.833328L5.83301 6.81666V17.5H16.0913L19.1663 10.3333V6.66666H12.2413L13.1747 2.18333L11.808 0.833328ZM0.833008 7.49999H4.16634V17.5H0.833008V7.49999Z"/></svg>
+          <span data-like-label>I like this content</span>
+        </button>
+        <button class="reader-fullarticle" type="button" data-open-article>
+          <span class="reader-fullarticle-label">Full Article</span><span class="reader-fullarticle-arrow" aria-hidden="true">&#8594;</span>
+        </button>
+      </div>
       <div class="reader-bottombar">
         <div class="bottombar-left"></div>
         <div class="bottombar-icons">
@@ -3813,6 +3859,7 @@
         const tabCarets = screenEl.querySelectorAll(".tab-caret");
         const tabSlideHost = screenEl.querySelector(".tabslide-host");
         const bottombarLeft = screenEl.querySelector(".bottombar-left");
+        const likeBar = screenEl.querySelector(".reader-likebar");
         const likeBtn = screenEl.querySelector("[data-like]");
         const likeLabel = likeBtn.querySelector("[data-like-label]");
         const bookmarkBtn = screenEl.querySelector("[data-bookmark]");
@@ -3899,7 +3946,7 @@
 
         function isLikePromptPost(post) {
           const selectedRelatedTopics = state.selectedTopics.filter((topic) => !state.savedTopics.includes(topic)).slice(0, 2);
-          return post.isSurprise || post.tags.some((tag) => selectedRelatedTopics.includes(tag.l));
+          return post.tags.some((tag) => selectedRelatedTopics.includes(tag.l));
         }
 
         function refreshBottombar() {
@@ -3912,10 +3959,12 @@
           const post = currentPost();
           const liked = state.likedPosts.has(post.id);
           const showingLikeConfirmation = state.likeConfirmationPostId === post.id;
-          const showLike = item && item.kind === "post" && (showingLikeConfirmation || (!liked && isLikePromptPost(post)));
+          const showPostActions = item && item.kind === "post";
+          const showLike = showPostActions && (showingLikeConfirmation || (!liked && isLikePromptPost(post)));
+          likeBar.classList.toggle("show", showPostActions);
           likeBtn.classList.toggle("show", showLike);
           likeBtn.setAttribute("aria-pressed", String(liked));
-          likeLabel.textContent = showingLikeConfirmation ? "Got it!" : "More content like this";
+          likeLabel.textContent = showingLikeConfirmation ? "Got it!" : "I like this content";
           const isBm = state.bookmarked.has(post.id);
           bookmarkBtn.setAttribute("aria-pressed", String(isBm));
           bookmarkBtn.setAttribute("aria-label", isBm ? tr("bookmarked") : tr("bookmark"));
