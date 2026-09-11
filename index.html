@@ -1882,19 +1882,27 @@
     }
 
     .topstories-btn .label {
+      flex: 1;
+      min-width: 0;
       font-size: 14px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .28px;
       color: var(--purple);
-      white-space: nowrap;
+      text-align: left;
+      line-height: 1.15;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
 
     .topstories-btn::after {
+      flex: 0 0 8px;
       content: "";
       width: 8px;
       height: 8px;
-      margin: -4px 0 0 5px;
+      margin: 0 0 0 5px;
       border-right: 2px solid var(--purple);
       border-bottom: 2px solid var(--purple);
       transform: rotate(45deg);
@@ -2889,6 +2897,12 @@
       }
       const INITIAL_VISIBLE = 10;
       const DEFAULT_SAVED_TOPICS = ["Cybersecurity", "Digital Economy", "Digital Government"];
+      const STORY_GROUP_LABELS = {
+        topStoriesWeek: "Top Stories This Week",
+        peopleLikeYou: "Most Read By People Like You",
+        industry: "Most Read By People In Your Industry",
+        sector: "Most Read By People In Your Sector",
+      };
 
       // Generic "more reads" filler — shown under any topic on the summary
       // screen regardless of exact topic match, just to fill the slot with
@@ -3914,14 +3928,14 @@
               bottombarLeft.innerHTML = `
             <button class="topstories-btn" data-open-topstories>
               <div class="sel-wrap">
-                <span class="sel-eyebrow">${esc(tr("favoriteTopics"))}</span>
+                <span class="sel-eyebrow">Read By Topics</span>
                 <span class="sel-value">${esc(selectedLabel)}</span>
               </div>
             </button>`;
             } else {
               bottombarLeft.innerHTML = `
             <button class="topstories-btn" data-open-topstories>
-              <span class="label">${esc(tr("topStories"))}</span>
+              <span class="label">${esc(STORY_GROUP_LABELS[state.storyGroup] || tr("topStories"))}</span>
             </button>`;
             }
             bottombarLeft.style.flex = "1";
