@@ -3228,7 +3228,7 @@
       // horizontal drag switches tabs.
       // ---------------------------------------------------------
       function createVFeed(container, opts) {
-        // opts: { getPosts(), getIndex(), setIndex(cb), onHDrag(dx), onHDragEnd(committed, dx) }
+        // opts: { getPosts(), getIndex(), setIndex(cb) }
         const clip = document.createElement("div");
         clip.className = "vfeed-clip";
         const tape = document.createElement("div");
@@ -3306,7 +3306,7 @@
             // Scroll article content first, then use movement beyond its edge to change posts.
             if (e.pointerType === "touch" && mode !== "slide-h") {
               if (mode === "idle" && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) >= 6) {
-                mode = "slide-h"; opts.onHDrag(dx); return;
+                mode = "slide-h"; return;
               }
               const scroll = scrollEls[idx];
               const maxScroll = scroll ? Math.max(0, scroll.scrollHeight - scroll.clientHeight) : 0;
@@ -3327,10 +3327,10 @@
               setTape(-idx * getH() + sign * (abs < T ? abs * 0.25 : T * 0.25 + (abs - T) * 0.55), false);
               return;
             }
-            if (mode === "slide-h") { opts.onHDrag(dx); return; }
+            if (mode === "slide-h") { return; }
             if (mode === "scroll") return;
             if (Math.abs(dy) < 6 && Math.abs(dx) < 6) return;
-            if (Math.abs(dx) > Math.abs(dy)) { mode = "slide-h"; opts.onHDrag(dx); return; }
+            if (Math.abs(dx) > Math.abs(dy)) { mode = "slide-h"; return; }
 
             const scroll = scrollEls[idx];
             const st = scroll ? scroll.scrollTop : 0;
@@ -3352,7 +3352,7 @@
             if (e.pointerType === "touch" && e.type !== "pointercancel") dy = touchSlideDy;
             if (busy) { mode = "idle"; return; }
             const idx = opts.getIndex();
-            if (mode === "slide-h") { opts.onHDragEnd(Math.abs(dx) > 80, dx); mode = "idle"; return; }
+            if (mode === "slide-h") { mode = "idle"; return; }
             if (mode === "slide-v") {
               const T = 100;
               if (dy < -T && slideDir === 1) {
@@ -3779,7 +3779,6 @@
           bookmarked: new Set(),
           likedPosts: new Set(),
           likedTopics: [],
-          likeConfirmationPostId: null,
           summaryRecs: { latest: null, curated: null },
           summarySelections: { latest: [], curated: [] },
           latestPosts: shuffle(ALL_LATEST),
@@ -3963,35 +3962,12 @@
           getPosts: feedLatest, getIndex: () => state.latestIndex,
           getReadingMode: () => screenEl.dataset.readingMode,
           setIndex: (i) => { state.latestIndex = i; refreshBottombar(); maybeShowSummaryStreak(); },
-          onHDrag: () => { },
-          onHDragEnd: () => { },
         });
         const vCurated = createVFeed(slider.paneCurated, {
           getPosts: feedCurated, getIndex: () => state.curatedIndex,
           getReadingMode: () => screenEl.dataset.readingMode,
           setIndex: (i) => { state.curatedIndex = i; refreshBottombar(); maybeShowSummaryStreak(); },
-          onHDrag: (dx) => handleHDrag(dx),
-          onHDragEnd: (committed, dx) => handleHDragEnd(committed, dx),
         });
-
-        function handleHDrag(dx) {
-          if (slider.isBusy()) return;
-          const w = slider.getWidth();
-          const base = state.activeTab === "latest" ? 0 : -w;
-          let x = base + dx;
-          if (x > 0) x = dx * 0.2;
-          if (x < -w) x = -w + (x + w) * 0.2;
-          slider.dragTo(x);
-        }
-        function handleHDragEnd(committed, dx) {
-          if (slider.isBusy()) return;
-          const tab = state.activeTab;
-          if (committed) {
-            if (dx < 0 && tab === "latest") { slider.commit("curated", true, () => { state.activeTab = "curated"; refreshTabUI(); refreshBottombar(); }); }
-            else if (dx > 0 && tab === "curated") { slider.commit("latest", true, () => { state.activeTab = "latest"; refreshTabUI(); refreshBottombar(); }); }
-            else slider.cancel();
-          } else slider.cancel();
-        }
 
         function setTab(tab, animated) {
           state.activeTab = tab;
@@ -4026,13 +4002,12 @@
           screenEl.classList.toggle("showing-summary", item && item.kind === "summary");
           const post = currentPost();
           const liked = state.likedPosts.has(post.id);
-          const showingLikeConfirmation = state.likeConfirmationPostId === post.id;
           const showPostActions = item && item.kind === "post";
-          const showLike = showPostActions && (showingLikeConfirmation || (!liked && isLikePromptPost(post)));
+          const showLike = showPostActions && (liked || isLikePromptPost(post));
           likeBar.classList.toggle("show", showPostActions);
           likeBtn.classList.toggle("show", showLike);
           likeBtn.setAttribute("aria-pressed", String(liked));
-          likeLabel.textContent = showingLikeConfirmation ? "Got it!" : "I like this content";
+          likeLabel.textContent = liked ? "Liked" : "I like this content";
           const isBm = state.bookmarked.has(post.id);
           bookmarkBtn.setAttribute("aria-pressed", String(isBm));
           bookmarkBtn.setAttribute("aria-label", isBm ? tr("bookmarked") : tr("bookmark"));
@@ -4104,7 +4079,6 @@
           if (state.likedPosts.has(post.id)) return;
 
           state.likedPosts.add(post.id);
-          state.likeConfirmationPostId = post.id;
 
           const topic =
             post.tags.find((tag) => !state.savedTopics.includes(tag.l)) ||
@@ -4124,11 +4098,6 @@
 
           refreshBottombar();
 
-          setTimeout(() => {
-            if (state.likeConfirmationPostId !== post.id) return;
-            state.likeConfirmationPostId = null;
-            refreshBottombar();
-          }, 2000);
         });
         bookmarkBtn.addEventListener("click", () => {
           const post = currentPost();
@@ -4200,7 +4169,6 @@
           const selected = state.summarySelections[tab];
           const index = selected.indexOf(topic);
           if (index >= 0) selected.splice(index, 1);
-          else if (!state.savedTopics.includes(topic) && selected.filter((selectedTopic) => !state.savedTopics.includes(selectedTopic)).length >= 2) return;
           else selected.push(topic);
           rerenderFeeds();
         }

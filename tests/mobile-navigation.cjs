@@ -23,15 +23,15 @@ const feed = createFeed(container, {
 });
 feed.render();
 const clip = container.children[0], [tape, dots] = clip.children;
-function swipe(dy, cancel = false) {
+function swipe(dy, cancel = false, dx = 0) {
   const target = tape.children[index];
   const event = { target, pointerId: 1, pointerType: 'touch', clientX: 100, clientY: 200 };
   clip.listeners.pointerdown({...event, type:'pointerdown'});
   for (const step of [0.1, 0.4, 0.7, 1]) {
-    clip.listeners.pointermove({...event, type:'pointermove', clientY:200 + dy * step});
+    clip.listeners.pointermove({...event, type:'pointermove', clientX:100 + dx * step, clientY:200 + dy * step});
   }
   const type = cancel ? 'pointercancel' : 'pointerup';
-  clip.listeners[type]({...event, type, clientY:200 + dy});
+  clip.listeners[type]({...event, type, clientX:100 + dx, clientY:200 + dy});
 }
 swipe(150);
 assert.equal(index, 0, 'swipe down from event returns to previous post');
@@ -64,3 +64,11 @@ assert.equal(tape.children[0].scrollTop, 0, 'scroll back to top of first article
 assert.equal(index, 0, 'cannot navigate before first article');
 
 console.log('PASS: vertical touch navigation, long-article scrolling, cancellation, and script syntax');
+
+assert.doesNotMatch(html, /onHDrag|handleHDrag/, 'neither tab has horizontal drag callbacks');
+for (const dx of [-150, 150]) {
+  const before = tape.style.transform;
+  swipe(0, false, dx);
+  assert.equal(index, 0, 'horizontal touch gestures do not navigate');
+  assert.equal(tape.style.transform, before, 'horizontal touch gestures do not move the feed');
+}

@@ -21,7 +21,15 @@ for (const page of ["index.html", "fast-read-prototype.html"]) {
   assert.match(html, /function continueSummary\(tab\)[\s\S]*?appendTopicPosts\(tab, selected\);/, `${page}: Continue Reading shows posts from selected topics`);
   assert.match(html, /function topicDemoPosts\(topic\)[\s\S]*?tags: \[\{ l: topic, c: TEAL \}\]/, `${page}: each selected unfamiliar topic keeps its topic on its posts`);
   assert.match(html, /function isLikePromptPost\(post\) \{\s*return state\.topicSelectionGroup === "explore" && post\.tags\.some\(\(tag\) => state\.selectedTopics\.includes\(tag\.l\)\);/, `${page}: every selected More to Explore post receives the like prompt`);
-  assert.match(html, /else if \(!state\.savedTopics\.includes\(topic\) && selected\.filter\(\(selectedTopic\) => !state\.savedTopics\.includes\(selectedTopic\)\)\.length >= 2\) return;/, `${page}: the summary cannot select more than two related topics`);
+  const selectSource = html.slice(html.indexOf("        function selectSummaryTopic"), html.indexOf("        function saveSummaryTopics"));
+  const state = { summarySelections: { latest: [], curated: [] } };
+  const select = new Function('state', 'rerenderFeeds', selectSource + '; return selectSummaryTopic;')(state, () => {});
+  for (const tab of ['latest', 'curated']) {
+    summaryTopics.forEach(topic => select(tab, topic));
+    assert.deepEqual(state.summarySelections[tab], summaryTopics, `${page}: all five topics can be selected in ${tab}`);
+    select(tab, summaryTopics[2]);
+    assert.equal(state.summarySelections[tab].length, 4, `${page}: topics can still be deselected`);
+  }
 }
 
 console.log("PASS: five fixed summary topics stay outside the profile and selected More to Explore posts receive likes");
