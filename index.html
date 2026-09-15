@@ -487,6 +487,21 @@
       background: #f5222d;
     }
 
+    .home-login {
+      flex: 0 0 auto;
+      min-height: 48px;
+      margin: 8px 16px 8px 4px;
+      padding: 8px 12px;
+      border-radius: 1px;
+      background: var(--purple);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .05);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 350;
+      letter-spacing: .28px;
+      line-height: 21px;
+    }
+
     .subnav {
       display: flex;
       align-items: center;
@@ -773,6 +788,78 @@
       font-weight: 325;
       white-space: nowrap;
     }
+
+    .headlines-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 40px 16px;
+      background: #fff;
+    }
+
+    .headlines-heading {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+    }
+
+    .headlines-heading h2 {
+      margin: 0;
+      color: #454545;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1.4px;
+      line-height: 37px;
+    }
+
+    .headlines-rule {
+      flex: 1;
+      height: 9px;
+      margin-bottom: 4px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .headline-feature,
+    .headline-list-item {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
+
+    .headline-feature { display: grid; gap: 8px; }
+    .headline-feature img { width: 100%; aspect-ratio: 358 / 240; object-fit: cover; }
+    .headline-tag {
+      margin: 0;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .24px;
+      line-height: 18px;
+      text-transform: uppercase;
+    }
+    .headline-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+    .headline-partner {
+      width: max-content;
+      margin: 4px 0 0;
+      padding: 2px 8px;
+      border: 1px solid #f7e7f9;
+      background: #f5f5f5;
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 325;
+      letter-spacing: .24px;
+      line-height: 18px;
+      text-transform: uppercase;
+    }
+    .headline-list-item { display: flex; gap: 12px; }
+    .headline-list-item img { width: 112px; height: 112px; object-fit: cover; }
+    .headline-list-item > div { display: grid; align-content: start; gap: 4px; }
 
     .qd-cta-stack {
       position: relative;
@@ -2501,6 +2588,198 @@
       cursor: default;
     }
 
+    .profile-onboarding {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 40px 16px 24px;
+      background: #fff;
+    }
+
+    .profile-onboarding-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .profile-onboarding-header-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-onboarding-kicker {
+      margin: 0 0 4px;
+      color: #232323;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: .38px;
+      line-height: 23px;
+    }
+
+    .profile-onboarding-intro {
+      margin: 0;
+      color: #595959;
+      font-size: 14px;
+      font-weight: 325;
+      letter-spacing: .28px;
+      line-height: 21px;
+    }
+
+    .profile-onboarding-close {
+      flex: 0 0 40px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+    }
+
+    .profile-onboarding-close img { width: 40px; height: 40px; }
+
+    .profile-onboarding-progress {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 24px;
+      padding: 0 12px;
+    }
+
+    .profile-onboarding-progress-line {
+      flex: 1;
+      height: 1px;
+      background: #dbdbdb;
+    }
+
+    .profile-onboarding-progress-line.done { background: #389e0d; }
+
+    .profile-onboarding-progress-step {
+      display: grid;
+      place-items: center;
+      flex: 0 0 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #c3c3c3;
+    }
+
+    .profile-onboarding-progress-step.active {
+      flex-basis: 14px;
+      width: 14px;
+      height: 14px;
+      background: #94409c;
+    }
+
+    .profile-onboarding-progress-step.done {
+      flex-basis: 24px;
+      width: 24px;
+      height: 24px;
+      background: transparent;
+    }
+
+    .profile-onboarding-progress-step.done img { width: 24px; height: 24px; }
+
+    .profile-onboarding-title {
+      margin: 0;
+      color: #232323;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 37px;
+    }
+
+    .profile-onboarding-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .profile-onboarding-options {
+      overflow-y: auto;
+    }
+
+    .profile-onboarding-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 12px;
+      color: #232323;
+      font-size: 16px;
+      font-weight: 325;
+      letter-spacing: .32px;
+      line-height: 24px;
+      text-align: left;
+    }
+
+    .profile-onboarding-option[aria-pressed="true"] {
+      background: #e7f8f7;
+      font-weight: 350;
+    }
+
+    .profile-onboarding-option img {
+      width: 16px;
+      height: 16px;
+      margin-left: auto;
+    }
+
+    .profile-onboarding-name-fields {
+      display: grid;
+      gap: 20px;
+      padding-top: 20px;
+    }
+
+    .profile-onboarding-name-fields input {
+      width: 100%;
+      padding: 0 0 2px;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      border-radius: 0;
+      color: #232323;
+      caret-color: #94409c;
+      font: 325 20px/30px var(--sans);
+      letter-spacing: .4px;
+      outline: 0;
+    }
+
+    .profile-onboarding-name-fields input::placeholder { color: #8b8b8b; }
+    .profile-onboarding-name-fields input:focus { border-bottom-color: transparent; }
+
+    .profile-onboarding-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      margin-top: auto;
+      color: #8b8b8b;
+      font-size: 15px;
+      font-weight: 325;
+      line-height: 18px;
+    }
+
+    .profile-onboarding-note img { flex: 0 0 16px; width: 16px; height: 16px; }
+
+    .profile-onboarding-next {
+      flex: 0 0 48px;
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--purple);
+      border-radius: 1px;
+      background: var(--purple);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .05);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 350;
+      letter-spacing: .32px;
+    }
+
+    .profile-onboarding-next:disabled {
+      border-color: #dbdbdb;
+      background: #f5f5f5;
+      color: #c3c3c3;
+      cursor: default;
+    }
+
     .ts-cancel {
       background: #fff;
       border: 1px solid var(--border);
@@ -3190,6 +3469,9 @@
       authGoogle: "assets/figma-auth-google.svg",
       authLinkedin: "assets/figma-auth-linkedin.svg",
       authEmail: "assets/figma-auth-email.svg",
+      visitorBanner: "assets/figma-visitor-banner.png",
+      visitorHeadlineFeature: "assets/figma-visitor-headline-feature.png",
+      visitorHeadlineSecondary: "assets/figma-visitor-headline-secondary.png",
     });
 
     const TOOLBAR_BOOKMARK = `<svg class="toolbar-bookmark-icon" viewBox="0 0 36 38" aria-hidden="true" focusable="false">
@@ -4296,12 +4578,14 @@
           curatedIndex: 0,
           surpriseActive: false,
           selectedTopics: [],
+          curatedTopics: [],
           moreToExploreTopics: [],
           topicSelectionGroup: null,
           savedTopics: DEFAULT_SAVED_TOPICS.slice(),
           bookmarked: new Set(),
           likedPosts: new Set(),
           likedTopics: [],
+          profile: { firstName: "", lastName: "", sector: null, industry: null, jobLevel: null, jobFunction: null },
           summaryRecs: { latest: null, curated: null },
           summarySelections: { latest: [], curated: [] },
           latestPosts: shuffle(ALL_LATEST),
@@ -4870,12 +5154,14 @@
             render();
           }));
           save.addEventListener("click", () => {
-            state.savedTopics = Array.from(selected);
-            state.selectedTopics = Array.from(selected);
-            state.topicSelectionGroup = "read";
+            state.curatedTopics = Array.from(selected);
+            state.selectedTopics = [];
+            state.topicSelectionGroup = null;
             state.storyGroup = null;
+            state.activeTab = "curated";
             state.curatedIndex = 0;
             rerenderFeeds();
+            refreshTabUI();
             refreshBottombar();
             close();
             onDone();
@@ -4917,6 +5203,17 @@
             sheet.querySelector("[data-role-next]").addEventListener("click", () => {
               if (!selections[stepIndex]) return;
               if (stepIndex === steps.length - 1) {
+                if (flow === "peers") {
+                  state.profile.jobLevel = selections[0];
+                  state.profile.jobFunction = selections[1];
+                  state.profile.sector = selections[2];
+                  state.profile.industry = selections[3];
+                } else if (flow === "sector") {
+                  state.profile.sector = selections[0];
+                } else if (flow === "industry") {
+                  state.profile.sector = selections[0];
+                  state.profile.industry = selections[1];
+                }
                 overlay.remove();
                 onDone(selections);
                 return;
@@ -4924,6 +5221,75 @@
               stepIndex += 1;
               render();
             });
+          };
+          render();
+        }
+
+        function showCloseOnboarding(onDone) {
+          const sectorStep = { key: "sector", title: "Which sector are you in?", options: ["Government and Statutory Boards", "Private Sector"] };
+          const industryStep = { key: "industry", title: "Which industry are you working in?", options: ["Agriculture & Food", "Building, Construction, Infrastructure & Public Works", "Communications & Information", "Culture, Community, Sports & Youth", "Defence – Air, Land, Sea", "Education", "Environment, Natural Resources, Energy, Sustainability", "Healthcare", "Transport", "Other"] };
+          const steps = [
+            !(state.profile.firstName && state.profile.lastName) && { key: "name", title: "What can we call you?" },
+            !state.profile.sector && sectorStep,
+            !state.profile.industry && industryStep,
+            !state.profile.jobLevel && { key: "jobLevel", title: "You’re a...", options: ["C-level/President/Owner/Chairman/Permanent Secretary/ Deputy Secretary", "Director/GM/Head of Department", "Assistant Director/ Deputy Director", "Manager/ Specialist", "Executive/Officer", "Academia", "Other"] },
+            !state.profile.jobFunction && { key: "jobFunction", title: "What are you responsible for?", options: ["Accounting/Finance/Procurement", "Admin/Operations/Customer Service", "Audit/Compliance/Legal", "HR/Training", "IT/Technology", "Marketing/Communications", "Policy/Planning/Strategy", "Other"] },
+          ].filter(Boolean);
+          if (!steps.length) { onDone(); return; }
+          const overlay = document.createElement("section");
+          overlay.className = "profile-onboarding";
+          overlay.setAttribute("role", "dialog");
+          overlay.setAttribute("aria-modal", "true");
+          screenEl.appendChild(overlay);
+          let stepIndex = 0;
+
+          const close = () => { overlay.remove(); onDone(); };
+          const renderProgress = () => steps.length < 2 ? "" : `<div class="profile-onboarding-progress" aria-label="Step ${stepIndex + 1} of ${steps.length}">${steps.map((_, index) => {
+            const status = index < stepIndex ? "done" : index === stepIndex ? "active" : "";
+            const marker = status === "done" ? '<img src="assets/figma-onboarding-complete.svg" alt="Completed">' : "";
+            const line = index < steps.length - 1 ? `<span class="profile-onboarding-progress-line ${index < stepIndex ? "done" : ""}"></span>` : "";
+            return `<span class="profile-onboarding-progress-step ${status}">${marker}</span>${line}`;
+          }).join("")}</div>`;
+          const canAdvance = (step) => step.key === "name" ? Boolean(state.profile.firstName.trim() && state.profile.lastName.trim()) : Boolean(state.profile[step.key]);
+          const render = () => {
+            const step = steps[stepIndex];
+            const isName = step.key === "name";
+            overlay.innerHTML = `
+              <div class="profile-onboarding-header">
+                <div class="profile-onboarding-header-copy">
+                  <p class="profile-onboarding-kicker">One more step!</p>
+                  <p class="profile-onboarding-intro">Share a bit more about yourself to make the most of GovInsider.</p>
+                </div>
+                <button class="profile-onboarding-close" type="button" data-profile-close aria-label="Close onboarding"><img src="assets/figma-onboarding-close.svg" alt=""></button>
+              </div>
+              ${renderProgress()}
+              <h2 class="profile-onboarding-title serif">${esc(step.title)}</h2>
+              <div class="profile-onboarding-content">
+                ${isName ? `<div class="profile-onboarding-name-fields"><input type="text" data-profile-first placeholder="First name" value="${esc(state.profile.firstName)}" autocomplete="given-name"><input type="text" data-profile-last placeholder="Last name" value="${esc(state.profile.lastName)}" autocomplete="family-name"></div>` : `<div class="profile-onboarding-options">${step.options.map((option) => {
+                  const selected = state.profile[step.key] === option;
+                  return `<button class="profile-onboarding-option" type="button" data-profile-option="${esc(option)}" aria-pressed="${selected}"><span>${esc(option)}</span>${selected ? '<img src="assets/figma-role-selected.svg" alt="">' : ""}</button>`;
+                }).join("")}</div>`}
+                ${isName ? "" : '<p class="profile-onboarding-note"><img src="assets/figma-onboarding-info.svg" alt="">We gather this info to make your experience more personal and enjoyable.</p>'}
+              </div>
+              <button class="profile-onboarding-next" type="button" data-profile-next ${canAdvance(step) ? "" : "disabled"}>${stepIndex === steps.length - 1 ? "Complete" : "Next"}</button>`;
+            overlay.querySelector("[data-profile-close]").addEventListener("click", close);
+            const next = overlay.querySelector("[data-profile-next]");
+            overlay.querySelectorAll("[data-profile-option]").forEach((button) => button.addEventListener("click", () => {
+              state.profile[step.key] = button.dataset.profileOption;
+              render();
+            }));
+            overlay.querySelectorAll("[data-profile-first], [data-profile-last]").forEach((input) => input.addEventListener("input", () => {
+              state.profile.firstName = overlay.querySelector("[data-profile-first]").value;
+              state.profile.lastName = overlay.querySelector("[data-profile-last]").value;
+              next.disabled = !canAdvance(step);
+            }));
+            next.addEventListener("click", () => {
+              if (!canAdvance(step)) return;
+              if (stepIndex === steps.length - 1) { close(); return; }
+              stepIndex += 1;
+              render();
+            });
+            if (isName) overlay.querySelector("[data-profile-first]").focus();
           };
           render();
         }
@@ -4936,7 +5302,7 @@
           showCenterHint(tr("bookmarked"), "bookmark");
         }
 
-        return { activate, getState: () => state, showSwipeHint, showLoginHint, showPersonalisedHint, showTopicSetup, showRoleSetup, showWelcome: () => setWelcomeVisible(true) };
+        return { activate, getState: () => state, showSwipeHint, showLoginHint, showPersonalisedHint, showTopicSetup, showRoleSetup, showCloseOnboarding, showWelcome: () => setWelcomeVisible(true) };
       }
 
       // ---------------------------------------------------------
@@ -4954,6 +5320,7 @@
         let isAuthenticated = !VISITOR_FLOW;
         let pendingAction = null;
         let authReturnScreen = "reader";
+        let authLoginFromHome = false;
 
         function showScreen(name, hint) {
           [screenHome, screenReader, screenAuthChoice, screenAuthLogin].forEach((s) => s.classList.remove("active"));
@@ -4991,6 +5358,7 @@
           }
           pendingAction = null;
           welcomeShown = true;
+          renderHome();
           showScreen("reader");
           if (category === "curated") reader1.showTopicSetup(() => reader1.showPersonalisedHint());
           else if (category === "peopleLikeYou") reader1.showRoleSetup("peers", () => reader1.showPersonalisedHint());
@@ -5013,7 +5381,7 @@
           </div>`;
 
         screenAuthLogin.innerHTML = `
-          <button class="auth-back" type="button" data-auth-choice><img src="${ASSETS.authChevron}" alt=""><span>Back</span></button>
+          <button class="auth-back" type="button" data-auth-login-back><img src="${ASSETS.authChevron}" alt=""><span>Back</span></button>
           <div class="auth-content">
             <h1 class="auth-title serif">Welcome back!</h1>
             <button class="auth-provider auth-login-action" type="button"><img class="auth-provider-mark" src="${ASSETS.authGoogle}" alt="">Login with Google</button>
@@ -5033,10 +5401,11 @@
           </div>`;
 
         screenAuthChoice.querySelector("[data-auth-back]").addEventListener("click", () => showScreen(authReturnScreen));
-        screenAuthChoice.querySelectorAll("[data-show-login]").forEach((button) => button.addEventListener("click", () => showScreen("auth-login")));
+        screenAuthChoice.querySelectorAll("[data-show-login]").forEach((button) => button.addEventListener("click", () => { authLoginFromHome = false; showScreen("auth-login"); }));
         screenAuthChoice.querySelectorAll("[data-auth-complete]").forEach((button) => button.addEventListener("click", () => completeLogin(true)));
         screenAuthLogin.querySelectorAll("[data-auth-choice]").forEach((button) => button.addEventListener("click", () => showScreen("auth-choice")));
-        screenAuthLogin.querySelectorAll(".auth-login-action").forEach((button) => button.addEventListener("click", completeLogin));
+        screenAuthLogin.querySelector("[data-auth-login-back]").addEventListener("click", () => showScreen(authLoginFromHome ? authReturnScreen : "auth-choice"));
+        screenAuthLogin.querySelectorAll(".auth-login-action").forEach((button) => button.addEventListener("click", () => completeLogin()));
         screenAuthLogin.querySelector("[data-toggle-password]").addEventListener("click", (event) => {
           const input = screenAuthLogin.querySelector("#visitor-password");
           const reveal = input.type === "password";
@@ -5046,12 +5415,8 @@
         });
 
         // ---- Home page render ----
-        screenHome.innerHTML = `
-      <div class="home-nav">
-        <div class="home-nav-row">
-          <button class="icon-btn"><img src="${ASSETS.iconMenu}" width="20" height="20" alt="Menu"></button>
-          <div class="home-logo-wrap"><img src="${ASSETS.logoPng}" alt="GovInsider" draggable="false"></div>
-          <button class="icon-btn"><img src="${ASSETS.iconSearch}" width="20" height="20" alt="Search"></button>
+        function renderHome() {
+        const homeAccountAction = isAuthenticated ? `
           <button class="bookmark-badge-wrap" type="button" aria-label="Saved articles">
             <img src="${ASSETS.iconBookmarkFull}" width="20" height="20" alt="Saved">
             <div class="bookmark-badge"><span>0</span></div>
@@ -5059,7 +5424,56 @@
           <div class="user-icon-wrap">
             <img src="${ASSETS.iconUser}" width="20" height="20" alt="Account">
             <div class="user-dot"></div>
-          </div>
+          </div>` : '<button class="home-login" type="button" data-home-login>Login</button>';
+        const homeContent = isAuthenticated ? `
+          <div class="curated-section">
+            <div class="curated-heading">
+              <div class="curated-heading-row"><p class="serif">Curated for You</p></div>
+              <div class="curated-heading-rule"></div>
+            </div>
+            <div class="curated-cards hide-scrollbar">
+              ${CURATED_HOME_CARDS.map((card) => `
+                <div class="curated-card">
+                  <div class="curated-card-img">
+                    <img src="${ASSETS.articleJpg}" alt="${esc(card.title)}" loading="lazy" decoding="async" draggable="false">
+                    <button class="curated-card-bm"><img src="${ASSETS.iconBookmark}" width="16" height="16" alt="Bookmark"></button>
+                  </div>
+                  <div class="curated-card-body">
+                    <div class="curated-card-tags">${card.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+                    <p class="curated-card-title serif">${esc(card.title)}</p>
+                    <p class="curated-card-excerpt">${esc(card.excerpt)}</p>
+                  </div>
+                  <button class="curated-card-more"><img src="${ASSETS.iconStar}" width="16" height="16" alt=""><span>More like this</span></button>
+                </div>`).join("")}
+            </div>
+            <div class="qd-cta-stack">
+              <button class="qd-cta-main" data-open-reader="curated">
+                <div class="txt"><p>Quick Digest</p><p>Catch up with curated articles in minutes.</p></div>
+                <img src="${ASSETS.iconArrowBig}" alt="">
+              </button>
+              <div class="qd-shadow1"></div><div class="qd-shadow2"></div>
+            </div>
+          </div>` : `
+          <section class="headlines-section" aria-labelledby="headlines-title">
+            <div class="headlines-heading"><h2 id="headlines-title" class="serif">Headlines</h2><span class="headlines-rule"></span></div>
+            <article class="headline-feature">
+              <img src="${ASSETS.visitorHeadlineFeature}" alt="People looking at a living map" loading="lazy" decoding="async">
+              <p class="headline-tag">Healthcare</p>
+              <h3 class="headline-title">Behind the ‘living map’ delivering preventive healthcare with geospatial tech</h3>
+              <p class="headline-partner">Partner</p>
+            </article>
+            <article class="headline-list-item">
+              <img src="${ASSETS.visitorHeadlineSecondary}" alt="Digital economy illustration" loading="lazy" decoding="async">
+              <div><p class="headline-tag">Artificial Intelligence</p><h3 class="headline-title">Indonesia’s digital economy strategy to close gap for AI infrastructure, says economic planner</h3></div>
+            </article>
+          </section>`;
+        screenHome.innerHTML = `
+      <div class="home-nav">
+        <div class="home-nav-row">
+          <button class="icon-btn"><img src="${ASSETS.iconMenu}" width="20" height="20" alt="Menu"></button>
+          <div class="home-logo-wrap"><img src="${ASSETS.logoPng}" alt="GovInsider" draggable="false"></div>
+          <button class="icon-btn"><img src="${ASSETS.iconSearch}" width="20" height="20" alt="Search"></button>
+          ${homeAccountAction}
         </div>
         <div class="subnav hide-scrollbar">
           <div class="subnav-inner">
@@ -5078,44 +5492,13 @@
       </div>
 
       <div class="home-banner-wrap">
-        <div class="img-wrap"><img src="${ASSETS.bannerJpg}" alt="Banner" decoding="async" fetchpriority="high" draggable="false"></div>
+        <div class="img-wrap"><img src="${isAuthenticated ? ASSETS.bannerJpg : ASSETS.visitorBanner}" alt="Banner" decoding="async" fetchpriority="high" draggable="false"></div>
         <div class="carousel-dots">
           <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
         </div>
       </div>
 
-      <div class="curated-section">
-        <div class="curated-heading">
-          <div class="curated-heading-row"><p class="serif">Curated for You</p></div>
-          <div class="curated-heading-rule"></div>
-        </div>
-        <div class="curated-cards hide-scrollbar">
-          ${CURATED_HOME_CARDS.map((card) => `
-            <div class="curated-card">
-              <div class="curated-card-img">
-                <img src="${ASSETS.articleJpg}" alt="${esc(card.title)}" loading="lazy" decoding="async" draggable="false">
-                <button class="curated-card-bm"><img src="${ASSETS.iconBookmark}" width="16" height="16" alt="Bookmark"></button>
-              </div>
-              <div class="curated-card-body">
-                <div class="curated-card-tags">${card.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-                <p class="curated-card-title serif">${esc(card.title)}</p>
-                <p class="curated-card-excerpt">${esc(card.excerpt)}</p>
-              </div>
-              <button class="curated-card-more"><img src="${ASSETS.iconStar}" width="16" height="16" alt=""><span>More like this</span></button>
-            </div>`).join("")}
-        </div>
-        <div class="qd-cta-stack">
-          <button class="qd-cta-main" data-open-reader="curated">
-            <div class="txt">
-              <p>Quick Digest</p>
-              <p>Catch up with curated articles in minutes.</p>
-            </div>
-            <img src="${ASSETS.iconArrowBig}" alt="">
-          </button>
-          <div class="qd-shadow1"></div>
-          <div class="qd-shadow2"></div>
-        </div>
-      </div>
+      ${homeContent}
     `;
 
         screenHome.querySelectorAll("[data-open-reader]").forEach((btn) => {
@@ -5135,27 +5518,30 @@
           });
         });
 
-        screenHome.querySelector(".bookmark-badge-wrap").addEventListener("click", () => {
+        screenHome.querySelector("[data-home-login]")?.addEventListener("click", () => {
+          authReturnScreen = "home";
+          authLoginFromHome = true;
+          showScreen("auth-login");
+        });
+        screenHome.querySelector(".bookmark-badge-wrap")?.addEventListener("click", () => {
           if (!isAuthenticated) requireLogin({ type: "bookmark-list" });
         });
         screenHome.querySelectorAll(".curated-card-bm").forEach((button) => button.addEventListener("click", () => {
           if (!isAuthenticated) requireLogin({ type: "bookmark", postId: ALL_LATEST[0].id });
         }));
+        }
 
         const reader1 = createReader({
           screenEl: screenReader,
           initialTabGetter: () => readerTab,
-          onClose: () => showScreen("home"),
+          onClose: () => isAuthenticated ? reader1.showCloseOnboarding(() => showScreen("home")) : showScreen("home"),
           canAccess: () => isAuthenticated,
           onRequireLogin: requireLogin,
         });
 
-        if (VISITOR_FLOW) {
-          welcomeShown = true;
-          showScreen("reader", true);
-        } else {
-          showScreen("home");
-        }
+        renderHome();
+
+        showScreen("home");
       });
     })();
 
