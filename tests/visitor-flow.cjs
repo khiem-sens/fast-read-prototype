@@ -21,9 +21,13 @@ assert.match(html, /showCenterHint\("Exclusive features unlocked!\\nThank you fo
 assert.match(html, /if \(category === "curated"\) reader1\.showTopicSetup\(\(\) => reader1\.showPersonalisedHint\(\)\);/, "Curated login opens topic setup before its confirmation toast");
 assert.match(html, /topic-setup-scrim" data-close[\s\S]*?addEventListener\("click", close\)/, "topic setup can be dismissed by clicking outside the sheet");
 assert.match(html, /You’re all set!\\nEnjoy your personalised content\./, "saving topics shows the personalised-content toast");
-assert.match(html, /showScreen\("reader"\);[\s\S]*?reader1\.showLoginHint\(\);/, "other login paths return to Quick Digest with the account-unlocked message");
+assert.match(html, /function showPersonalisedHint\(\)[\s\S]*?classList\.add\("login-success"\)[\s\S]*?ph_confetti\.svg/, "personalised-content toast uses the same card and icon as sign-up");
+assert.match(html, /function completeLogin\(isSignUp = false\)[\s\S]*?else if \(isSignUp\) reader1\.showLoginHint\(\);/, "only sign-up shows the account-unlocked message");
+assert.match(html, /data-auth-complete[\s\S]*?completeLogin\(true\)/, "sign-up actions are marked as account creation");
 assert.match(html, /src="assets\/ph_confetti\.svg"/, "login notification uses the supplied confetti icon");
 assert.match(html, /class="topstories-chevron" src="assets\/chevron\.svg"/, "category chevron uses the supplied SVG");
+assert.match(html, /\.reader-bottombar\.content-ad\s*\{[\s\S]*?visibility: hidden;[\s\S]*?pointer-events: none;/, "ads hide controls without resizing the feed");
+assert.match(html, /\.reader-bottombar\.event-only \.[\s\S]*?data-share/, "events retain only the share action in the bottom panel");
 assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?padding: 16px;/, "Back button uses 16px padding on every side");
 assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
 assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");

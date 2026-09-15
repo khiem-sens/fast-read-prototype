@@ -142,6 +142,10 @@
       display: flex;
     }
 
+    .screen.showing-ad {
+      background: #f5f5f5;
+    }
+
     /* Quick Digest welcome */
     .welcome-overlay {
       position: absolute;
@@ -1849,6 +1853,22 @@
       z-index: 10;
     }
 
+    .reader-bottombar.content-ad {
+      visibility: hidden;
+      pointer-events: none;
+      border-top-color: transparent;
+      box-shadow: none;
+    }
+
+    .reader-bottombar.event-only {
+      justify-content: center;
+    }
+
+    .reader-bottombar.event-only .bottombar-left,
+    .reader-bottombar.event-only .bottombar-icons> :not([data-share]) {
+      display: none;
+    }
+
     .reader-likebar {
       position: absolute;
       right: 0;
@@ -2385,11 +2405,6 @@
       background: #f6f6f6;
       color: #c6c6c6;
       cursor: default;
-    }
-
-    .swipe-hint.personalised-success {
-      white-space: pre-line;
-      text-align: center;
     }
 
     .ts-cancel {
@@ -3024,6 +3039,7 @@
       margin-top: 2px;
       padding: 22px 16px;
       background: #fbf2fc;
+      border: 0;
     }
 
     .visitor-signup-callout strong {
@@ -3054,6 +3070,11 @@
     .visitor-restricted .ts-favorites-head,
     .visitor-restricted .ts-suggestions-panel {
       display: none;
+    }
+
+    .visitor-restricted .ts-favorites-panel {
+      border: 0;
+      padding: 0;
     }
   </style>
 </head>
@@ -4331,6 +4352,7 @@
         const tabBtns = screenEl.querySelectorAll(".tab-btn");
         const tabCarets = screenEl.querySelectorAll(".tab-caret");
         const tabSlideHost = screenEl.querySelector(".tabslide-host");
+        const bottomBar = screenEl.querySelector(".reader-bottombar");
         const bottombarLeft = screenEl.querySelector(".bottombar-left");
         const likeBar = screenEl.querySelector(".reader-likebar");
         const likeBtn = screenEl.querySelector("[data-like]");
@@ -4408,6 +4430,16 @@
           });
           const item = currentItem();
           screenEl.classList.toggle("showing-summary", item && item.kind === "summary");
+          const isAd = item && item.kind === "ad";
+          const isEvent = item && item.kind === "event";
+          screenEl.classList.toggle("showing-ad", isAd);
+          bottomBar.classList.toggle("content-ad", isAd);
+          bottomBar.classList.toggle("event-only", isEvent);
+          if (isAd || isEvent) {
+            likeBar.classList.remove("show");
+            likeBtn.classList.remove("show");
+            if (isAd) return;
+          }
           const post = currentPost();
           const liked = state.likedPosts.has(post.id);
           const showPostActions = item && item.kind === "post";
@@ -4705,8 +4737,10 @@
         }
 
         function showPersonalisedHint() {
-          showCenterHint("You’re all set!\nEnjoy your personalised content.");
-          screenEl.querySelector(".swipe-hint").classList.add("personalised-success");
+          showCenterHint("You’re all set! Enjoy your personalised content.");
+          const hint = screenEl.querySelector(".swipe-hint");
+          hint.classList.add("login-success");
+          hint.insertAdjacentHTML("afterbegin", '<img class="swipe-hint-login-icon" src="assets/ph_confetti.svg" alt="">');
         }
 
         function showTopicSetup(onDone) {
@@ -4797,7 +4831,7 @@
           showScreen("auth-choice");
         }
 
-        function completeLogin() {
+        function completeLogin(isSignUp = false) {
           isAuthenticated = true;
           if (pendingAction && pendingAction.type === "bookmark") {
             reader1.getState().bookmarked.add(pendingAction.postId);
@@ -4820,7 +4854,7 @@
           welcomeShown = true;
           showScreen("reader");
           if (category === "curated") reader1.showTopicSetup(() => reader1.showPersonalisedHint());
-          else reader1.showLoginHint();
+          else if (isSignUp) reader1.showLoginHint();
         }
 
         screenAuthChoice.innerHTML = `
@@ -4858,7 +4892,7 @@
 
         screenAuthChoice.querySelector("[data-auth-back]").addEventListener("click", () => showScreen(authReturnScreen));
         screenAuthChoice.querySelectorAll("[data-show-login]").forEach((button) => button.addEventListener("click", () => showScreen("auth-login")));
-        screenAuthChoice.querySelectorAll("[data-auth-complete]").forEach((button) => button.addEventListener("click", completeLogin));
+        screenAuthChoice.querySelectorAll("[data-auth-complete]").forEach((button) => button.addEventListener("click", () => completeLogin(true)));
         screenAuthLogin.querySelectorAll("[data-auth-choice]").forEach((button) => button.addEventListener("click", () => showScreen("auth-choice")));
         screenAuthLogin.querySelectorAll(".auth-login-action").forEach((button) => button.addEventListener("click", completeLogin));
         screenAuthLogin.querySelector("[data-toggle-password]").addEventListener("click", (event) => {
