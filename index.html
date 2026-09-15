@@ -2407,6 +2407,100 @@
       cursor: default;
     }
 
+    .role-setup-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .role-setup-scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+    }
+
+    .role-setup-sheet {
+      position: relative;
+      width: 100%;
+      height: min(600px, calc(100% - 44px));
+      max-height: 600px;
+      padding: 20px 20px 40px;
+      border-radius: 12px 12px 0 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .role-setup-intro {
+      margin: 12px 0;
+      color: #595959;
+      font-size: 14px;
+      font-weight: 325;
+      letter-spacing: .28px;
+      line-height: 21px;
+    }
+
+    .role-setup-sheet h2 {
+      margin: 0;
+      color: #232323;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 32px;
+    }
+
+    .role-setup-options {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .role-setup-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 12px;
+      color: #232323;
+      font-size: 16px;
+      font-weight: 325;
+      letter-spacing: .32px;
+      line-height: 24px;
+      text-align: left;
+    }
+
+    .role-setup-option[aria-pressed="true"] {
+      background: #e7f8f7;
+      font-weight: 350;
+    }
+
+    .role-setup-option img {
+      width: 16px;
+      height: 16px;
+      margin-left: auto;
+    }
+
+    .role-setup-next {
+      flex: 0 0 48px;
+      width: 100%;
+      min-height: 48px;
+      background: var(--purple);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .05);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 350;
+      letter-spacing: .32px;
+    }
+
+    .role-setup-next:disabled {
+      background: #f5f5f5;
+      color: #c3c3c3;
+      cursor: default;
+    }
+
     .ts-cancel {
       background: #fff;
       border: 1px solid var(--border);
@@ -4789,6 +4883,51 @@
           options[0].focus();
         }
 
+        function showRoleSetup(flow, onDone) {
+          const sectorStep = { title: "Which sector are you in?", options: ["Government and Statutory Boards", "Private Sector"] };
+          const industryStep = { title: "Which industry are you working in?", options: ["Agriculture & Food", "Building, Construction, Infrastructure & Public Works", "Communications & Information", "Culture, Community, Sports & Youth", "Defence – Air, Land, Sea", "Education", "Environment, Natural Resources, Energy, Sustainability", "Healthcare", "Transport", "Other"] };
+          const peerSteps = [
+            { title: "You’re a...", options: ["C-level/President/Owner/Chairman/Permanent Secretary/ Deputy Secretary", "Director/GM/Head of Department", "Assistant Director/ Deputy Director", "Manager/ Specialist", "Executive/Officer", "Academia", "Other"], selected: "Assistant Director/ Deputy Director" },
+            { title: "What are you responsible for?", options: ["Accounting/Finance/Procurement", "Admin/Operations/Customer Service", "Audit/Compliance/Legal", "HR/Training", "IT/Technology", "Marketing/Communications", "Policy/Planning/Strategy", "Other"] },
+            sectorStep,
+            industryStep,
+          ];
+          const steps = flow === "sector" ? [sectorStep] : flow === "industry" ? [sectorStep, industryStep] : peerSteps;
+          const overlay = document.createElement("div");
+          overlay.className = "role-setup-overlay";
+          overlay.innerHTML = '<div class="role-setup-scrim"></div><section class="role-setup-sheet" role="dialog" aria-modal="true" aria-labelledby="role-setup-title"></section>';
+          screenEl.appendChild(overlay);
+          const sheet = overlay.querySelector(".role-setup-sheet");
+          let stepIndex = 0;
+          const selections = steps.map((step) => step.selected || null);
+          const render = () => {
+            const step = steps[stepIndex];
+            sheet.innerHTML = `
+              <p class="role-setup-intro">Share a few details about your role so we can personalise your selection.</p>
+              <h2 id="role-setup-title" class="serif">${esc(step.title)}</h2>
+              <div class="role-setup-options">${step.options.map((option) => {
+                const selected = selections[stepIndex] === option;
+                return `<button class="role-setup-option" type="button" data-role-option="${esc(option)}" aria-pressed="${selected}"><span>${esc(option)}</span>${selected ? '<img src="assets/figma-role-selected.svg" alt="">' : ""}</button>`;
+              }).join("")}</div>
+              <button class="role-setup-next" type="button" data-role-next ${selections[stepIndex] ? "" : "disabled"}>${stepIndex === steps.length - 1 ? "Done" : "Next"}</button>`;
+            sheet.querySelectorAll("[data-role-option]").forEach((button) => button.addEventListener("click", () => {
+              selections[stepIndex] = button.dataset.roleOption;
+              render();
+            }));
+            sheet.querySelector("[data-role-next]").addEventListener("click", () => {
+              if (!selections[stepIndex]) return;
+              if (stepIndex === steps.length - 1) {
+                overlay.remove();
+                onDone(selections);
+                return;
+              }
+              stepIndex += 1;
+              render();
+            });
+          };
+          render();
+        }
+
         function showModeChangeHint(mode) {
           showCenterHint(tr(`${mode}Changed`));
         }
@@ -4797,7 +4936,7 @@
           showCenterHint(tr("bookmarked"), "bookmark");
         }
 
-        return { activate, getState: () => state, showSwipeHint, showLoginHint, showPersonalisedHint, showTopicSetup, showWelcome: () => setWelcomeVisible(true) };
+        return { activate, getState: () => state, showSwipeHint, showLoginHint, showPersonalisedHint, showTopicSetup, showRoleSetup, showWelcome: () => setWelcomeVisible(true) };
       }
 
       // ---------------------------------------------------------
@@ -4854,6 +4993,9 @@
           welcomeShown = true;
           showScreen("reader");
           if (category === "curated") reader1.showTopicSetup(() => reader1.showPersonalisedHint());
+          else if (category === "peopleLikeYou") reader1.showRoleSetup("peers", () => reader1.showPersonalisedHint());
+          else if (category === "sector") reader1.showRoleSetup("sector", () => reader1.showPersonalisedHint());
+          else if (category === "industry") reader1.showRoleSetup("industry", () => reader1.showPersonalisedHint());
           else if (isSignUp) reader1.showLoginHint();
         }
 

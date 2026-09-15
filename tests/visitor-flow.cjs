@@ -19,6 +19,10 @@ assert.match(html, /const category = pendingAction && pendingAction\.type === "c
 assert.match(html, /readerState\.storyGroup = category === "curated" \|\| category === "topics" \? null : category;/, "login restores protected story-group categories");
 assert.match(html, /showCenterHint\("Exclusive features unlocked!\\nThank you for registering\."\)/, "login shows an account-unlocked message");
 assert.match(html, /if \(category === "curated"\) reader1\.showTopicSetup\(\(\) => reader1\.showPersonalisedHint\(\)\);/, "Curated login opens topic setup before its confirmation toast");
+assert.match(html, /else if \(category === "peopleLikeYou"\) reader1\.showRoleSetup\("peers", \(\) => reader1\.showPersonalisedHint\(\)\);/, "Trending login opens the mandatory role-personalisation flow");
+assert.match(html, /else if \(category === "sector"\) reader1\.showRoleSetup\("sector"/, "Most Read In Your Sector asks only for sector");
+assert.match(html, /else if \(category === "industry"\) reader1\.showRoleSetup\("industry"/, "Most Read In Your Industry asks for sector before industry");
+assert.match(html, /role-setup-scrim(?!" data-close)/, "role-personalisation flow cannot be dismissed outside the sheet");
 assert.match(html, /topic-setup-scrim" data-close[\s\S]*?addEventListener\("click", close\)/, "topic setup can be dismissed by clicking outside the sheet");
 assert.match(html, /You’re all set!\\nEnjoy your personalised content\./, "saving topics shows the personalised-content toast");
 assert.match(html, /function showPersonalisedHint\(\)[\s\S]*?classList\.add\("login-success"\)[\s\S]*?ph_confetti\.svg/, "personalised-content toast uses the same card and icon as sign-up");
