@@ -2277,6 +2277,121 @@
       font-size: 14px;
     }
 
+    .topic-setup-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .topic-setup-scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .52);
+    }
+
+    .topic-setup-sheet {
+      position: relative;
+      width: 100%;
+      height: min(600px, calc(100% - 44px));
+      max-height: 600px;
+      padding: 20px 20px 40px;
+      border-radius: 12px 12px 0 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .topic-setup-sheet h2 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 700;
+    }
+
+    .topic-setup-sheet p {
+      margin: 0;
+      color: #595959;
+      font-size: 14px;
+      font-weight: 325;
+      letter-spacing: .28px;
+      line-height: 21px;
+    }
+
+    .topic-setup-select-all {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      align-self: flex-end;
+      margin: 12px 0 12px;
+      padding: 0;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .28px;
+      text-transform: uppercase;
+    }
+
+    .topic-setup-select-all span {
+      padding-bottom: 1px;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .topic-setup-select-all img {
+      width: 16px;
+      height: 16px;
+    }
+
+    .topic-setup-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .topic-setup-option {
+      min-height: 41px;
+      padding: 10px 8px;
+      border: 1px solid #d8d8d8;
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 325;
+      letter-spacing: .28px;
+      line-height: 21px;
+    }
+
+    .topic-setup-option[aria-pressed="true"] {
+      border-color: var(--purple);
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .topic-setup-save {
+      width: 100%;
+      min-height: 48px;
+      margin-top: auto;
+      border: 1px solid var(--purple);
+      background: var(--purple);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 350;
+      letter-spacing: .32px;
+    }
+
+    .topic-setup-save:disabled {
+      border-color: #d9d9d9;
+      background: #f6f6f6;
+      color: #c6c6c6;
+      cursor: default;
+    }
+
+    .swipe-hint.personalised-success {
+      white-space: pre-line;
+      text-align: center;
+    }
+
     .ts-cancel {
       background: #fff;
       border: 1px solid var(--border);
@@ -4585,6 +4700,57 @@
           hint.insertAdjacentHTML("afterbegin", '<img class="swipe-hint-login-icon" src="assets/ph_confetti.svg" alt="">');
         }
 
+        function showPersonalisedHint() {
+          showCenterHint("You’re all set!\nEnjoy your personalised content.");
+          screenEl.querySelector(".swipe-hint").classList.add("personalised-success");
+        }
+
+        function showTopicSetup(onDone) {
+          const topics = ["Covid19", "Health", "Artificial Intelligence", "Connected", "Inclusive", "Data & Transformation", "Resilience", "CitizenCentric", "Secure Gov", "Data & Transformation"];
+          const overlay = document.createElement("div");
+          overlay.className = "topic-setup-overlay";
+          overlay.innerHTML = `
+            <div class="topic-setup-scrim" data-close></div>
+            <section class="topic-setup-sheet" role="dialog" aria-modal="true" aria-labelledby="topic-setup-title">
+              <h2 id="topic-setup-title" class="serif">Choose the topics that interest you most</h2>
+              <p>We use this data to tailor your feed just for you.</p>
+              <button class="topic-setup-select-all" type="button" data-select-all><img src="assets/figma-topic-select-all.svg" alt=""><span>Select all</span></button>
+              <div class="topic-setup-options">${topics.map((topic) => `<button class="topic-setup-option" type="button" data-topic="${esc(topic)}" aria-pressed="false">${esc(topic)}</button>`).join("")}</div>
+              <button class="topic-setup-save" type="button" data-save disabled>Save</button>
+            </section>`;
+          screenEl.appendChild(overlay);
+          const selected = new Set();
+          const save = overlay.querySelector("[data-save]");
+          const options = overlay.querySelectorAll("[data-topic]");
+          const close = () => overlay.remove();
+          const render = () => {
+            options.forEach((button) => button.setAttribute("aria-pressed", String(selected.has(button.dataset.topic))));
+            save.disabled = selected.size === 0;
+          };
+          overlay.querySelector("[data-close]").addEventListener("click", close);
+          overlay.querySelector("[data-select-all]").addEventListener("click", () => {
+            topics.forEach((topic) => selected.add(topic));
+            render();
+          });
+          options.forEach((button) => button.addEventListener("click", () => {
+            const topic = button.dataset.topic;
+            if (selected.has(topic)) selected.delete(topic); else selected.add(topic);
+            render();
+          }));
+          save.addEventListener("click", () => {
+            state.savedTopics = Array.from(selected);
+            state.selectedTopics = Array.from(selected);
+            state.topicSelectionGroup = "read";
+            state.storyGroup = null;
+            state.curatedIndex = 0;
+            rerenderFeeds();
+            refreshBottombar();
+            close();
+            onDone();
+          });
+          options[0].focus();
+        }
+
         function showModeChangeHint(mode) {
           showCenterHint(tr(`${mode}Changed`));
         }
@@ -4593,7 +4759,7 @@
           showCenterHint(tr("bookmarked"), "bookmark");
         }
 
-        return { activate, getState: () => state, showSwipeHint, showLoginHint, showWelcome: () => setWelcomeVisible(true) };
+        return { activate, getState: () => state, showSwipeHint, showLoginHint, showPersonalisedHint, showTopicSetup, showWelcome: () => setWelcomeVisible(true) };
       }
 
       // ---------------------------------------------------------
@@ -4646,7 +4812,8 @@
           pendingAction = null;
           welcomeShown = true;
           showScreen("reader");
-          reader1.showLoginHint();
+          if (category === "curated") reader1.showTopicSetup(() => reader1.showPersonalisedHint());
+          else reader1.showLoginHint();
         }
 
         screenAuthChoice.innerHTML = `
