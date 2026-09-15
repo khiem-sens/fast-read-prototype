@@ -13,5 +13,8 @@ assert.match(html, /button\.dataset\.storyGroup !== "topStoriesWeek"/, "Top Stor
 assert.match(html, /onRequireLogin\(\{ type: "bookmark", postId: post\.id \}\)/, "bookmarking asks visitors to sign in");
 assert.match(html, /bookmarked\.add\(pendingAction\.postId\)/, "the pending bookmark is restored after login");
 assert.match(html, /showScreen\("reader", true\)/, "login returns to Quick Digest with the swipe hint");
+assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?height: 48px;/, "Back button matches the Figma dimensions");
+assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
+assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");
 
 console.log("PASS: visitor access, authentication, and pending bookmark handoff are wired");

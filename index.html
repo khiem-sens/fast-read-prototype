@@ -2692,52 +2692,67 @@
     /* ===================== Visitor authentication ===================== */
     .auth-screen {
       overflow-y: auto;
-      padding: max(76px, env(safe-area-inset-top)) 22px max(42px, env(safe-area-inset-bottom));
+      padding: max(84px, calc(env(safe-area-inset-top) + 40px)) 20px max(40px, env(safe-area-inset-bottom));
       color: var(--ink);
     }
 
     .auth-back {
-      width: 92px;
-      height: 50px;
+      width: max-content;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      border: 1px solid #d8d8d8;
-      box-shadow: 0 2px 0 #eeeeee;
-      font-size: 18px;
-      font-weight: 700;
+      gap: 8px;
+      padding: 0 16px;
+      border: 1px solid #dbdbdb;
+      border-radius: 1px;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+      font-size: 16px;
+      font-weight: 350;
+      line-height: 24px;
+      letter-spacing: .32px;
     }
 
-    .auth-content { padding-top: 34px; }
+    .auth-back img,
+    .auth-provider-mark {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+    }
+
+    .auth-content { padding-top: 28px; }
 
     .auth-title {
-      margin: 0 0 18px;
-      font-size: 31px;
-      line-height: 1.08;
-      letter-spacing: -0.7px;
+      margin: 0 0 16px;
+      font-size: 28px;
+      line-height: 37px;
+      letter-spacing: 0;
     }
 
     .auth-copy {
-      margin: 0 0 30px;
-      max-width: 360px;
-      color: #606060;
-      font-size: 18px;
-      line-height: 1.45;
+      margin: 0 0 28px;
+      color: #595959;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: .32px;
     }
 
     .auth-provider {
       width: 100%;
-      min-height: 50px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 11px;
-      margin-bottom: 22px;
-      border: 1px solid #d8d8d8;
-      box-shadow: 0 2px 0 #eeeeee;
-      font-size: 18px;
-      font-weight: 700;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding: 0 16px;
+      border: 1px solid #dbdbdb;
+      border-radius: 1px;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+      font-size: 16px;
+      font-weight: 350;
+      line-height: 24px;
+      letter-spacing: .32px;
     }
 
     .auth-provider:active,
@@ -2747,48 +2762,14 @@
       box-shadow: none;
     }
 
-    .auth-provider-mark {
-      width: 18px;
-      height: 18px;
-      display: grid;
-      place-items: center;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .auth-provider-mark.google { color: #4285f4; }
-
-    .auth-provider-mark.linkedin {
-      border-radius: 2px;
-      background: #0a66c2;
-      color: #fff;
-      font-size: 12px;
-    }
-
-    .auth-provider-mark.email {
-      width: 18px;
-      border: 1.5px solid currentColor;
-      font-size: 0;
-    }
-
-    .auth-provider-mark.email::after {
-      content: "";
-      width: 9px;
-      height: 9px;
-      border-left: 1.5px solid currentColor;
-      border-bottom: 1.5px solid currentColor;
-      transform: translateY(-3px) rotate(-45deg);
-    }
-
     .auth-legal {
-      margin: 24px auto 42px;
+      margin: 0 auto 40px;
       max-width: 250px;
       text-align: center;
-      color: #7a7a7a;
-      font-size: 16px;
-      line-height: 1.35;
+      color: #8b8b8b;
+      font-size: 14px;
+      line-height: 21px;
+      letter-spacing: .28px;
     }
 
     .auth-legal a {
@@ -2798,30 +2779,36 @@
     }
 
     .auth-account-prompt {
-      margin: 0 0 18px;
+      margin: 0 0 16px;
       text-align: center;
-      color: #606060;
-      font-size: 18px;
+      color: #595959;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: .32px;
     }
 
     .auth-primary {
       width: 100%;
-      min-height: 52px;
+      height: 48px;
       background: var(--purple);
       color: #fff;
-      box-shadow: 0 2px 0 #dedede;
-      font-size: 18px;
-      font-weight: 700;
+      border-radius: 1px;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+      font-size: 16px;
+      font-weight: 350;
+      line-height: 24px;
+      letter-spacing: .32px;
     }
 
     .auth-divider {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 22px;
-      margin: 30px 0;
-      color: #8a8a8a;
-      font-size: 18px;
+      gap: 24px;
+      margin: 24px 0;
+      color: #8b8b8b;
+      font-size: 16px;
+      line-height: 24px;
     }
 
     .auth-divider::before,
@@ -2838,7 +2825,7 @@
     }
 
     .auth-field label {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
     }
 
@@ -2851,13 +2838,13 @@
     .auth-input-wrap input {
       min-width: 0;
       flex: 1;
-      height: 50px;
+      height: 48px;
       padding: 0 13px;
       border: 0;
       outline: 0;
       color: var(--ink);
       font: inherit;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .auth-input-wrap:focus-within {
@@ -2866,7 +2853,7 @@
     }
 
     .auth-show-password {
-      height: 50px;
+      height: 48px;
       padding: 0 13px;
       color: #555;
       font-size: 14px;
@@ -2886,8 +2873,8 @@
     .auth-signup-link {
       margin-top: 34px;
       text-align: center;
-      color: #606060;
-      font-size: 17px;
+      color: #595959;
+      font-size: 16px;
     }
 
     .auth-signup-link button {
@@ -2930,12 +2917,6 @@
     .visitor-restricted .ts-favorites-head,
     .visitor-restricted .ts-suggestions-panel { display: none; }
 
-    @media (max-height: 700px) {
-      .auth-screen { padding-top: 36px; }
-      .auth-content { padding-top: 24px; }
-      .auth-provider { margin-bottom: 14px; }
-      .auth-legal { margin: 18px auto 24px; }
-    }
   </style>
 </head>
 
@@ -2952,6 +2933,10 @@
       toolbarTranslate: "assets/de1f3c5f6620.svg",
       toolbarSettings: "assets/269f2f2344cc.svg",
       toolbarShare: "assets/bcae54b476a3.svg",
+      authChevron: "assets/figma-auth-chevron.svg",
+      authGoogle: "assets/figma-auth-google.svg",
+      authLinkedin: "assets/figma-auth-linkedin.svg",
+      authEmail: "assets/figma-auth-email.svg",
     });
 
     const TOOLBAR_BOOKMARK = `<svg class="toolbar-bookmark-icon" viewBox="0 0 36 38" aria-hidden="true" focusable="false">
@@ -4621,24 +4606,24 @@
         }
 
         screenAuthChoice.innerHTML = `
-          <button class="auth-back" type="button" data-auth-back><span aria-hidden="true">‹</span><span>Back</span></button>
+          <button class="auth-back" type="button" data-auth-back><img src="${ASSETS.authChevron}" alt=""><span>Back</span></button>
           <div class="auth-content">
             <h1 class="auth-title serif">Make your daily catch-up more relevant</h1>
             <p class="auth-copy">Create an account to customise what you see and keep your preferences.</p>
-            <button class="auth-provider" type="button" data-auth-complete><span class="auth-provider-mark google" aria-hidden="true">G</span>Continue with Google</button>
-            <button class="auth-provider" type="button" data-auth-complete><span class="auth-provider-mark linkedin" aria-hidden="true">in</span>Continue with LinkedIn</button>
-            <button class="auth-provider" type="button" data-show-login><span class="auth-provider-mark email" aria-hidden="true"></span>Continue with email</button>
-            <p class="auth-legal">By continuing, you agree to GovInsider's <a href="https://govinsider.asia/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></p>
+            <button class="auth-provider" type="button" data-auth-complete><img class="auth-provider-mark" src="${ASSETS.authGoogle}" alt="">Continue with Google</button>
+            <button class="auth-provider" type="button" data-auth-complete><img class="auth-provider-mark" src="${ASSETS.authLinkedin}" alt="">Continue with Linkedin</button>
+            <button class="auth-provider" type="button" data-show-login><img class="auth-provider-mark" src="${ASSETS.authEmail}" alt="">Continue with email</button>
+            <p class="auth-legal">By continuing, you agree to<br>GovInsider’s <a href="https://govinsider.asia/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></p>
             <p class="auth-account-prompt">Already have an account?</p>
             <button class="auth-primary" type="button" data-show-login>Login</button>
           </div>`;
 
         screenAuthLogin.innerHTML = `
-          <button class="auth-back" type="button" data-auth-choice><span aria-hidden="true">‹</span><span>Back</span></button>
+          <button class="auth-back" type="button" data-auth-choice><img src="${ASSETS.authChevron}" alt=""><span>Back</span></button>
           <div class="auth-content">
             <h1 class="auth-title serif">Welcome back!</h1>
-            <button class="auth-provider auth-login-action" type="button"><span class="auth-provider-mark google" aria-hidden="true">G</span>Login with Google</button>
-            <button class="auth-provider auth-login-action" type="button"><span class="auth-provider-mark linkedin" aria-hidden="true">in</span>Login with LinkedIn</button>
+            <button class="auth-provider auth-login-action" type="button"><img class="auth-provider-mark" src="${ASSETS.authGoogle}" alt="">Login with Google</button>
+            <button class="auth-provider auth-login-action" type="button"><img class="auth-provider-mark" src="${ASSETS.authLinkedin}" alt="">Login with Linkedin</button>
             <div class="auth-divider"><span>or</span></div>
             <div class="auth-field">
               <label for="visitor-email">Email</label>
