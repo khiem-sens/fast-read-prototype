@@ -11,8 +11,10 @@ assert.match(visitor, /index\.html\?flow=visitor/, "visitor URL starts the isola
 assert.match(html, /button\.dataset\.feedTab !== "latest"/, "only Latest is a public feed tab");
 assert.match(html, /button\.dataset\.storyGroup !== "topStoriesWeek"/, "Top Stories This Week remains public");
 assert.match(html, /onRequireLogin\(\{ type: "bookmark", postId: post\.id \}\)/, "bookmarking asks visitors to sign in");
+assert.match(html, /onRequireLogin\(\{ type: "like", postId: post\.id \}\)/, "liking asks visitors to sign in");
 assert.match(html, /action\.type === "bookmark" \? "Found something worth saving\?" : "Make your daily catch-up more relevant"/, "bookmark sign-up uses saving-focused copy");
 assert.match(html, /bookmarked\.add\(pendingAction\.postId\)/, "the pending bookmark is restored after login");
+assert.match(html, /likedPosts\.add\(pendingAction\.postId\)/, "the pending like is restored after login");
 assert.match(html, /const category = pendingAction && pendingAction\.type === "category" \? pendingAction\.value : null;/, "login retains the requested category");
 assert.match(html, /readerState\.storyGroup = category === "curated" \|\| category === "topics" \? null : category;/, "login restores protected story-group categories");
 assert.match(html, /showCenterHint\("Exclusive features unlocked!\\nThank you for registering\."\)/, "login shows an account-unlocked message");

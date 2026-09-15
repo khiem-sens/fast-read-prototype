@@ -2363,8 +2363,8 @@
     }
 
     .topic-setup-option[aria-pressed="true"] {
-      border-color: var(--purple);
-      background: var(--purple);
+      border-color: #232323;
+      background: #232323;
       color: #fff;
     }
 
@@ -4411,7 +4411,7 @@
           const post = currentPost();
           const liked = state.likedPosts.has(post.id);
           const showPostActions = item && item.kind === "post";
-          const showLike = showPostActions && (liked || isLikePromptPost(post));
+          const showLike = showPostActions;
           likeBar.classList.toggle("show", showPostActions);
           likeBtn.classList.toggle("show", showLike);
           likeBtn.setAttribute("aria-pressed", String(liked));
@@ -4495,6 +4495,10 @@
         shareBtn.addEventListener("click", () => shareSheet.open());
         likeBtn.addEventListener("click", () => {
           const post = currentPost();
+          if (!canAccess()) {
+            onRequireLogin({ type: "like", postId: post.id });
+            return;
+          }
           if (state.likedPosts.has(post.id)) return;
 
           state.likedPosts.add(post.id);
@@ -4706,7 +4710,7 @@
         }
 
         function showTopicSetup(onDone) {
-          const topics = ["Covid19", "Health", "Artificial Intelligence", "Connected", "Inclusive", "Data & Transformation", "Resilience", "CitizenCentric", "Secure Gov", "Data & Transformation"];
+          const topics = ["Covid19", "Health", "Artificial Intelligence", "Connected", "Inclusive", "Data & Transformation", "Resilience", "CitizenCentric", "Secure Gov"];
           const overlay = document.createElement("div");
           overlay.className = "topic-setup-overlay";
           overlay.innerHTML = `
@@ -4797,6 +4801,9 @@
           isAuthenticated = true;
           if (pendingAction && pendingAction.type === "bookmark") {
             reader1.getState().bookmarked.add(pendingAction.postId);
+          }
+          if (pendingAction && pendingAction.type === "like") {
+            reader1.getState().likedPosts.add(pendingAction.postId);
           }
           const category = pendingAction && pendingAction.type === "category" ? pendingAction.value : null;
           readerTab = category === "curated" ? "curated" : "latest";
