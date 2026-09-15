@@ -2688,6 +2688,254 @@
     .language-option[aria-pressed="true"] .language-check {
       display: block;
     }
+
+    /* ===================== Visitor authentication ===================== */
+    .auth-screen {
+      overflow-y: auto;
+      padding: max(76px, env(safe-area-inset-top)) 22px max(42px, env(safe-area-inset-bottom));
+      color: var(--ink);
+    }
+
+    .auth-back {
+      width: 92px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid #d8d8d8;
+      box-shadow: 0 2px 0 #eeeeee;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .auth-content { padding-top: 34px; }
+
+    .auth-title {
+      margin: 0 0 18px;
+      font-size: 31px;
+      line-height: 1.08;
+      letter-spacing: -0.7px;
+    }
+
+    .auth-copy {
+      margin: 0 0 30px;
+      max-width: 360px;
+      color: #606060;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .auth-provider {
+      width: 100%;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      margin-bottom: 22px;
+      border: 1px solid #d8d8d8;
+      box-shadow: 0 2px 0 #eeeeee;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .auth-provider:active,
+    .auth-back:active,
+    .auth-primary:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .auth-provider-mark {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .auth-provider-mark.google { color: #4285f4; }
+
+    .auth-provider-mark.linkedin {
+      border-radius: 2px;
+      background: #0a66c2;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .auth-provider-mark.email {
+      width: 18px;
+      border: 1.5px solid currentColor;
+      font-size: 0;
+    }
+
+    .auth-provider-mark.email::after {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-left: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: translateY(-3px) rotate(-45deg);
+    }
+
+    .auth-legal {
+      margin: 24px auto 42px;
+      max-width: 250px;
+      text-align: center;
+      color: #7a7a7a;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .auth-legal a {
+      color: var(--teal-dark);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .auth-account-prompt {
+      margin: 0 0 18px;
+      text-align: center;
+      color: #606060;
+      font-size: 18px;
+    }
+
+    .auth-primary {
+      width: 100%;
+      min-height: 52px;
+      background: var(--purple);
+      color: #fff;
+      box-shadow: 0 2px 0 #dedede;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .auth-divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 22px;
+      margin: 30px 0;
+      color: #8a8a8a;
+      font-size: 18px;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      height: 1px;
+      background: #dedede;
+    }
+
+    .auth-field {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 25px;
+    }
+
+    .auth-field label {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .auth-input-wrap {
+      display: flex;
+      align-items: center;
+      border: 1px solid #d8d8d8;
+    }
+
+    .auth-input-wrap input {
+      min-width: 0;
+      flex: 1;
+      height: 50px;
+      padding: 0 13px;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      font: inherit;
+      font-size: 18px;
+    }
+
+    .auth-input-wrap:focus-within {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 2px rgba(148, 64, 156, 0.16);
+    }
+
+    .auth-show-password {
+      height: 50px;
+      padding: 0 13px;
+      color: #555;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .auth-forgot {
+      display: block;
+      width: max-content;
+      margin: -10px 0 28px auto;
+      border-bottom: 1px solid #8d8d8d;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .auth-signup-link {
+      margin-top: 34px;
+      text-align: center;
+      color: #606060;
+      font-size: 17px;
+    }
+
+    .auth-signup-link button {
+      margin-left: 6px;
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .visitor-signup-callout {
+      margin-top: 2px;
+      padding: 22px 16px;
+      background: #fbf2fc;
+    }
+
+    .visitor-signup-callout strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #5f5f5f;
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+
+    .visitor-signup-callout p {
+      margin: 0 0 16px;
+      color: #5f5f5f;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .visitor-signup-callout button {
+      width: 100%;
+      min-height: 44px;
+      background: var(--purple);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .visitor-restricted .ts-favorites-head,
+    .visitor-restricted .ts-suggestions-panel { display: none; }
+
+    @media (max-height: 700px) {
+      .auth-screen { padding-top: 36px; }
+      .auth-content { padding-top: 24px; }
+      .auth-provider { margin-bottom: 14px; }
+      .auth-legal { margin: 18px auto 24px; }
+    }
   </style>
 </head>
 
@@ -2695,6 +2943,8 @@
   <div id="app-shell">
     <div id="screen-home" class="screen active"></div>
     <div id="screen-reader" class="screen"></div>
+    <div id="screen-auth-choice" class="screen auth-screen"></div>
+    <div id="screen-auth-login" class="screen auth-screen"></div>
   </div>
   <script>
     const ASSETS = { "logoPng": "assets/f6a55164b83b.png", "bannerJpg": "assets/728d61dd7c89.jpg", "articleJpg": "assets/4950c5bc5e66.jpg", "ad1Jpg": "assets/b66972e46b06.jpg", "ad2Jpg": "assets/7e624007bd08.jpg", "ad3Jpg": "assets/c0bba468d686.jpg", "ad4Jpg": "assets/16cae8590da2.jpg", "iconBookmark": "assets/cf084be94dde.svg", "iconBookmarkFull": "assets/019127c1df91.svg", "iconStar": "assets/292d748df61d.svg", "iconArrowBig": "assets/e4a05fe60731.svg", "iconMenu": "assets/07dadf6addc4.svg", "iconSearch": "assets/5a87ac8caec5.svg", "iconUser": "assets/82a0bd3bcfb4.svg", "iconArrowSmall": "assets/d83e10364385.svg", "iconGroup": "assets/39940b0dfe0e.svg", "iconSocialShare": "assets/aa0363830231.svg", "iconTranslate": "assets/2bf390319dfa.svg", "iconTopStories": "assets/f9bf4ad8c04b.svg", "iconCheck": "assets/32389d5eed31.svg", "iconShare": "assets/53db3bb1ad5d.svg", "iconClose": "assets/c70c2dbacf74.svg", "iconArrow": "assets/9ddb9e0285a8.svg", "iconCaret": "assets/aec5688e1376.svg", "iconLinkedin": "assets/78bd64835fcd.svg", "iconTwitter": "assets/9b7a0d49b0d1.svg", "iconEmail": "assets/0da44c08faed.svg", "iconEdit": "assets/36d06c669d44.svg", "iconDivider": "assets/8bc1e3fae9b9.svg", "thumb0": "assets/4774de42224e.jpg", "thumb1": "assets/4e0b75403e52.jpg", "thumb2": "assets/496a054ad8e7.jpg", "thumb3": "assets/95922bf1b2f0.jpg", "thumb4": "assets/9c9a2c6b765b.jpg", "thumb5": "assets/2843d2a07092.jpg", "thumb6": "assets/a2e5be71602e.jpg", "thumb7": "assets/765773b5c2f4.jpg", "thumb8": "assets/87932212ad14.jpg", "thumb9": "assets/3be6d99812b6.jpg", "thumb10": "assets/1164ea8363c2.jpg", "thumb11": "assets/8de1453085f7.jpg", "thumb12": "assets/96f67f923189.jpg", "thumb13": "assets/daa5103cae31.jpg", "thumb14": "assets/5ffc4ff63e80.jpg", "thumb15": "assets/0ffee93ddb4a.jpg", "eventPureAccelerate": "assets/9dc8e6ac0600.jpg" };
@@ -2721,6 +2971,7 @@
 
       const PURPLE = "#94409C";
       const TEAL = "#09a096";
+      const VISITOR_FLOW = new URLSearchParams(window.location.search).get("flow") === "visitor";
       let selectedLanguage = "en";
 
       // ---------------------------------------------------------
@@ -3525,6 +3776,8 @@
         }
 
         function renderContent() {
+          const accessRestricted = cbs.isAccessRestricted && cbs.isAccessRestricted();
+          overlay.classList.toggle("visitor-restricted", Boolean(accessRestricted));
           const suggestedTopics = state.moreToExploreTopics;
           const activeStoryGroup = pendingTopics.length ? null : state.storyGroup;
           const activeFeedTab = pendingTopics.length || activeStoryGroup ? null : state.activeTab;
@@ -3542,6 +3795,20 @@
             button.classList.toggle("selected", selected);
             button.setAttribute("aria-pressed", String(selected));
           });
+          if (accessRestricted) {
+            suggestionsPanel.hidden = true;
+            content.innerHTML = `
+              <div class="visitor-signup-callout">
+                <strong>Want to change what you see?</strong>
+                <p>Sign up for free to customise your topics and keep your preferences.</p>
+                <button type="button" data-visitor-signup>Create your free account</button>
+              </div>`;
+            content.querySelector("[data-visitor-signup]").addEventListener("click", () => {
+              close();
+              cbs.onRequireLogin({ type: "category", value: "topics" });
+            });
+            return;
+          }
           if (!isEditing) {
             suggestionsPanel.hidden = suggestedTopics.length === 0;
             content.innerHTML = `<div class="ts-pills">${state.savedTopics.map((t) => {
@@ -3618,17 +3885,35 @@
         overlay.querySelector("[data-close]").addEventListener("click", close);
         feedTabButtons.forEach((button) => {
           button.addEventListener("click", () => {
+            if (cbs.isAccessRestricted && cbs.isAccessRestricted() && button.dataset.feedTab !== "latest") {
+              close();
+              cbs.onRequireLogin({ type: "category", value: button.dataset.feedTab });
+              return;
+            }
             cbs.onSelectFeedTab(button.dataset.feedTab);
             close();
           });
         });
         storyGroupButtons.forEach((button) => {
           button.addEventListener("click", () => {
+            if (cbs.isAccessRestricted && cbs.isAccessRestricted() && button.dataset.storyGroup !== "topStoriesWeek") {
+              close();
+              cbs.onRequireLogin({ type: "category", value: button.dataset.storyGroup });
+              return;
+            }
             cbs.onSelectStoryGroup(button.dataset.storyGroup);
             close();
           });
         });
-        overlay.querySelector("[data-edit]").addEventListener("click", () => { isEditing = true; renderContent(); });
+        overlay.querySelector("[data-edit]").addEventListener("click", () => {
+          if (cbs.isAccessRestricted && cbs.isAccessRestricted()) {
+            close();
+            cbs.onRequireLogin({ type: "category", value: "topics" });
+            return;
+          }
+          isEditing = true;
+          renderContent();
+        });
 
         return { open, close };
       }
@@ -3764,7 +4049,7 @@
       // ---------------------------------------------------------
       let summaryStreakShown = false;
 
-      function createReader({ screenEl, initialTabGetter, onClose }) {
+      function createReader({ screenEl, initialTabGetter, onClose, canAccess, onRequireLogin }) {
         screenEl.dataset.readingMode = "quick";
         const state = {
           activeTab: "latest",
@@ -4038,7 +4323,14 @@
         }
 
         tabBtns.forEach((btn) => {
-          btn.addEventListener("click", () => setTab(btn.getAttribute("data-tab"), true));
+          btn.addEventListener("click", () => {
+            const tab = btn.getAttribute("data-tab");
+            if (tab !== "latest" && !canAccess()) {
+              onRequireLogin({ type: "category", value: tab });
+              return;
+            }
+            setTab(tab, true);
+          });
         });
 
         screenEl.querySelector("[data-close]").addEventListener("click", onClose);
@@ -4053,6 +4345,8 @@
         });
 
         const topStories = createTopStoriesPanel(screenEl, state, {
+          isAccessRestricted: () => !canAccess(),
+          onRequireLogin,
           onSaveTopics() { state.summaryRecs = { latest: null, curated: null }; rerenderFeeds(); },
           onSelectTopics(topics, explore = state.topicSelectionGroup === "explore") { state.topicSelectionGroup = topics.length ? (explore ? "explore" : "read") : null; state.storyGroup = topics.length ? null : state.storyGroup; state.surpriseActive = false; shufflePosts(); if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0; rerenderFeeds(); },
           onSelectFeedTab(tab) { state.activeTab = tab; state.storyGroup = null; state.selectedTopics = []; state.topicSelectionGroup = null; state.surpriseActive = false; shufflePosts(); state.latestIndex = 0; state.curatedIndex = 0; refreshTabUI(); rerenderFeeds(); slider.setActive(tab, false); },
@@ -4101,6 +4395,10 @@
         });
         bookmarkBtn.addEventListener("click", () => {
           const post = currentPost();
+          if (!canAccess()) {
+            onRequireLogin({ type: "bookmark", postId: post.id });
+            return;
+          }
           if (state.bookmarked.has(post.id)) state.bookmarked.delete(post.id);
           else {
             state.bookmarked.add(post.id);
@@ -4203,6 +4501,11 @@
           const post = currentPost();
           const tap = { time: Date.now(), x: e.clientX, y: e.clientY, id: post.id };
           if (lastPostTap && tap.time - lastPostTap.time < 350 && tap.id === lastPostTap.id && Math.hypot(tap.x - lastPostTap.x, tap.y - lastPostTap.y) < 24) {
+            if (!canAccess()) {
+              lastPostTap = null;
+              onRequireLogin({ type: "bookmark", postId: post.id });
+              return;
+            }
             state.bookmarked.add(post.id);
             refreshBottombar();
             showBookmarkHint();
@@ -4283,15 +4586,85 @@
         const shell = document.getElementById("app-shell");
         const screenHome = document.getElementById("screen-home");
         const screenReader = document.getElementById("screen-reader");
+        const screenAuthChoice = document.getElementById("screen-auth-choice");
+        const screenAuthLogin = document.getElementById("screen-auth-login");
 
         let readerTab = "latest";
         let welcomeShown = false;
+        let isAuthenticated = !VISITOR_FLOW;
+        let pendingAction = null;
+        let authReturnScreen = "reader";
 
         function showScreen(name, hint) {
-          [screenHome, screenReader].forEach((s) => s.classList.remove("active"));
+          [screenHome, screenReader, screenAuthChoice, screenAuthLogin].forEach((s) => s.classList.remove("active"));
           if (name === "home") screenHome.classList.add("active");
           if (name === "reader") { screenReader.classList.add("active"); reader1.activate(); if (hint) reader1.showSwipeHint(); }
+          if (name === "auth-choice") screenAuthChoice.classList.add("active");
+          if (name === "auth-login") screenAuthLogin.classList.add("active");
         }
+
+        function requireLogin(action) {
+          pendingAction = action;
+          authReturnScreen = screenHome.classList.contains("active") ? "home" : "reader";
+          showScreen("auth-choice");
+        }
+
+        function completeLogin() {
+          isAuthenticated = true;
+          if (pendingAction && pendingAction.type === "bookmark") {
+            reader1.getState().bookmarked.add(pendingAction.postId);
+          }
+          pendingAction = null;
+          readerTab = "latest";
+          welcomeShown = true;
+          showScreen("reader", true);
+        }
+
+        screenAuthChoice.innerHTML = `
+          <button class="auth-back" type="button" data-auth-back><span aria-hidden="true">‹</span><span>Back</span></button>
+          <div class="auth-content">
+            <h1 class="auth-title serif">Make your daily catch-up more relevant</h1>
+            <p class="auth-copy">Create an account to customise what you see and keep your preferences.</p>
+            <button class="auth-provider" type="button" data-auth-complete><span class="auth-provider-mark google" aria-hidden="true">G</span>Continue with Google</button>
+            <button class="auth-provider" type="button" data-auth-complete><span class="auth-provider-mark linkedin" aria-hidden="true">in</span>Continue with LinkedIn</button>
+            <button class="auth-provider" type="button" data-show-login><span class="auth-provider-mark email" aria-hidden="true"></span>Continue with email</button>
+            <p class="auth-legal">By continuing, you agree to GovInsider's <a href="https://govinsider.asia/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></p>
+            <p class="auth-account-prompt">Already have an account?</p>
+            <button class="auth-primary" type="button" data-show-login>Login</button>
+          </div>`;
+
+        screenAuthLogin.innerHTML = `
+          <button class="auth-back" type="button" data-auth-choice><span aria-hidden="true">‹</span><span>Back</span></button>
+          <div class="auth-content">
+            <h1 class="auth-title serif">Welcome back!</h1>
+            <button class="auth-provider auth-login-action" type="button"><span class="auth-provider-mark google" aria-hidden="true">G</span>Login with Google</button>
+            <button class="auth-provider auth-login-action" type="button"><span class="auth-provider-mark linkedin" aria-hidden="true">in</span>Login with LinkedIn</button>
+            <div class="auth-divider"><span>or</span></div>
+            <div class="auth-field">
+              <label for="visitor-email">Email</label>
+              <div class="auth-input-wrap"><input id="visitor-email" type="email" autocomplete="email" placeholder="Your email"></div>
+            </div>
+            <div class="auth-field">
+              <label for="visitor-password">Password</label>
+              <div class="auth-input-wrap"><input id="visitor-password" type="password" autocomplete="current-password" placeholder="Your password"><button class="auth-show-password" type="button" data-toggle-password aria-label="Show password">Show</button></div>
+            </div>
+            <button class="auth-forgot" type="button">Forgot password</button>
+            <button class="auth-primary auth-login-action" type="button">Login</button>
+            <p class="auth-signup-link">Don't have an account?<button type="button" data-auth-choice>Sign up</button></p>
+          </div>`;
+
+        screenAuthChoice.querySelector("[data-auth-back]").addEventListener("click", () => showScreen(authReturnScreen));
+        screenAuthChoice.querySelectorAll("[data-show-login]").forEach((button) => button.addEventListener("click", () => showScreen("auth-login")));
+        screenAuthChoice.querySelectorAll("[data-auth-complete]").forEach((button) => button.addEventListener("click", completeLogin));
+        screenAuthLogin.querySelectorAll("[data-auth-choice]").forEach((button) => button.addEventListener("click", () => showScreen("auth-choice")));
+        screenAuthLogin.querySelectorAll(".auth-login-action").forEach((button) => button.addEventListener("click", completeLogin));
+        screenAuthLogin.querySelector("[data-toggle-password]").addEventListener("click", (event) => {
+          const input = screenAuthLogin.querySelector("#visitor-password");
+          const reveal = input.type === "password";
+          input.type = reveal ? "text" : "password";
+          event.currentTarget.textContent = reveal ? "Hide" : "Show";
+          event.currentTarget.setAttribute("aria-label", reveal ? "Hide password" : "Show password");
+        });
 
         // ---- Home page render ----
         screenHome.innerHTML = `
@@ -4300,10 +4673,10 @@
           <button class="icon-btn"><img src="${ASSETS.iconMenu}" width="20" height="20" alt="Menu"></button>
           <div class="home-logo-wrap"><img src="${ASSETS.logoPng}" alt="GovInsider" draggable="false"></div>
           <button class="icon-btn"><img src="${ASSETS.iconSearch}" width="20" height="20" alt="Search"></button>
-          <div class="bookmark-badge-wrap">
+          <button class="bookmark-badge-wrap" type="button" aria-label="Saved articles">
             <img src="${ASSETS.iconBookmarkFull}" width="20" height="20" alt="Saved">
             <div class="bookmark-badge"><span>0</span></div>
-          </div>
+          </button>
           <div class="user-icon-wrap">
             <img src="${ASSETS.iconUser}" width="20" height="20" alt="Account">
             <div class="user-dot"></div>
@@ -4369,6 +4742,10 @@
         screenHome.querySelectorAll("[data-open-reader]").forEach((btn) => {
           btn.addEventListener("click", () => {
             readerTab = btn.getAttribute("data-open-reader");
+            if (readerTab !== "latest" && !isAuthenticated) {
+              requireLogin({ type: "category", value: readerTab });
+              return;
+            }
             reader1.getState().latestIndex = 0;
             reader1.getState().curatedIndex = 0;
             showScreen("reader", welcomeShown);
@@ -4379,13 +4756,27 @@
           });
         });
 
+        screenHome.querySelector(".bookmark-badge-wrap").addEventListener("click", () => {
+          if (!isAuthenticated) requireLogin({ type: "bookmark-list" });
+        });
+        screenHome.querySelectorAll(".curated-card-bm").forEach((button) => button.addEventListener("click", () => {
+          if (!isAuthenticated) requireLogin({ type: "bookmark", postId: ALL_LATEST[0].id });
+        }));
+
         const reader1 = createReader({
           screenEl: screenReader,
           initialTabGetter: () => readerTab,
           onClose: () => showScreen("home"),
+          canAccess: () => isAuthenticated,
+          onRequireLogin: requireLogin,
         });
 
-        showScreen("home");
+        if (VISITOR_FLOW) {
+          welcomeShown = true;
+          showScreen("reader", true);
+        } else {
+          showScreen("home");
+        }
       });
     })();
 
