@@ -1133,7 +1133,7 @@
       left: 50%;
       top: auto;
       bottom: 96px;
-      transform: translate(-50%, 0) scale(0.92);
+      transform: translate(-50%, 16px) scale(0.92);
       z-index: 60;
       pointer-events: none;
       display: flex;
@@ -1149,7 +1149,7 @@
       letter-spacing: 0.2px;
       white-space: nowrap;
       opacity: 0;
-      transition: opacity .25s ease, transform .25s ease;
+      transition: opacity .22s ease .08s, transform .22s ease .08s;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
 
@@ -1170,7 +1170,7 @@
       line-height: 1.45;
       white-space: pre-line;
       text-align: left;
-      transform: translate(0, 0) scale(0.92);
+      transform: translate(0, 16px) scale(0.92);
     }
 
     .swipe-hint.login-success.show {
@@ -3408,6 +3408,23 @@
       font-weight: 700;
     }
 
+    .auth-signup-screen { padding-top: max(40px, calc(env(safe-area-inset-top) + 16px)); }
+    .auth-signup-form { display: grid; gap: 32px; padding-top: 16px; }
+    .auth-signup-form .auth-field { gap: 8px; margin: 0; }
+    .auth-signup-form .auth-field > label { font-size: 16px; font-weight: 350; letter-spacing: .32px; line-height: 24px; }
+    .auth-required { color: #f5222d; }
+    .auth-info { width: 16px; height: 16px; margin-left: 4px; vertical-align: -3px; }
+    .auth-signup-form .auth-input-wrap { border-color: #dbdbdb; border-radius: 1px; }
+    .auth-signup-form .auth-input-wrap input { height: 48px; padding: 12px; font-size: 16px; font-weight: 325; letter-spacing: .32px; line-height: 24px; }
+    .auth-signup-form .auth-input-wrap input::placeholder { color: #c3c3c3; opacity: 1; }
+    .auth-consents { display: grid; gap: 16px; }
+    .auth-check { display: flex; align-items: flex-start; gap: 8px; color: #232323; font-size: 14px; font-weight: 325; letter-spacing: .28px; line-height: 21px; }
+    .auth-check input { appearance: none; width: 16px; height: 16px; margin: 2px 0 0; flex: 0 0 16px; background: center / 16px 16px url("assets/figma-signup-checkbox.svg") no-repeat; }
+    .auth-check input:not(:checked) { border: 1px solid #dbdbdb; background: #fff; }
+    .auth-check a { color: #0bbcb1; text-decoration: underline; }
+    .auth-signup-form .auth-primary { margin-top: -16px; }
+    .auth-signup-note { margin: -16px 0 0; color: #454545; font-size: 11px; font-weight: 325; letter-spacing: .22px; line-height: 16px; text-align: center; }
+
     .visitor-signup-callout {
       margin-top: 2px;
       padding: 22px 16px;
@@ -3458,6 +3475,7 @@
     <div id="screen-reader" class="screen"></div>
     <div id="screen-auth-choice" class="screen auth-screen"></div>
     <div id="screen-auth-login" class="screen auth-screen"></div>
+    <div id="screen-auth-signup" class="screen auth-screen auth-signup-screen"></div>
   </div>
   <script>
     const ASSETS = { "logoPng": "assets/f6a55164b83b.png", "bannerJpg": "assets/728d61dd7c89.jpg", "articleJpg": "assets/4950c5bc5e66.jpg", "ad1Jpg": "assets/b66972e46b06.jpg", "ad2Jpg": "assets/7e624007bd08.jpg", "ad3Jpg": "assets/c0bba468d686.jpg", "ad4Jpg": "assets/16cae8590da2.jpg", "iconBookmark": "assets/cf084be94dde.svg", "iconBookmarkFull": "assets/019127c1df91.svg", "iconStar": "assets/292d748df61d.svg", "iconArrowBig": "assets/e4a05fe60731.svg", "iconMenu": "assets/07dadf6addc4.svg", "iconSearch": "assets/5a87ac8caec5.svg", "iconUser": "assets/82a0bd3bcfb4.svg", "iconArrowSmall": "assets/d83e10364385.svg", "iconGroup": "assets/39940b0dfe0e.svg", "iconSocialShare": "assets/aa0363830231.svg", "iconTranslate": "assets/2bf390319dfa.svg", "iconTopStories": "assets/f9bf4ad8c04b.svg", "iconCheck": "assets/32389d5eed31.svg", "iconShare": "assets/53db3bb1ad5d.svg", "iconClose": "assets/c70c2dbacf74.svg", "iconArrow": "assets/9ddb9e0285a8.svg", "iconCaret": "assets/aec5688e1376.svg", "iconLinkedin": "assets/78bd64835fcd.svg", "iconTwitter": "assets/9b7a0d49b0d1.svg", "iconEmail": "assets/0da44c08faed.svg", "iconEdit": "assets/36d06c669d44.svg", "iconDivider": "assets/8bc1e3fae9b9.svg", "thumb0": "assets/4774de42224e.jpg", "thumb1": "assets/4e0b75403e52.jpg", "thumb2": "assets/496a054ad8e7.jpg", "thumb3": "assets/95922bf1b2f0.jpg", "thumb4": "assets/9c9a2c6b765b.jpg", "thumb5": "assets/2843d2a07092.jpg", "thumb6": "assets/a2e5be71602e.jpg", "thumb7": "assets/765773b5c2f4.jpg", "thumb8": "assets/87932212ad14.jpg", "thumb9": "assets/3be6d99812b6.jpg", "thumb10": "assets/1164ea8363c2.jpg", "thumb11": "assets/8de1453085f7.jpg", "thumb12": "assets/96f67f923189.jpg", "thumb13": "assets/daa5103cae31.jpg", "thumb14": "assets/5ffc4ff63e80.jpg", "thumb15": "assets/0ffee93ddb4a.jpg", "eventPureAccelerate": "assets/9dc8e6ac0600.jpg" };
@@ -5314,6 +5332,7 @@
         const screenReader = document.getElementById("screen-reader");
         const screenAuthChoice = document.getElementById("screen-auth-choice");
         const screenAuthLogin = document.getElementById("screen-auth-login");
+        const screenAuthSignup = document.getElementById("screen-auth-signup");
 
         let readerTab = "latest";
         let welcomeShown = false;
@@ -5323,11 +5342,12 @@
         let authLoginFromHome = false;
 
         function showScreen(name, hint) {
-          [screenHome, screenReader, screenAuthChoice, screenAuthLogin].forEach((s) => s.classList.remove("active"));
+          [screenHome, screenReader, screenAuthChoice, screenAuthLogin, screenAuthSignup].forEach((s) => s.classList.remove("active"));
           if (name === "home") screenHome.classList.add("active");
           if (name === "reader") { screenReader.classList.add("active"); reader1.activate(); if (hint) reader1.showSwipeHint(); }
           if (name === "auth-choice") screenAuthChoice.classList.add("active");
           if (name === "auth-login") screenAuthLogin.classList.add("active");
+          if (name === "auth-signup") screenAuthSignup.classList.add("active");
         }
 
         function requireLogin(action) {
@@ -5374,7 +5394,7 @@
             <p class="auth-copy">Create an account to customise what you see and keep your preferences.</p>
             <button class="auth-provider" type="button" data-auth-complete><img class="auth-provider-mark" src="${ASSETS.authGoogle}" alt="">Continue with Google</button>
             <button class="auth-provider" type="button" data-auth-complete><img class="auth-provider-mark" src="${ASSETS.authLinkedin}" alt="">Continue with Linkedin</button>
-            <button class="auth-provider" type="button" data-show-login><img class="auth-provider-mark" src="${ASSETS.authEmail}" alt="">Continue with email</button>
+            <button class="auth-provider" type="button" data-show-signup><img class="auth-provider-mark" src="${ASSETS.authEmail}" alt="">Continue with email</button>
             <p class="auth-legal">By continuing, you agree to<br>GovInsider’s <a href="https://govinsider.asia/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></p>
             <p class="auth-account-prompt">Already have an account?</p>
             <button class="auth-primary" type="button" data-show-login>Login</button>
@@ -5400,8 +5420,24 @@
             <p class="auth-signup-link">Don't have an account?<button type="button" data-auth-choice>Sign up</button></p>
           </div>`;
 
+        screenAuthSignup.innerHTML = `
+          <button class="auth-back" type="button" data-auth-signup-back><img src="assets/figma-signup-chevron.svg" alt=""><span>Back</span></button>
+          <form class="auth-signup-form" data-email-signup>
+            <div class="auth-field"><label for="signup-email"><span class="auth-required">*</span> Email</label><div class="auth-input-wrap"><input id="signup-email" type="email" autocomplete="email" placeholder="Your email"></div></div>
+            <div class="auth-field"><label for="signup-password"><span class="auth-required">*</span> Password <img class="auth-info" src="assets/figma-signup-info.svg" alt="Password requirements"></label><div class="auth-input-wrap"><input id="signup-password" type="password" autocomplete="new-password" placeholder="Your password"></div></div>
+            <div class="auth-field"><label for="signup-password-confirm"><span class="auth-required">*</span> Confirm password</label><div class="auth-input-wrap"><input id="signup-password-confirm" type="password" autocomplete="new-password" placeholder="Type your password again"></div></div>
+            <div class="auth-consents">
+              <label class="auth-check"><input type="checkbox" checked><span>I want to subscribe to GovInsider Bulletin for the latest updates on public sector innovation</span></label>
+              <label class="auth-check"><input type="checkbox" checked><span>I confirm that I have read and agree to the <a href="https://govinsider.asia/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></span></label>
+              <label class="auth-check"><input type="checkbox" checked><span>I confirm that the contact information I have given is for the purpose of Business Communications</span></label>
+            </div>
+            <button class="auth-primary" type="submit">Sign up</button>
+            <p class="auth-signup-note">*If I have provided a non-business domain email address (such as, but not limited to, gmail, hotmail, etc) I am doing so in the context of it being used for my business and not personal interactions with GovInsider.</p>
+          </form>`;
+
         screenAuthChoice.querySelector("[data-auth-back]").addEventListener("click", () => showScreen(authReturnScreen));
         screenAuthChoice.querySelectorAll("[data-show-login]").forEach((button) => button.addEventListener("click", () => { authLoginFromHome = false; showScreen("auth-login"); }));
+        screenAuthChoice.querySelector("[data-show-signup]").addEventListener("click", () => showScreen("auth-signup"));
         screenAuthChoice.querySelectorAll("[data-auth-complete]").forEach((button) => button.addEventListener("click", () => completeLogin(true)));
         screenAuthLogin.querySelectorAll("[data-auth-choice]").forEach((button) => button.addEventListener("click", () => showScreen("auth-choice")));
         screenAuthLogin.querySelector("[data-auth-login-back]").addEventListener("click", () => showScreen(authLoginFromHome ? authReturnScreen : "auth-choice"));
@@ -5413,6 +5449,8 @@
           event.currentTarget.textContent = reveal ? "Hide" : "Show";
           event.currentTarget.setAttribute("aria-label", reveal ? "Hide password" : "Show password");
         });
+        screenAuthSignup.querySelector("[data-auth-signup-back]").addEventListener("click", () => showScreen("auth-choice"));
+        screenAuthSignup.querySelector("[data-email-signup]").addEventListener("submit", (event) => { event.preventDefault(); completeLogin(true); });
 
         // ---- Home page render ----
         function renderHome() {
