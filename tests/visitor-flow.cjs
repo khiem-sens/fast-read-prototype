@@ -11,8 +11,12 @@ assert.match(visitor, /index\.html\?flow=visitor/, "visitor URL starts the isola
 assert.match(html, /button\.dataset\.feedTab !== "latest"/, "only Latest is a public feed tab");
 assert.match(html, /button\.dataset\.storyGroup !== "topStoriesWeek"/, "Top Stories This Week remains public");
 assert.match(html, /onRequireLogin\(\{ type: "bookmark", postId: post\.id \}\)/, "bookmarking asks visitors to sign in");
+assert.match(html, /action\.type === "bookmark" \? "Found something worth saving\?" : "Make your daily catch-up more relevant"/, "bookmark sign-up uses saving-focused copy");
 assert.match(html, /bookmarked\.add\(pendingAction\.postId\)/, "the pending bookmark is restored after login");
-assert.match(html, /showScreen\("reader", true\)/, "login returns to Quick Digest with the swipe hint");
+assert.match(html, /readerTab = pendingAction && pendingAction\.type === "category" && pendingAction\.value === "curated" \? "curated" : "latest"/, "login returns visitors to the Curated For You feed they selected");
+assert.match(html, /showCenterHint\("Exclusive features unlocked!\\nThank you for registering\."\)/, "login shows an account-unlocked message");
+assert.match(html, /showScreen\("reader"\);\s*reader1\.showLoginHint\(\);/, "login returns to Quick Digest with the account-unlocked message");
+assert.match(html, /src="assets\/ph_confetti\.svg"/, "login notification uses the supplied confetti icon");
 assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?padding: 16px;/, "Back button uses 16px padding on every side");
 assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
 assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");

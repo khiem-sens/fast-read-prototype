@@ -974,7 +974,7 @@
       margin: 0;
     }
 
-    .reader-tour-card p + p {
+    .reader-tour-card p+p {
       margin-top: 12px;
     }
 
@@ -1065,6 +1065,31 @@
     .swipe-hint.show {
       opacity: 1;
       transform: translate(-50%, 0) scale(1);
+    }
+
+    .swipe-hint.login-success {
+      left: 13%;
+      width: 74%;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px 28px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 350;
+      line-height: 1.45;
+      white-space: pre-line;
+      text-align: left;
+      transform: translate(0, 0) scale(0.92);
+    }
+
+    .swipe-hint.login-success.show {
+      transform: translate(0, 0) scale(1);
+    }
+
+    .swipe-hint-login-icon {
+      width: 24px;
+      height: 24px;
+      flex: 0 0 24px;
     }
 
     .swipe-hint-arrow {
@@ -1685,7 +1710,7 @@
       display: block;
     }
 
-    .summary-sub span + span {
+    .summary-sub span+span {
       margin-top: 8px;
     }
 
@@ -2702,7 +2727,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 16px;
+      padding: 12px 16px;
       border: 1px solid #dbdbdb;
       border-radius: 1px;
       box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
@@ -2719,7 +2744,9 @@
       flex: 0 0 16px;
     }
 
-    .auth-content { padding-top: 28px; }
+    .auth-content {
+      padding-top: 28px;
+    }
 
     .auth-title {
       margin: 0 0 16px;
@@ -2914,8 +2941,9 @@
     }
 
     .visitor-restricted .ts-favorites-head,
-    .visitor-restricted .ts-suggestions-panel { display: none; }
-
+    .visitor-restricted .ts-suggestions-panel {
+      display: none;
+    }
   </style>
 </head>
 
@@ -4552,6 +4580,13 @@
           showCenterHint(tr("swipeUp"), "up");
         }
 
+        function showLoginHint() {
+          showCenterHint("Exclusive features unlocked!\nThank you for registering.");
+          const hint = screenEl.querySelector(".swipe-hint");
+          hint.classList.add("login-success");
+          hint.insertAdjacentHTML("afterbegin", '<img class="swipe-hint-login-icon" src="assets/ph_confetti.svg" alt="">');
+        }
+
         function showModeChangeHint(mode) {
           showCenterHint(tr(`${mode}Changed`));
         }
@@ -4560,7 +4595,7 @@
           showCenterHint(tr("bookmarked"), "bookmark");
         }
 
-        return { activate, getState: () => state, showSwipeHint, showWelcome: () => setWelcomeVisible(true) };
+        return { activate, getState: () => state, showSwipeHint, showLoginHint, showWelcome: () => setWelcomeVisible(true) };
       }
 
       // ---------------------------------------------------------
@@ -4590,6 +4625,7 @@
         function requireLogin(action) {
           pendingAction = action;
           authReturnScreen = screenHome.classList.contains("active") ? "home" : "reader";
+          screenAuthChoice.querySelector(".auth-title").textContent = action.type === "bookmark" ? "Found something worth saving?" : "Make your daily catch-up more relevant";
           showScreen("auth-choice");
         }
 
@@ -4598,10 +4634,11 @@
           if (pendingAction && pendingAction.type === "bookmark") {
             reader1.getState().bookmarked.add(pendingAction.postId);
           }
+          readerTab = pendingAction && pendingAction.type === "category" && pendingAction.value === "curated" ? "curated" : "latest";
           pendingAction = null;
-          readerTab = "latest";
           welcomeShown = true;
-          showScreen("reader", true);
+          showScreen("reader");
+          reader1.showLoginHint();
         }
 
         screenAuthChoice.innerHTML = `
