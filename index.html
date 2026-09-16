@@ -2618,6 +2618,7 @@
       gap: 24px;
       padding: 40px 16px 24px;
       background: #fff;
+      overflow: hidden;
     }
 
     .profile-onboarding-header {
@@ -5334,20 +5335,7 @@
           screenEl.appendChild(overlay);
           let stepIndex = 0;
 
-          // Keep the header inside the visible viewport as the mobile keyboard pans it.
-          const viewport = window.visualViewport;
-          const syncViewport = () => {
-            if (!viewport) return;
-            overlay.style.top = `${viewport.offsetTop}px`;
-            overlay.style.height = `${viewport.height}px`;
-            overlay.style.bottom = "auto";
-          };
-          viewport?.addEventListener("resize", syncViewport);
-          viewport?.addEventListener("scroll", syncViewport);
-          syncViewport();
           const close = () => {
-            viewport?.removeEventListener("resize", syncViewport);
-            viewport?.removeEventListener("scroll", syncViewport);
             overlay.remove();
             onDone();
           };
