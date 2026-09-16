@@ -2608,8 +2608,10 @@
     }
 
     .profile-onboarding {
-      position: absolute;
+      position: fixed;
       inset: 0;
+      width: min(100%, 430px);
+      margin: 0 auto;
       z-index: 100;
       display: flex;
       flex-direction: column;
@@ -5343,7 +5345,7 @@
               ${renderProgress()}
               <h2 class="profile-onboarding-title serif">${esc(step.title)}</h2>
               <div class="profile-onboarding-content">
-                ${isName ? `<div class="profile-onboarding-name-fields"><input type="text" data-profile-first placeholder="First name" value="${esc(state.profile.firstName)}" autocomplete="given-name" enterkeyhint="next"><input type="text" data-profile-last placeholder="Last name" value="${esc(state.profile.lastName)}" autocomplete="family-name" enterkeyhint="done"></div>` : `<div class="profile-onboarding-options">${step.options.map((option) => {
+                ${isName ? `<form class="profile-onboarding-name-fields" data-profile-name-form><input type="text" data-profile-first placeholder="First name" value="${esc(state.profile.firstName)}" autocomplete="given-name" enterkeyhint="next"><input type="text" data-profile-last placeholder="Last name" value="${esc(state.profile.lastName)}" autocomplete="family-name" enterkeyhint="done"><button type="submit" hidden aria-hidden="true" tabindex="-1"></button></form>` : `<div class="profile-onboarding-options">${step.options.map((option) => {
                   const selected = state.profile[step.key] === option;
                   return `<button class="profile-onboarding-option" type="button" data-profile-option="${esc(option)}" aria-pressed="${selected}"><span>${esc(option)}</span>${selected ? '<img src="assets/figma-role-selected.svg" alt="">' : ""}</button>`;
                 }).join("")}</div>`}
@@ -5361,8 +5363,17 @@
               state.profile.lastName = overlay.querySelector("[data-profile-last]").value;
               next.disabled = !canAdvance(step);
             }));
-            overlay.querySelector("[data-profile-first]")?.addEventListener("keydown", (event) => {
-              if (event.key === "Enter") { event.preventDefault(); overlay.querySelector("[data-profile-last]").focus({ preventScroll: true }); }
+            const firstName = overlay.querySelector("[data-profile-first]");
+            const lastName = overlay.querySelector("[data-profile-last]");
+            const keepOnboardingAnchored = () => requestAnimationFrame(() => window.scrollTo(0, 0));
+            [firstName, lastName].filter(Boolean).forEach((input) => input.addEventListener("focus", keepOnboardingAnchored));
+            const focusLastName = () => lastName?.focus({ preventScroll: true });
+            firstName?.addEventListener("keydown", (event) => {
+              if (event.key === "Enter") { event.preventDefault(); focusLastName(); }
+            });
+            overlay.querySelector("[data-profile-name-form]")?.addEventListener("submit", (event) => {
+              event.preventDefault();
+              if (document.activeElement === firstName) focusLastName();
             });
             next.addEventListener("click", () => {
               if (!canAdvance(step)) return;
