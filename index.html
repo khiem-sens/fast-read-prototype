@@ -3364,12 +3364,22 @@
     }
 
     .auth-account-prompt {
-      margin: 0 0 16px;
+      margin: 0;
       text-align: center;
       color: #595959;
       font-size: 16px;
       line-height: 24px;
       letter-spacing: .32px;
+    }
+
+    .auth-ghost-login {
+      margin-left: 12px;
+      padding: 0;
+      color: var(--purple);
+      font: inherit;
+      font-weight: 500;
+      line-height: inherit;
+      vertical-align: baseline;
     }
 
     .auth-primary {
@@ -5591,8 +5601,7 @@
             <button class="auth-provider" type="button" data-auth-complete><img class="auth-provider-mark" src="${ASSETS.authLinkedin}" alt="">Continue with Linkedin</button>
             <button class="auth-provider" type="button" data-show-signup><img class="auth-provider-mark" src="${ASSETS.authEmail}" alt="">Continue with email</button>
             <p class="auth-legal">By continuing, you agree to<br>GovInsider’s <a href="https://govinsider.asia/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></p>
-            <p class="auth-account-prompt">Already have an account?</p>
-            <button class="auth-primary" type="button" data-show-login>Login</button>
+            <p class="auth-account-prompt">Already have an account? <button class="auth-ghost-login" type="button" data-show-login>Login</button></p>
           </div>`;
 
         screenAuthLogin.innerHTML = `
