@@ -5343,7 +5343,7 @@
               ${renderProgress()}
               <h2 class="profile-onboarding-title serif">${esc(step.title)}</h2>
               <div class="profile-onboarding-content">
-                ${isName ? `<div class="profile-onboarding-name-fields"><input type="text" data-profile-first placeholder="First name" value="${esc(state.profile.firstName)}" autocomplete="given-name"><input type="text" data-profile-last placeholder="Last name" value="${esc(state.profile.lastName)}" autocomplete="family-name"></div>` : `<div class="profile-onboarding-options">${step.options.map((option) => {
+                ${isName ? `<div class="profile-onboarding-name-fields"><input type="text" data-profile-first placeholder="First name" value="${esc(state.profile.firstName)}" autocomplete="given-name" enterkeyhint="next"><input type="text" data-profile-last placeholder="Last name" value="${esc(state.profile.lastName)}" autocomplete="family-name" enterkeyhint="done"></div>` : `<div class="profile-onboarding-options">${step.options.map((option) => {
                   const selected = state.profile[step.key] === option;
                   return `<button class="profile-onboarding-option" type="button" data-profile-option="${esc(option)}" aria-pressed="${selected}"><span>${esc(option)}</span>${selected ? '<img src="assets/figma-role-selected.svg" alt="">' : ""}</button>`;
                 }).join("")}</div>`}
@@ -5361,13 +5361,15 @@
               state.profile.lastName = overlay.querySelector("[data-profile-last]").value;
               next.disabled = !canAdvance(step);
             }));
+            overlay.querySelector("[data-profile-first]")?.addEventListener("keydown", (event) => {
+              if (event.key === "Enter") { event.preventDefault(); overlay.querySelector("[data-profile-last]").focus({ preventScroll: true }); }
+            });
             next.addEventListener("click", () => {
               if (!canAdvance(step)) return;
               if (stepIndex === steps.length - 1) { close(); return; }
               stepIndex += 1;
               render();
             });
-            if (isName) overlay.querySelector("[data-profile-first]").focus();
           };
           render();
         }

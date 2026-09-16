@@ -34,6 +34,9 @@ assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?padding: 
 assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
 assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");
 assert.match(html, /onClose: \(\) => VISITOR_FLOW && isAuthenticated \? reader1\.showCloseOnboarding/, "profile onboarding runs only after a visitor authenticates");
+assert.match(html, /data-profile-first[\s\S]*?enterkeyhint="next"[\s\S]*?data-profile-last[\s\S]*?enterkeyhint="done"/, "name fields offer the appropriate mobile keyboard actions");
+assert.match(html, /data-profile-first\]"\)\?\.addEventListener\("keydown",[\s\S]*?event\.key === "Enter"[\s\S]*?data-profile-last\]"\)\.focus\(\{ preventScroll: true \}\)/, "Enter moves from first name to last name without scrolling the onboarding page");
+assert.doesNotMatch(html, /if \(isName\) overlay\.querySelector\("\[data-profile-first\]"\)\.focus\(\);/, "name onboarding does not autofocus and push itself above the keyboard");
 assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?reader1\.showLoginHint\(\);\s*setTimeout\(showCategorySetup, 1400\);/, "protected categories show the reader toast before opening their setup sheet");
 assert.match(html, /\[data-language-settings\]\s*\{\s*display:\s*none;/, "the language control remains in markup but is hidden in both flows");
 
