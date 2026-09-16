@@ -6,7 +6,7 @@ const path = require('node:path');
 
 // Minimal DOM for exercising the actual panel's rendering and click handlers.
 class Element {
-  constructor() { this.listeners = {}; this.children = []; this.classList = { add() {}, remove() {} }; }
+  constructor() { this.listeners = {}; this.children = []; this.classList = { add() {}, remove() {}, toggle() {} }; }
   set innerHTML(html) {
     this.html = html;
     this.children = [...html.matchAll(/<button\b[^>]*>/g)].map(([tag]) => {
@@ -60,5 +60,10 @@ for (const file of ['index.html', 'fast-read-prototype.html']) {
   assert.deepEqual(selected(favorites()), ['Cybersecurity']);
   assert.deepEqual(selected(suggestions()), []);
   assert.deepEqual(state.moreToExploreTopics, ['Cybersecurity', 'Digital Economy']);
+  state.selectedTopics = [];
+  state.topicSelectionGroup = null;
+  state.storyGroup = 'topStoriesWeek';
+  panel.open();
+  assert.equal(nodes['.ts-content'].querySelector('[data-confirm-read]'), undefined);
 }
-console.log('PASS: topic groups are exclusive and More to Explore remains available after switching groups');
+console.log('PASS: topic groups are exclusive, category switches do not leave a stale OK action, and More to Explore remains available');

@@ -2083,15 +2083,16 @@
       text-align: left;
       line-height: 1.15;
       overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      display: block;
+      max-height: 2.3em;
     }
 
-    .topstories-chevron {
-      flex: 0 0 16px;
+    .topstories-btn .topstories-chevron {
+      display: inline-block;
       width: 16px;
       height: 16px;
+      margin-left: 4px;
+      vertical-align: -3px;
     }
 
     .topstories-btn .sel-wrap {
@@ -4321,7 +4322,9 @@
           const activeFeedTab = pendingTopics.length || activeStoryGroup ? null : state.activeTab;
           const selectionsMatch = pendingTopics.length === state.selectedTopics.length
             && pendingTopics.every((topic) => state.selectedTopics.includes(topic));
-          const favoriteSelectionChanged = !surpriseSelected && !pendingExplore && (state.topicSelectionGroup !== "read" || !selectionsMatch);
+          const favoriteSelectionChanged = !surpriseSelected && !pendingExplore && (pendingTopics.length
+            ? state.topicSelectionGroup !== "read" || !selectionsMatch
+            : state.topicSelectionGroup === "read" && !selectionsMatch);
           const exploreSelectionChanged = !surpriseSelected && pendingExplore && (state.topicSelectionGroup !== "explore" || !selectionsMatch);
           storyGroupButtons.forEach((button) => {
             const selected = button.dataset.storyGroup === activeStoryGroup;
@@ -4857,16 +4860,14 @@
             <button class="topstories-btn" data-open-topstories>
               <div class="sel-wrap">
                 <span class="sel-eyebrow">${showingExplore ? "More to Explore" : "Read By Topics"}</span>
-                <span class="sel-value">${esc(selectedLabel)}</span>
+                <span class="sel-value">${esc(selectedLabel).replace(/(\S+)$/, '$1&nbsp;<img class="topstories-chevron" src="assets/chevron.svg" alt="">')}</span>
               </div>
-              <img class="topstories-chevron" src="assets/chevron.svg" alt="">
             </button>`;
             } else {
               const label = state.storyGroup ? STORY_GROUP_LABELS[state.storyGroup] : tr(state.activeTab);
               bottombarLeft.innerHTML = `
             <button class="topstories-btn" data-open-topstories>
-              <span class="label">${esc(label)}</span>
-              <img class="topstories-chevron" src="assets/chevron.svg" alt="">
+              <span class="label">${esc(label).replace(/(\S+)$/, '$1&nbsp;<img class="topstories-chevron" src="assets/chevron.svg" alt="">')}</span>
             </button>`;
             }
             bottombarLeft.style.flex = "1";
@@ -5572,7 +5573,7 @@
         const reader1 = createReader({
           screenEl: screenReader,
           initialTabGetter: () => readerTab,
-          onClose: () => isAuthenticated ? reader1.showCloseOnboarding(() => showScreen("home")) : showScreen("home"),
+          onClose: () => VISITOR_FLOW && isAuthenticated ? reader1.showCloseOnboarding(() => showScreen("home")) : showScreen("home"),
           canAccess: () => isAuthenticated,
           onRequireLogin: requireLogin,
         });

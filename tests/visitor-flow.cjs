@@ -35,5 +35,6 @@ assert.match(html, /\.reader-bottombar\.event-only \.[\s\S]*?data-share/, "event
 assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?padding: 16px;/, "Back button uses 16px padding on every side");
 assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
 assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");
+assert.match(html, /onClose: \(\) => VISITOR_FLOW && isAuthenticated \? reader1\.showCloseOnboarding/, "profile onboarding runs only after a visitor authenticates");
 
 console.log("PASS: visitor access, authentication, and pending bookmark handoff are wired");
