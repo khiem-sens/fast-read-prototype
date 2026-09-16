@@ -18,14 +18,12 @@ assert.match(html, /likedPosts\.add\(pendingAction\.postId\)/, "the pending like
 assert.match(html, /const category = pendingAction && pendingAction\.type === "category" \? pendingAction\.value : null;/, "login retains the requested category");
 assert.match(html, /readerState\.storyGroup = category === "curated" \|\| category === "topics" \? null : category;/, "login restores protected story-group categories");
 assert.match(html, /showCenterHint\("Exclusive features unlocked!\\nThank you for registering\."\)/, "login shows an account-unlocked message");
-assert.match(html, /if \(category === "curated"\) reader1\.showTopicSetup\(\(\) => reader1\.showPersonalisedHint\(\)\);/, "Curated login opens topic setup before its confirmation toast");
-assert.match(html, /else if \(category === "peopleLikeYou"\) reader1\.showRoleSetup\("peers", \(\) => reader1\.showPersonalisedHint\(\)\);/, "Trending login opens the mandatory role-personalisation flow");
-assert.match(html, /else if \(category === "sector"\) reader1\.showRoleSetup\("sector"/, "Most Read In Your Sector asks only for sector");
-assert.match(html, /else if \(category === "industry"\) reader1\.showRoleSetup\("industry"/, "Most Read In Your Industry asks for sector before industry");
+assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?showTopicSetup\(showRegistrationComplete\)[\s\S]*?showRoleSetup\("peers", showRegistrationComplete\)[\s\S]*?showRoleSetup\("sector", showRegistrationComplete\)[\s\S]*?showRoleSetup\("industry", showRegistrationComplete\)/, "protected categories complete setup before the registration welcome screen");
 assert.match(html, /role-setup-scrim(?!" data-close)/, "role-personalisation flow cannot be dismissed outside the sheet");
 assert.match(html, /topic-setup-scrim" data-close[\s\S]*?addEventListener\("click", close\)/, "topic setup can be dismissed by clicking outside the sheet");
-assert.match(html, /You’re all set!\\nEnjoy your personalised content\./, "saving topics shows the personalised-content toast");
-assert.match(html, /function showPersonalisedHint\(\)[\s\S]*?classList\.add\("login-success"\)[\s\S]*?ph_confetti\.svg/, "personalised-content toast uses the same card and icon as sign-up");
+assert.match(html, /function showRegistrationComplete\(\)[\s\S]*?Registration complete[\s\S]*?Personalise my experience[\s\S]*?data-later/, "registration completion offers professional-context onboarding or a later choice");
+assert.match(html, /function showHomeWelcome\(\)[\s\S]*?Welcome to GovInsider[\s\S]*?Show me around/, "returning home opens the welcome bottom sheet");
+assert.match(html, /showCloseOnboarding\(showHomeWelcome\)/, "finishing professional-context onboarding opens the homepage welcome sheet");
 assert.match(html, /function completeLogin\(isSignUp = false\)[\s\S]*?else if \(isSignUp\) reader1\.showLoginHint\(\);/, "only sign-up shows the account-unlocked message");
 assert.match(html, /data-auth-complete[\s\S]*?completeLogin\(true\)/, "sign-up actions are marked as account creation");
 assert.match(html, /src="assets\/ph_confetti\.svg"/, "login notification uses the supplied confetti icon");
@@ -36,5 +34,7 @@ assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?padding: 
 assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
 assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");
 assert.match(html, /onClose: \(\) => VISITOR_FLOW && isAuthenticated \? reader1\.showCloseOnboarding/, "profile onboarding runs only after a visitor authenticates");
+assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?reader1\.showLoginHint\(\);\s*setTimeout\(showCategorySetup, 1400\);/, "protected categories show the reader toast before opening their setup sheet");
+assert.match(html, /\[data-language-settings\]\s*\{\s*display:\s*none;/, "the language control remains in markup but is hidden in both flows");
 
 console.log("PASS: visitor access, authentication, and pending bookmark handoff are wired");

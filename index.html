@@ -2140,6 +2140,10 @@
       background: #f5f5f5;
     }
 
+    [data-language-settings] {
+      display: none;
+    }
+
     .bottombar-icons .toolbar-icon {
       width: 30px;
       height: 32px;
@@ -2397,6 +2401,8 @@
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, .52);
+      opacity: 0;
+      transition: opacity .35s ease;
     }
 
     .topic-setup-sheet {
@@ -2410,7 +2416,12 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      transform: translateY(100%);
+      transition: transform .55s cubic-bezier(.32, 0, .15, 1);
     }
+
+    .topic-setup-overlay.show .topic-setup-scrim { opacity: 1; }
+    .topic-setup-overlay.show .topic-setup-sheet { transform: translateY(0); }
 
     .topic-setup-sheet h2 {
       margin: 0;
@@ -2507,6 +2518,8 @@
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, .5);
+      opacity: 0;
+      transition: opacity .35s ease;
     }
 
     .role-setup-sheet {
@@ -2520,7 +2533,12 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      transform: translateY(100%);
+      transition: transform .55s cubic-bezier(.32, 0, .15, 1);
     }
+
+    .role-setup-overlay.show .role-setup-scrim { opacity: 1; }
+    .role-setup-overlay.show .role-setup-sheet { transform: translateY(0); }
 
     .role-setup-intro {
       margin: 12px 0;
@@ -3426,6 +3444,44 @@
     .auth-signup-form .auth-primary { margin-top: -16px; }
     .auth-signup-note { margin: -16px 0 0; color: #454545; font-size: 11px; font-weight: 325; letter-spacing: .22px; line-height: 16px; text-align: center; }
 
+    .registration-screen {
+      overflow-y: auto;
+      background: #f6fbfb;
+    }
+
+    .registration-complete {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      min-height: 100%;
+      padding: 40px 16px 80px;
+    }
+
+    .registration-logo { width: 202px; height: 32px; object-fit: contain; object-position: left center; }
+    .registration-eyebrow { margin: 0 0 8px; color: var(--teal-dark); font-size: 14px; font-weight: 500; letter-spacing: 1.4px; line-height: 21px; text-transform: uppercase; }
+    .registration-title { margin: 0; color: var(--ink); font-size: 24px; font-weight: 700; line-height: 32px; }
+    .registration-features { display: grid; gap: 20px; padding: 20px; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .04); }
+    .registration-feature { display: flex; gap: 16px; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .registration-feature:last-child { padding-bottom: 0; border-bottom: 0; }
+    .registration-feature img { width: 32px; height: 32px; flex: 0 0 32px; }
+    .registration-feature strong { display: block; color: #000; font-size: 20px; font-weight: 500; line-height: 30px; letter-spacing: .4px; }
+    .registration-feature span { display: block; color: #595959; font-size: 14px; line-height: 21px; letter-spacing: .28px; }
+    .registration-copy { margin: 0; color: #595959; font-size: 16px; line-height: 24px; letter-spacing: .32px; text-align: center; }
+    .registration-actions { display: grid; gap: 12px; }
+    .registration-actions button { height: 48px; padding: 0 16px; border: 1px solid var(--border); box-shadow: 0 2px 0 rgba(0, 0, 0, .05); font-size: 16px; font-weight: 500; letter-spacing: .32px; }
+    .registration-actions [data-personalise] { border-color: var(--purple); background: var(--purple); color: #fff; }
+
+    .home-welcome-overlay { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+    .home-welcome-overlay.show { opacity: 1; pointer-events: auto; }
+    .home-welcome-sheet { position: relative; width: 100%; padding: 32px 16px 24px; background: #7f3689; color: #fff; border-radius: 12px 12px 0 0; transform: translateY(56px); transition: transform .4s cubic-bezier(.32, 0, .15, 1); }
+    .home-welcome-overlay.show .home-welcome-sheet { transform: translateY(0); }
+    .home-welcome-close { position: absolute; top: -16px; right: 16px; display: grid; width: 40px; height: 40px; place-items: center; background: var(--ink); }
+    .home-welcome-close img { width: 24px; height: 24px; filter: invert(1); }
+    .home-welcome-sheet p.home-welcome-wave { margin: 0 0 16px; font-size: 24px; line-height: 1; }
+    .home-welcome-sheet h2 { margin: 0 0 8px; font-size: 24px; line-height: 32px; }
+    .home-welcome-sheet > p:not(.home-welcome-wave) { margin: 0 0 24px; font-size: 16px; font-weight: 325; line-height: 24px; letter-spacing: .32px; }
+    .home-welcome-sheet button[data-welcome-tour] { width: 100%; height: 48px; background: var(--teal); color: #fff; font-size: 16px; font-weight: 500; letter-spacing: .32px; }
+
     .visitor-signup-callout {
       margin-top: 2px;
       padding: 22px 16px;
@@ -3474,6 +3530,7 @@
   <div id="app-shell">
     <div id="screen-home" class="screen active"></div>
     <div id="screen-reader" class="screen"></div>
+    <div id="screen-registration" class="screen registration-screen"></div>
     <div id="screen-auth-choice" class="screen auth-screen"></div>
     <div id="screen-auth-login" class="screen auth-screen"></div>
     <div id="screen-auth-signup" class="screen auth-screen auth-signup-screen"></div>
@@ -5154,6 +5211,7 @@
               <button class="topic-setup-save" type="button" data-save disabled>Save</button>
             </section>`;
           screenEl.appendChild(overlay);
+          requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add("show")));
           const selected = new Set();
           const save = overlay.querySelector("[data-save]");
           const options = overlay.querySelectorAll("[data-topic]");
@@ -5185,7 +5243,7 @@
             close();
             onDone();
           });
-          options[0].focus();
+          setTimeout(() => options[0].focus({ preventScroll: true }), 600);
         }
 
         function showRoleSetup(flow, onDone) {
@@ -5202,6 +5260,7 @@
           overlay.className = "role-setup-overlay";
           overlay.innerHTML = '<div class="role-setup-scrim"></div><section class="role-setup-sheet" role="dialog" aria-modal="true" aria-labelledby="role-setup-title"></section>';
           screenEl.appendChild(overlay);
+          requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add("show")));
           const sheet = overlay.querySelector(".role-setup-sheet");
           let stepIndex = 0;
           const selections = steps.map((step) => step.selected || null);
@@ -5331,6 +5390,7 @@
         const shell = document.getElementById("app-shell");
         const screenHome = document.getElementById("screen-home");
         const screenReader = document.getElementById("screen-reader");
+        const screenRegistration = document.getElementById("screen-registration");
         const screenAuthChoice = document.getElementById("screen-auth-choice");
         const screenAuthLogin = document.getElementById("screen-auth-login");
         const screenAuthSignup = document.getElementById("screen-auth-signup");
@@ -5343,9 +5403,10 @@
         let authLoginFromHome = false;
 
         function showScreen(name, hint) {
-          [screenHome, screenReader, screenAuthChoice, screenAuthLogin, screenAuthSignup].forEach((s) => s.classList.remove("active"));
+          [screenHome, screenReader, screenRegistration, screenAuthChoice, screenAuthLogin, screenAuthSignup].forEach((s) => s.classList.remove("active"));
           if (name === "home") screenHome.classList.add("active");
           if (name === "reader") { screenReader.classList.add("active"); reader1.activate(); if (hint) reader1.showSwipeHint(); }
+          if (name === "registration") screenRegistration.classList.add("active");
           if (name === "auth-choice") screenAuthChoice.classList.add("active");
           if (name === "auth-login") screenAuthLogin.classList.add("active");
           if (name === "auth-signup") screenAuthSignup.classList.add("active");
@@ -5356,6 +5417,49 @@
           authReturnScreen = screenHome.classList.contains("active") ? "home" : "reader";
           screenAuthChoice.querySelector(".auth-title").textContent = action.type === "bookmark" ? "Found something worth saving?" : "Make your daily catch-up more relevant";
           showScreen("auth-choice");
+        }
+
+        function showHomeWelcome() {
+          renderHome();
+          showScreen("home");
+          const overlay = document.createElement("section");
+          overlay.className = "home-welcome-overlay";
+          overlay.innerHTML = `
+            <div class="home-welcome-sheet" role="dialog" aria-modal="true" aria-labelledby="home-welcome-title">
+              <button class="home-welcome-close" type="button" data-welcome-close aria-label="Close welcome"><img src="assets/figma-onboarding-close.svg" alt=""></button>
+              <p class="home-welcome-wave" aria-hidden="true">👋</p>
+              <h2 id="home-welcome-title" class="serif">Welcome to GovInsider</h2>
+              <p>Stay up to date with the latest insights, stories, and events shaping government and the public sector across Asia.</p>
+              <button type="button" data-welcome-tour>Show me around</button>
+            </div>`;
+          screenHome.appendChild(overlay);
+          setTimeout(() => overlay.classList.add("show"), 900);
+          const close = () => { overlay.classList.remove("show"); setTimeout(() => overlay.remove(), 350); };
+          overlay.querySelector("[data-welcome-close]").addEventListener("click", close);
+          overlay.querySelector("[data-welcome-tour]").addEventListener("click", close);
+        }
+
+        function showRegistrationComplete() {
+          const features = [
+            ["Key takeaways", "Insights for you, in every story."],
+            ["Quick digest", "Get 3x more value from your reading time."],
+            ["Personalised content", "Skip the scroll. See content tailored to you."],
+            ["Bookmarks", "Skip the scroll. See content tailored to you."],
+          ];
+          screenRegistration.innerHTML = `
+            <main class="registration-complete">
+              <img class="registration-logo" src="${ASSETS.logoPng}" alt="GovInsider">
+              <div><p class="registration-eyebrow">Registration complete</p><h1 class="registration-title serif">Great news! You have unlocked exclusive features.</h1></div>
+              <section class="registration-features">${features.map(([title, copy]) => `<div class="registration-feature"><img src="assets/figma-onboarding-complete.svg" alt=""><div><strong>${title}</strong><span>${copy}</span></div></div>`).join("")}</section>
+              <p class="registration-copy">Want more personalised content? Tell us a little about your professional context.</p>
+              <div class="registration-actions"><button type="button" data-personalise>Personalise my experience</button><button type="button" data-later>Later</button></div>
+            </main>`;
+          screenRegistration.querySelector("[data-personalise]").addEventListener("click", () => {
+            showScreen("reader");
+            reader1.showCloseOnboarding(showHomeWelcome);
+          });
+          screenRegistration.querySelector("[data-later]").addEventListener("click", showHomeWelcome);
+          showScreen("registration");
         }
 
         function completeLogin(isSignUp = false) {
@@ -5381,10 +5485,19 @@
           welcomeShown = true;
           renderHome();
           showScreen("reader");
-          if (category === "curated") reader1.showTopicSetup(() => reader1.showPersonalisedHint());
-          else if (category === "peopleLikeYou") reader1.showRoleSetup("peers", () => reader1.showPersonalisedHint());
-          else if (category === "sector") reader1.showRoleSetup("sector", () => reader1.showPersonalisedHint());
-          else if (category === "industry") reader1.showRoleSetup("industry", () => reader1.showPersonalisedHint());
+          const showCategorySetup = category === "curated"
+            ? () => reader1.showTopicSetup(showRegistrationComplete)
+            : category === "peopleLikeYou"
+              ? () => reader1.showRoleSetup("peers", showRegistrationComplete)
+              : category === "sector"
+                ? () => reader1.showRoleSetup("sector", showRegistrationComplete)
+                : category === "industry"
+                  ? () => reader1.showRoleSetup("industry", showRegistrationComplete)
+                  : null;
+          if (showCategorySetup) {
+            reader1.showLoginHint();
+            setTimeout(showCategorySetup, 1400);
+          }
           else if (isSignUp) reader1.showLoginHint();
         }
 
@@ -5573,7 +5686,7 @@
         const reader1 = createReader({
           screenEl: screenReader,
           initialTabGetter: () => readerTab,
-          onClose: () => VISITOR_FLOW && isAuthenticated ? reader1.showCloseOnboarding(() => showScreen("home")) : showScreen("home"),
+          onClose: () => VISITOR_FLOW && isAuthenticated ? reader1.showCloseOnboarding(showHomeWelcome) : showScreen("home"),
           canAccess: () => isAuthenticated,
           onRequireLogin: requireLogin,
         });
