@@ -1007,7 +1007,7 @@
       content: "";
       position: absolute;
       top: 8px;
-      right: 92px;
+      right: 132px;
       bottom: 8px;
       left: 12px;
       z-index: 81;
@@ -1026,13 +1026,12 @@
       right: -8px;
       bottom: -14px;
       z-index: 81;
-      width: 82px;
+      width: 126px;
       background: #fff;
     }
 
     .reader-tour-open[data-tour-step="1"] .bottombar-left,
-    .reader-tour-open[data-tour-step="1"] [data-language-settings],
-    .reader-tour-open[data-tour-step="1"] [data-reading-settings],
+    .reader-tour-open[data-tour-step="2"] [data-reading-settings],
     .reader-tour-open[data-tour-step="2"] [data-bookmark],
     .reader-tour-open[data-tour-step="2"] [data-share] {
       position: relative;
@@ -1071,8 +1070,8 @@
 
     .reader-tour-toolbar-card {
       bottom: 112px;
-      left: 18%;
-      width: 74%;
+      left: 49%;
+      width: 44%;
       border-bottom-left-radius: 0;
     }
 
@@ -1085,10 +1084,49 @@
       border-right: 38px solid transparent;
     }
 
+    .reader-tour-like-card {
+      bottom: 150px;
+      left: 10%;
+      width: 28%;
+      border-bottom-left-radius: 0;
+    }
+
+    .reader-tour-like-card::after {
+      content: "";
+      position: absolute;
+      bottom: -24px;
+      left: 0;
+      border-top: 25px solid #eafafa;
+      border-right: 38px solid transparent;
+    }
+
+    .reader-tour-like-highlight {
+      position: absolute;
+      bottom: 80px;
+      left: 12px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      padding: 0 10px;
+      background: #fff;
+      color: #595959;
+      font-size: 12px;
+      font-weight: 360;
+    }
+
+    .reader-tour-like-highlight strong {
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 325;
+      line-height: 1;
+    }
+
     .reader-tour-bookmark-card {
-      top: 106px;
-      left: 25%;
-      width: 64%;
+      top: 214px;
+      left: 20%;
+      width: 60%;
       border-bottom-left-radius: 0;
     }
 
@@ -1102,9 +1140,9 @@
     }
 
     .reader-tour-bookmark-action {
-      bottom: 84px;
-      left: 26%;
-      width: 67%;
+      bottom: 120px;
+      left: 10%;
+      width: 76%;
       border-bottom-right-radius: 0;
     }
 
@@ -4742,11 +4780,13 @@
       <div class="share-host"></div>
       <div class="reader-tour" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="Quick Read guide">
         <div class="reader-tour-step" data-tour-step="1">
-          <div class="reader-tour-card reader-tour-toolbar-card"><p>Change content category by tapping the category name on this toolbar.</p><p>You can also change language and adjust summary style.</p><button class="reader-tour-action" type="button" data-tour-next>Next</button></div>
+          <div class="reader-tour-like-highlight" aria-hidden="true"><strong>♡</strong><span>I like this content</span></div>
+          <div class="reader-tour-card reader-tour-like-card">Like to get more similar content.</div>
+          <div class="reader-tour-card reader-tour-toolbar-card"><p>Change content category by tapping the category name on this toolbar.</p><button class="reader-tour-action" type="button" data-tour-next>Next</button></div>
         </div>
         <div class="reader-tour-step" data-tour-step="2" hidden>
           <div class="reader-tour-card reader-tour-bookmark-card">Double tap the article or use the Bookmark button to bookmark it.</div>
-          <div class="reader-tour-card reader-tour-bookmark-action"><p>Or use the bookmark button on the toolbar.</p><p>If you find the article interesting, you can share it using the Share button.</p><button class="reader-tour-action" type="button" data-tour-done>Got it</button></div>
+          <div class="reader-tour-card reader-tour-bookmark-action"><p>Or use the bookmark button on the toolbar.</p><p>You can also adjust summary style here.</p><p>If you find the article interesting, you can share it using the Share button.</p><button class="reader-tour-action" type="button" data-tour-done>Got it</button></div>
         </div>
       </div>
       <div class="welcome-overlay" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="Choose your Quick Digest reading style">
