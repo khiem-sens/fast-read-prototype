@@ -5317,7 +5317,7 @@
           render();
         }
 
-        function showCloseOnboarding(onDone) {
+        function showCloseOnboarding(onDone, onDismiss = onDone) {
           const sectorStep = { key: "sector", title: "Which sector are you in?", options: ["Government and Statutory Boards", "Private Sector"] };
           const industryStep = { key: "industry", title: "Which industry are you working in?", options: ["Agriculture & Food", "Building, Construction, Infrastructure & Public Works", "Communications & Information", "Culture, Community, Sports & Youth", "Defence – Air, Land, Sea", "Education", "Environment, Natural Resources, Energy, Sustainability", "Healthcare", "Transport", "Other"] };
           const steps = [
@@ -5335,7 +5335,11 @@
           screenEl.appendChild(overlay);
           let stepIndex = 0;
 
-          const close = () => {
+          const dismiss = () => {
+            overlay.remove();
+            onDismiss();
+          };
+          const complete = () => {
             overlay.remove();
             onDone();
           };
@@ -5367,7 +5371,7 @@
                 ${isName ? "" : '<p class="profile-onboarding-note"><img src="assets/figma-onboarding-info.svg" alt="">We gather this info to make your experience more personal and enjoyable.</p>'}
               </div>
               <button class="profile-onboarding-next" type="button" data-profile-next ${canAdvance(step) ? "" : "disabled"}>${stepIndex === steps.length - 1 ? "Complete" : "Next"}</button>`;
-            overlay.querySelector("[data-profile-close]").addEventListener("click", close);
+            overlay.querySelector("[data-profile-close]").addEventListener("click", dismiss);
             const next = overlay.querySelector("[data-profile-next]");
             overlay.querySelectorAll("[data-profile-option]").forEach((button) => button.addEventListener("click", () => {
               state.profile[step.key] = button.dataset.profileOption;
@@ -5401,7 +5405,7 @@
             });
             next.addEventListener("click", () => {
               if (!canAdvance(step)) return;
-              if (stepIndex === steps.length - 1) { close(); return; }
+              if (stepIndex === steps.length - 1) { complete(); return; }
               stepIndex += 1;
               render();
             });
@@ -5523,13 +5527,13 @@
           renderHome();
           showScreen("reader");
           const showCategorySetup = category === "curated"
-            ? () => reader1.showTopicSetup(showRegistrationComplete)
+            ? () => reader1.showTopicSetup(reader1.showPersonalisedHint)
             : category === "peopleLikeYou"
-              ? () => reader1.showRoleSetup("peers", showRegistrationComplete)
+              ? () => reader1.showRoleSetup("peers", reader1.showPersonalisedHint)
               : category === "sector"
-                ? () => reader1.showRoleSetup("sector", showRegistrationComplete)
+                ? () => reader1.showRoleSetup("sector", reader1.showPersonalisedHint)
                 : category === "industry"
-                  ? () => reader1.showRoleSetup("industry", showRegistrationComplete)
+                  ? () => reader1.showRoleSetup("industry", reader1.showPersonalisedHint)
                   : null;
           if (showCategorySetup) {
             reader1.showLoginHint();
@@ -5723,7 +5727,7 @@
         const reader1 = createReader({
           screenEl: screenReader,
           initialTabGetter: () => readerTab,
-          onClose: () => VISITOR_FLOW && isAuthenticated ? reader1.showCloseOnboarding(showHomeWelcome) : showScreen("home"),
+          onClose: () => VISITOR_FLOW && isAuthenticated ? reader1.showCloseOnboarding(showRegistrationComplete, () => showScreen("home")) : showScreen("home"),
           canAccess: () => isAuthenticated,
           onRequireLogin: requireLogin,
         });

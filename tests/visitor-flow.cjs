@@ -18,12 +18,12 @@ assert.match(html, /likedPosts\.add\(pendingAction\.postId\)/, "the pending like
 assert.match(html, /const category = pendingAction && pendingAction\.type === "category" \? pendingAction\.value : null;/, "login retains the requested category");
 assert.match(html, /readerState\.storyGroup = category === "curated" \|\| category === "topics" \? null : category;/, "login restores protected story-group categories");
 assert.match(html, /showCenterHint\("Exclusive features unlocked!\\nThank you for registering\."\)/, "login shows an account-unlocked message");
-assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?showTopicSetup\(showRegistrationComplete\)[\s\S]*?showRoleSetup\("peers", showRegistrationComplete\)[\s\S]*?showRoleSetup\("sector", showRegistrationComplete\)[\s\S]*?showRoleSetup\("industry", showRegistrationComplete\)/, "protected categories complete setup before the registration welcome screen");
+assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?showTopicSetup\(reader1\.showPersonalisedHint\)[\s\S]*?showRoleSetup\("peers", reader1\.showPersonalisedHint\)[\s\S]*?showRoleSetup\("sector", reader1\.showPersonalisedHint\)[\s\S]*?showRoleSetup\("industry", reader1\.showPersonalisedHint\)/, "protected categories show the in-reader personalised-content confirmation after setup");
 assert.match(html, /role-setup-scrim(?!" data-close)/, "role-personalisation flow cannot be dismissed outside the sheet");
 assert.match(html, /topic-setup-scrim" data-close[\s\S]*?addEventListener\("click", close\)/, "topic setup can be dismissed by clicking outside the sheet");
 assert.match(html, /function showRegistrationComplete\(\)[\s\S]*?Registration complete[\s\S]*?Personalise my experience[\s\S]*?data-later/, "registration completion offers professional-context onboarding or a later choice");
 assert.match(html, /function showHomeWelcome\(\)[\s\S]*?Welcome to GovInsider[\s\S]*?Show me around/, "returning home opens the welcome bottom sheet");
-assert.match(html, /showCloseOnboarding\(showHomeWelcome\)/, "finishing professional-context onboarding opens the homepage welcome sheet");
+assert.match(html, /showCloseOnboarding\(showRegistrationComplete, \(\) => showScreen\("home"\)\)/, "exiting Fast Read shows registration completion only after profile onboarding is completed");
 assert.match(html, /function completeLogin\(isSignUp = false\)[\s\S]*?else if \(isSignUp\) reader1\.showLoginHint\(\);/, "only sign-up shows the account-unlocked message");
 assert.match(html, /data-auth-complete[\s\S]*?completeLogin\(true\)/, "sign-up actions are marked as account creation");
 assert.match(html, /src="assets\/ph_confetti\.svg"/, "login notification uses the supplied confetti icon");
