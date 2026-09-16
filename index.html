@@ -2759,7 +2759,7 @@
       border-radius: 0;
       color: #232323;
       caret-color: #94409c;
-      font: 325 20px/30px var(--sans);
+      font: 325 20px/30px 'Gotham Narrow', system-ui, sans-serif;
       letter-spacing: .4px;
       outline: 0;
     }
@@ -5334,7 +5334,23 @@
           screenEl.appendChild(overlay);
           let stepIndex = 0;
 
-          const close = () => { overlay.remove(); onDone(); };
+          // Keep the header inside the visible viewport as the mobile keyboard pans it.
+          const viewport = window.visualViewport;
+          const syncViewport = () => {
+            if (!viewport) return;
+            overlay.style.top = `${viewport.offsetTop}px`;
+            overlay.style.height = `${viewport.height}px`;
+            overlay.style.bottom = "auto";
+          };
+          viewport?.addEventListener("resize", syncViewport);
+          viewport?.addEventListener("scroll", syncViewport);
+          syncViewport();
+          const close = () => {
+            viewport?.removeEventListener("resize", syncViewport);
+            viewport?.removeEventListener("scroll", syncViewport);
+            overlay.remove();
+            onDone();
+          };
           const renderProgress = () => steps.length < 2 ? "" : `<div class="profile-onboarding-progress" aria-label="Step ${stepIndex + 1} of ${steps.length}">${steps.map((_, index) => {
             const status = index < stepIndex ? "done" : index === stepIndex ? "active" : "";
             const marker = status === "done" ? '<img src="assets/figma-onboarding-complete.svg" alt="Completed">' : "";
@@ -5376,15 +5392,24 @@
             }));
             const firstName = overlay.querySelector("[data-profile-first]");
             const lastName = overlay.querySelector("[data-profile-last]");
-            const keepOnboardingAnchored = () => requestAnimationFrame(() => window.scrollTo(0, 0));
-            [firstName, lastName].filter(Boolean).forEach((input) => input.addEventListener("focus", keepOnboardingAnchored));
+            let activeNameField = firstName;
+            [firstName, lastName].filter(Boolean).forEach((input) => input.addEventListener("focus", () => { activeNameField = input; }));
             const focusLastName = () => lastName?.focus({ preventScroll: true });
-            firstName?.addEventListener("keydown", (event) => {
-              if (event.key === "Enter") { event.preventDefault(); focusLastName(); }
+            const handleNameReturn = (event) => {
+              event.preventDefault();
+              if (activeNameField === firstName) focusLastName();
+              else lastName?.blur();
+            };
+            [firstName, lastName].filter(Boolean).forEach((input) => {
+              input.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" && !event.isComposing) handleNameReturn(event);
+              });
+              input.addEventListener("beforeinput", (event) => {
+                if (event.inputType === "insertLineBreak" || event.inputType === "insertParagraph") handleNameReturn(event);
+              });
             });
             overlay.querySelector("[data-profile-name-form]")?.addEventListener("submit", (event) => {
-              event.preventDefault();
-              if (document.activeElement === firstName) focusLastName();
+              handleNameReturn(event);
             });
             next.addEventListener("click", () => {
               if (!canAdvance(step)) return;

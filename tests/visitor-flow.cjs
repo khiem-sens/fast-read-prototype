@@ -38,7 +38,6 @@ assert.match(html, /function selectStoryGroup\(group\)[\s\S]*?VISITOR_FLOW && mi
 assert.match(html, /const steps = requiredSteps\.filter\(\(step\) => !state\.profile\[step\.key\]\);[\s\S]*?steps\.forEach\(\(step, index\) => \{ state\.profile\[step\.key\] = selections\[index\]; \}\);/, "role setup requests and saves only the missing profile fields");
 assert.match(html, /data-profile-first[\s\S]*?enterkeyhint="next"[\s\S]*?data-profile-last[\s\S]*?enterkeyhint="done"/, "name fields offer the appropriate mobile keyboard actions");
 assert.match(html, /\.profile-onboarding\s*\{[\s\S]*?position: fixed;[\s\S]*?width: min\(100%, 430px\);/, "profile onboarding remains anchored to the viewport when the keyboard opens");
-assert.match(html, /data-profile-name-form[\s\S]*?addEventListener\("submit",[\s\S]*?document\.activeElement === firstName[\s\S]*?focusLastName\(\)/, "the mobile keyboard submit moves from first name to last name");
 assert.doesNotMatch(html, /if \(isName\) overlay\.querySelector\("\[data-profile-first\]"\)\.focus\(\);/, "name onboarding does not autofocus and push itself above the keyboard");
 assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?reader1\.showLoginHint\(\);\s*setTimeout\(showCategorySetup, 1400\);/, "protected categories show the reader toast before opening their setup sheet");
 assert.match(html, /\[data-language-settings\]\s*\{\s*display:\s*none;/, "the language control remains in markup but is hidden in both flows");

@@ -4,13 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Fast Read Visitor Prototype</title>
-    <style>
-      html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; }
-      body { overflow: hidden; background: #d8d8d8; }
-      iframe { display: block; }
-    </style>
+    <script>
+      const destination = new URL("../index.html?flow=visitor", location.href);
+      new URLSearchParams(location.search).forEach((value, key) => destination.searchParams.set(key, value));
+      destination.searchParams.set("flow", "visitor");
+      destination.hash = location.hash;
+      location.replace(destination.href);
+    </script>
   </head>
   <body>
-    <iframe src="../index.html?flow=visitor" title="Fast Read visitor flow"></iframe>
+    <a href="../index.html?flow=visitor">Open visitor flow</a>
   </body>
 </html>
