@@ -34,6 +34,8 @@ assert.match(html, /\.auth-back\s*\{[\s\S]*?width: max-content;[\s\S]*?padding: 
 assert.match(html, /\.auth-title\s*\{[\s\S]*?font-size: 28px;[\s\S]*?line-height: 37px;/, "auth heading matches the Figma type scale");
 assert.match(html, /authGoogle: "assets\/figma-auth-google\.svg"/, "auth uses the exported Figma provider icons");
 assert.match(html, /onClose: \(\) => VISITOR_FLOW && isAuthenticated \? reader1\.showCloseOnboarding/, "profile onboarding runs only after a visitor authenticates");
+assert.match(html, /function selectStoryGroup\(group\)[\s\S]*?VISITOR_FLOW && missingProfile[\s\S]*?showRoleSetup\(flow, \(\) => selectStoryGroup\(group\)\)/, "registered visitors complete missing profile data before opening peer, sector, or industry feeds");
+assert.match(html, /const steps = requiredSteps\.filter\(\(step\) => !state\.profile\[step\.key\]\);[\s\S]*?steps\.forEach\(\(step, index\) => \{ state\.profile\[step\.key\] = selections\[index\]; \}\);/, "role setup requests and saves only the missing profile fields");
 assert.match(html, /data-profile-first[\s\S]*?enterkeyhint="next"[\s\S]*?data-profile-last[\s\S]*?enterkeyhint="done"/, "name fields offer the appropriate mobile keyboard actions");
 assert.match(html, /\.profile-onboarding\s*\{[\s\S]*?position: fixed;[\s\S]*?width: min\(100%, 430px\);/, "profile onboarding remains anchored to the viewport when the keyboard opens");
 assert.match(html, /data-profile-name-form[\s\S]*?addEventListener\("submit",[\s\S]*?document\.activeElement === firstName[\s\S]*?focusLastName\(\)/, "the mobile keyboard submit moves from first name to last name");

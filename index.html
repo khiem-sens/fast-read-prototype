@@ -4957,13 +4957,32 @@
           if (e.key === "Escape") closeTour();
         });
 
+        function selectStoryGroup(group) {
+          const requiredProfile = group === "peopleLikeYou"
+            ? ["jobLevel", "jobFunction", "sector", "industry"]
+            : group === "sector" ? ["sector"] : group === "industry" ? ["sector", "industry"] : [];
+          const missingProfile = requiredProfile.some((field) => !state.profile[field]);
+          if (VISITOR_FLOW && missingProfile) {
+            const flow = group === "peopleLikeYou" ? "peers" : group;
+            showRoleSetup(flow, () => selectStoryGroup(group));
+            return;
+          }
+          state.storyGroup = group;
+          state.surpriseActive = false;
+          state.selectedTopics = [];
+          state.topicSelectionGroup = null;
+          shufflePosts();
+          if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0;
+          rerenderFeeds();
+        }
+
         const topStories = createTopStoriesPanel(screenEl, state, {
           isAccessRestricted: () => !canAccess(),
           onRequireLogin,
           onSaveTopics() { state.summaryRecs = { latest: null, curated: null }; rerenderFeeds(); },
           onSelectTopics(topics, explore = state.topicSelectionGroup === "explore") { state.topicSelectionGroup = topics.length ? (explore ? "explore" : "read") : null; state.storyGroup = topics.length ? null : state.storyGroup; state.surpriseActive = false; shufflePosts(); if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0; rerenderFeeds(); },
           onSelectFeedTab(tab) { state.activeTab = tab; state.storyGroup = null; state.selectedTopics = []; state.topicSelectionGroup = null; state.surpriseActive = false; shufflePosts(); state.latestIndex = 0; state.curatedIndex = 0; refreshTabUI(); rerenderFeeds(); slider.setActive(tab, false); },
-          onSelectStoryGroup(group) { state.storyGroup = group; state.surpriseActive = false; state.selectedTopics = []; state.topicSelectionGroup = null; shufflePosts(); if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0; rerenderFeeds(); },
+          onSelectStoryGroup: selectStoryGroup,
         });
         const readingModeSheet = createReadingModeSheet(
           screenEl,
@@ -5249,15 +5268,17 @@
         }
 
         function showRoleSetup(flow, onDone) {
-          const sectorStep = { title: "Which sector are you in?", options: ["Government and Statutory Boards", "Private Sector"] };
-          const industryStep = { title: "Which industry are you working in?", options: ["Agriculture & Food", "Building, Construction, Infrastructure & Public Works", "Communications & Information", "Culture, Community, Sports & Youth", "Defence – Air, Land, Sea", "Education", "Environment, Natural Resources, Energy, Sustainability", "Healthcare", "Transport", "Other"] };
+          const sectorStep = { key: "sector", title: "Which sector are you in?", options: ["Government and Statutory Boards", "Private Sector"] };
+          const industryStep = { key: "industry", title: "Which industry are you working in?", options: ["Agriculture & Food", "Building, Construction, Infrastructure & Public Works", "Communications & Information", "Culture, Community, Sports & Youth", "Defence – Air, Land, Sea", "Education", "Environment, Natural Resources, Energy, Sustainability", "Healthcare", "Transport", "Other"] };
           const peerSteps = [
-            { title: "You’re a...", options: ["C-level/President/Owner/Chairman/Permanent Secretary/ Deputy Secretary", "Director/GM/Head of Department", "Assistant Director/ Deputy Director", "Manager/ Specialist", "Executive/Officer", "Academia", "Other"], selected: "Assistant Director/ Deputy Director" },
-            { title: "What are you responsible for?", options: ["Accounting/Finance/Procurement", "Admin/Operations/Customer Service", "Audit/Compliance/Legal", "HR/Training", "IT/Technology", "Marketing/Communications", "Policy/Planning/Strategy", "Other"] },
+            { key: "jobLevel", title: "You’re a...", options: ["C-level/President/Owner/Chairman/Permanent Secretary/ Deputy Secretary", "Director/GM/Head of Department", "Assistant Director/ Deputy Director", "Manager/ Specialist", "Executive/Officer", "Academia", "Other"], selected: "Assistant Director/ Deputy Director" },
+            { key: "jobFunction", title: "What are you responsible for?", options: ["Accounting/Finance/Procurement", "Admin/Operations/Customer Service", "Audit/Compliance/Legal", "HR/Training", "IT/Technology", "Marketing/Communications", "Policy/Planning/Strategy", "Other"] },
             sectorStep,
             industryStep,
           ];
-          const steps = flow === "sector" ? [sectorStep] : flow === "industry" ? [sectorStep, industryStep] : peerSteps;
+          const requiredSteps = flow === "sector" ? [sectorStep] : flow === "industry" ? [sectorStep, industryStep] : peerSteps;
+          const steps = requiredSteps.filter((step) => !state.profile[step.key]);
+          if (!steps.length) { onDone(); return; }
           const overlay = document.createElement("div");
           overlay.className = "role-setup-overlay";
           overlay.innerHTML = '<div class="role-setup-scrim"></div><section class="role-setup-sheet" role="dialog" aria-modal="true" aria-labelledby="role-setup-title"></section>';
@@ -5265,7 +5286,7 @@
           requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add("show")));
           const sheet = overlay.querySelector(".role-setup-sheet");
           let stepIndex = 0;
-          const selections = steps.map((step) => step.selected || null);
+          const selections = steps.map((step) => state.profile[step.key] || step.selected || null);
           const render = () => {
             const step = steps[stepIndex];
             sheet.innerHTML = `
@@ -5283,17 +5304,7 @@
             sheet.querySelector("[data-role-next]").addEventListener("click", () => {
               if (!selections[stepIndex]) return;
               if (stepIndex === steps.length - 1) {
-                if (flow === "peers") {
-                  state.profile.jobLevel = selections[0];
-                  state.profile.jobFunction = selections[1];
-                  state.profile.sector = selections[2];
-                  state.profile.industry = selections[3];
-                } else if (flow === "sector") {
-                  state.profile.sector = selections[0];
-                } else if (flow === "industry") {
-                  state.profile.sector = selections[0];
-                  state.profile.industry = selections[1];
-                }
+                steps.forEach((step, index) => { state.profile[step.key] = selections[index]; });
                 overlay.remove();
                 onDone(selections);
                 return;
