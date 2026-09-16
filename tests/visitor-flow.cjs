@@ -40,6 +40,6 @@ assert.match(html, /data-profile-first[\s\S]*?enterkeyhint="next"[\s\S]*?data-pr
 assert.match(html, /\.profile-onboarding\s*\{[\s\S]*?position: fixed;[\s\S]*?width: min\(100%, 430px\);/, "profile onboarding remains anchored to the viewport when the keyboard opens");
 assert.doesNotMatch(html, /if \(isName\) overlay\.querySelector\("\[data-profile-first\]"\)\.focus\(\);/, "name onboarding does not autofocus and push itself above the keyboard");
 assert.match(html, /const showCategorySetup = category === "curated"[\s\S]*?reader1\.showLoginHint\(\);\s*setTimeout\(showCategorySetup, 1400\);/, "protected categories show the reader toast before opening their setup sheet");
-assert.match(html, /\[data-language-settings\]\s*\{\s*display:\s*none;/, "the language control remains in markup but is hidden in both flows");
+assert.match(html, /\.bottombar-icons\s+\[data-language-settings\]\s*\{\s*display:\s*none;/, "the language control remains in markup but is hidden in both flows");
 
 console.log("PASS: visitor access, authentication, and pending bookmark handoff are wired");
