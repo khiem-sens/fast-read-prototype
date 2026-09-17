@@ -4042,11 +4042,11 @@
       </button>`).join("");
         return `
       <div class="summary-content">
-        <div class="summary-streak" data-summary-streak aria-live="polite">
+        ${VISITOR_FLOW ? "" : `<div class="summary-streak" data-summary-streak aria-live="polite">
           <div class="summary-streak-days" aria-hidden="true">${streakDayStrip()}</div>
           <p class="summary-streak-title" data-streak-title></p>
           <p class="summary-streak-copy">Come back tomorrow to keep the streak!</p>
-        </div>
+        </div>`}
         <h2 class="summary-title">You’ve covered ${item.coveredTopics} topics today.</h2>
         ${coveredTopicLabels.length ? `<div class="summary-covered-topics" data-collapsed="${hasHiddenCoveredTopics}">${coveredTopicLabels.map((topic) => `<span>${esc(topicLabel(topic))}</span>`).join("")}</div>` : ""}
         ${hasHiddenCoveredTopics ? '<button class="summary-covered-more" type="button" data-summary-covered-more>View More</button>' : ""}
@@ -5101,7 +5101,7 @@
         }
 
         function maybeShowSummaryStreak() {
-          if (summaryStreakShown || currentItem().kind !== "summary") return;
+          if (VISITOR_FLOW || summaryStreakShown || currentItem().kind !== "summary") return;
           summaryStreakShown = true;
           const streak = recordSummaryVisit();
           const pane = state.activeTab === "latest" ? slider.paneLatest : slider.paneCurated;
