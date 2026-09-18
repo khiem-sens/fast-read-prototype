@@ -1956,6 +1956,180 @@
       transform: scale(.98);
     }
 
+    .showing-caught-up .reader-tour-trigger,
+    .showing-caught-up .vfeed-dots,
+    .showing-caught-up .reader-likebar,
+    .showing-caught-up .reader-bottombar {
+      display: none;
+    }
+
+    .caught-up-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100%;
+      box-sizing: border-box;
+      padding: 96px 40px 34px;
+      background: #f5f5f5;
+      color: #232323;
+      text-align: center;
+    }
+
+    .caught-up-title {
+      margin: 0;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 31px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.7px;
+    }
+
+    .caught-up-copy {
+      max-width: 320px;
+      margin: 16px 0 0;
+      color: #606060;
+      font-size: 16px;
+      font-weight: 325;
+      line-height: 1.45;
+    }
+
+    .caught-up-card {
+      width: 100%;
+      margin-top: 28px;
+      padding: 20px 12px 14px;
+      box-sizing: border-box;
+      border: 1px solid #dedede;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(20, 20, 20, .03);
+    }
+
+    .caught-up-card-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .caught-up-card-copy {
+      margin: 12px auto 0;
+      color: #606060;
+      font-size: 16px;
+      font-weight: 325;
+      line-height: 1.35;
+    }
+
+    .caught-up-carousel {
+      display: flex;
+      width: 100%;
+      margin-top: 14px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .caught-up-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .caught-up-slide {
+      flex: 0 0 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      scroll-snap-align: center;
+    }
+
+    .caught-up-slide-title {
+      min-height: 28px;
+      margin: 0 0 4px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .caught-up-slide img {
+      display: block;
+      width: 194px;
+      max-width: 100%;
+      height: 220px;
+      object-fit: contain;
+    }
+
+    .caught-up-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .caught-up-dot {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border-radius: 999px;
+      background: #d9d9d9;
+      transition: width .18s ease, background .18s ease;
+    }
+
+    .caught-up-dot[aria-current="true"] {
+      width: 28px;
+      background: #12b7b0;
+    }
+
+    .caught-up-signup,
+    .caught-up-top-stories {
+      width: 100%;
+      min-height: 40px;
+      border-radius: 1px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .1px;
+    }
+
+    .caught-up-signup {
+      margin-top: 12px;
+      background: var(--purple);
+      box-shadow: 0 2px 0 rgba(107, 42, 113, .32);
+    }
+
+    .caught-up-top-stories {
+      margin-top: 24px;
+      background: #12b7b0;
+      box-shadow: 0 2px 0 rgba(6, 107, 101, .35);
+    }
+
+    .caught-up-home {
+      margin-top: 28px;
+      padding: 0;
+      color: #232323;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .caught-up-signup:active,
+    .caught-up-top-stories:active,
+    .caught-up-home:active {
+      transform: scale(.98);
+    }
+
+    @media (max-height: 700px) {
+      .caught-up-content { padding-top: 76px; }
+      .caught-up-card { margin-top: 20px; }
+      .caught-up-slide img { height: 184px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .caught-up-dot { transition: none; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .summary-streak.show {
         animation: none;
@@ -3599,6 +3773,10 @@
       visitorBanner: "assets/figma-visitor-banner.png",
       visitorHeadlineFeature: "assets/figma-visitor-headline-feature.png",
       visitorHeadlineSecondary: "assets/figma-visitor-headline-secondary.png",
+      visitorCaughtUpHomepage: "assets/visitor-caught-up/personalised-homepage.svg",
+      visitorCaughtUpDigest: "assets/visitor-caught-up/quick-digest.svg",
+      visitorCaughtUpBookmarks: "assets/visitor-caught-up/bookmarks.svg",
+      visitorCaughtUpTopStories: "assets/visitor-caught-up/top-stories.svg",
     });
 
     const TOOLBAR_BOOKMARK = `<svg class="toolbar-bookmark-icon" viewBox="0 0 36 38" aria-hidden="true" focusable="false">
@@ -4057,6 +4235,47 @@
       </div>`;
       }
 
+      function renderVisitorCaughtUpContent() {
+        const features = [
+          ["Personalised Homepage", ASSETS.visitorCaughtUpHomepage],
+          ["Quick Digest", ASSETS.visitorCaughtUpDigest],
+          ["Bookmarks", ASSETS.visitorCaughtUpBookmarks],
+          ["Top Stories", ASSETS.visitorCaughtUpTopStories],
+        ];
+        return `
+      <div class="caught-up-content">
+        <h2 class="caught-up-title">You’ve all caught up!</h2>
+        <p class="caught-up-copy">You’ve reached your free Latest articles for today. Check out this week’s Top Stories or come back tomorrow for more.</p>
+        <button class="caught-up-top-stories" type="button" data-caught-up-top-stories>Read Top stories this week</button>
+        <button class="caught-up-home" type="button" data-back-home>${esc(tr("backHome"))}</button>
+        <section class="caught-up-card" aria-labelledby="caught-up-card-title">
+          <h3 id="caught-up-card-title" class="caught-up-card-title">Get more from GovInsider</h3>
+          <p class="caught-up-card-copy">Sign up for free to unlock Quick Digest, personalise your feed, bookmark, and more.</p>
+          <div class="caught-up-carousel" data-caught-up-carousel aria-label="GovInsider member features">
+            ${features.map(([title, image]) => `<figure class="caught-up-slide"><figcaption class="caught-up-slide-title">${esc(title)}</figcaption><img src="${image}" alt="${esc(title)} preview" draggable="false"></figure>`).join("")}
+          </div>
+          <div class="caught-up-dots" role="tablist" aria-label="Feature preview slides">
+            ${features.map(([title], index) => `<button class="caught-up-dot" type="button" data-caught-up-dot="${index}" aria-label="Show ${esc(title)}" aria-current="${index === 0}"></button>`).join("")}
+          </div>
+          <button class="caught-up-signup" type="button" data-caught-up-signup>Sign up</button>
+        </section>
+      </div>`;
+      }
+
+      function wireCaughtUpCarousel(root) {
+        const carousel = root.querySelector("[data-caught-up-carousel]");
+        if (!carousel) return;
+        const dots = Array.from(root.querySelectorAll("[data-caught-up-dot]"));
+        const setActive = () => {
+          const index = Math.max(0, Math.min(dots.length - 1, Math.round(carousel.scrollLeft / Math.max(carousel.clientWidth, 1))));
+          dots.forEach((dot, dotIndex) => dot.setAttribute("aria-current", String(dotIndex === index)));
+        };
+        carousel.addEventListener("scroll", setActive, { passive: true });
+        dots.forEach((dot, index) => dot.addEventListener("click", () => {
+          carousel.scrollTo({ left: index * carousel.clientWidth, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        }));
+      }
+
       const READING_MODE_ICONS = {
         hurry: "2x",
         quick: "1.5x",
@@ -4091,6 +4310,7 @@
       function renderFeedItem(item, readingMode) {
         if (item.kind === "ad") return renderAdContent(item);
         if (item.kind === "event") return renderEventContent(item);
+        if (item.kind === "caught-up") return renderVisitorCaughtUpContent();
         if (item.kind === "summary") return renderSummaryContent(item);
         return renderPostContent(item, readingMode);
       }
@@ -4164,6 +4384,7 @@
             it.className = "vfeed-item" + (item.kind === "ad" || item.kind === "event" ? "" : " scrollable hide-scrollbar");
             it.style.height = h + "px";
             it.innerHTML = renderFeedItem(item, opts.getReadingMode && opts.getReadingMode());
+            if (item.kind === "caught-up") wireCaughtUpCarousel(it);
             tape.appendChild(it);
             itemEls.push(it);
             scrollEls.push(item.kind === "ad" || item.kind === "event" ? null : it);
@@ -4291,16 +4512,18 @@
           }
         }, { passive: false });
 
-        window.addEventListener("resize", () => {
+        function syncLayout() {
           const h = getH();
           itemEls.forEach((it) => { it.style.height = h + "px"; });
           snap(opts.getIndex());
-        });
+        }
+        window.addEventListener("resize", syncLayout);
 
         return {
           render,
           snapCurrent(animated) { snap(opts.getIndex(), animated); renderDots(); },
           resetScroll,
+          syncLayout,
         };
       }
 
@@ -4745,8 +4968,9 @@
             showAllCoveredTopics: state.showAllCoveredTopics,
           };
         }
+        function caughtUpItem() { return { kind: "caught-up" }; }
         function extendedPosts(tab) { return state.extended[tab].reduce((acc, g) => acc.concat(g.items), []); }
-        function feedLatest() { return buildFeed(filteredLatest()).concat(extendedPosts("latest")).concat([summaryItem("latest")]); }
+        function feedLatest() { return buildFeed(VISITOR_FLOW ? filteredLatest().slice(0, 4) : filteredLatest()).concat(extendedPosts("latest")).concat([VISITOR_FLOW ? caughtUpItem() : summaryItem("latest")]); }
         function feedCurated() { return buildFeed(filteredCurated()).concat(extendedPosts("curated")).concat([summaryItem("curated")]); }
 
         function currentFeed() { return state.activeTab === "latest" ? feedLatest() : feedCurated(); }
@@ -4938,7 +5162,11 @@
             button.setAttribute("aria-pressed", String(button.dataset.readingMode === screenEl.dataset.readingMode));
           });
           const item = currentItem();
+          const caughtUp = Boolean(item && item.kind === "caught-up");
+          const caughtUpChanged = screenEl.classList.contains("showing-caught-up") !== caughtUp;
           screenEl.classList.toggle("showing-summary", item && item.kind === "summary");
+          screenEl.classList.toggle("showing-caught-up", caughtUp);
+          if (caughtUpChanged) (state.activeTab === "latest" ? vLatest : vCurated).syncLayout();
           const isAd = item && item.kind === "ad";
           const isEvent = item && item.kind === "event";
           screenEl.classList.toggle("showing-ad", isAd);
@@ -5212,6 +5440,8 @@
           }
           if (e.target.closest("[data-enter-digest]")) { enterDigest(); return; }
           if (e.target.closest("[data-event-later]")) { goToNextItem(); return; }
+          if (e.target.closest("[data-caught-up-signup]")) { onRequireLogin({ type: "signup" }); return; }
+          if (e.target.closest("[data-caught-up-top-stories]")) { selectStoryGroup("topStoriesWeek"); return; }
           const topicCard = e.target.closest("[data-summary-topic]");
           if (topicCard) {
             e.preventDefault();
