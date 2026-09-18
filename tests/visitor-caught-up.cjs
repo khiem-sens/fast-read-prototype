@@ -11,7 +11,8 @@ assert.match(html, /VISITOR_FLOW \? filteredLatest\(\)\.slice\(0, 4\) : filtered
 assert.match(html, /\.showing-caught-up \.reader-bottombar \{\s*display: none;/);
 assert.match(html, /function syncLayout\(\)[\s\S]*?itemEls\.forEach[\s\S]*?snap\(opts\.getIndex\(\)\);/);
 assert.match(html, /caughtUpChanged\) \(state\.activeTab === "latest" \? vLatest : vCurated\)\.syncLayout\(\);/);
-assert.match(html, /caught-up-copy[\s\S]*?data-caught-up-top-stories[\s\S]*?data-back-home[\s\S]*?caught-up-card/);
+assert.match(html, /caught-up-copy[\s\S]*?caught-up-card[\s\S]*?data-caught-up-signup[\s\S]*?data-caught-up-top-stories[\s\S]*?data-back-home/);
+assert.match(html, /data-caught-up-top-stories[\s\S]*?src="assets\/double-arrow\.svg"/);
 assert.match(html, /\.caught-up-slide\s*\{[\s\S]*?margin:\s*0;/);
 assert.match(html, /carousel\.addEventListener\("scroll", setActive, \{ passive: true \}\);/);
 
