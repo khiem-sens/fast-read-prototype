@@ -10,10 +10,11 @@ const visitor = fs.readFileSync(path.join(root, "visitor", "index.html"), "utf8"
 assert.match(visitor, /index\.html\?flow=visitor/, "visitor URL starts the isolated visitor mode");
 assert.match(html, /button\.dataset\.feedTab !== "latest"/, "only Latest is a public feed tab");
 assert.match(html, /button\.dataset\.storyGroup !== "topStoriesWeek"/, "Top Stories This Week remains public");
-assert.match(html, /function feedLatest\(\) \{ return buildFeed\(VISITOR_FLOW \? filteredLatest\(\)\.slice\(0, 4\) : filteredLatest\(\)\)\.concat\(extendedPosts\("latest"\)\)\.concat\(\[VISITOR_FLOW \? caughtUpItem\(\) : summaryItem\("latest"\)\]\); \}/, "visitors see the caught-up screen after four Latest posts");
+assert.match(html, /function feedLatest\(\)[\s\S]*?filteredLatest\(\)\.slice\(0, 4\)[\s\S]*?caughtUpItem\(\)[\s\S]*?state\.topStoriesExpanded \? feed\.concat\(buildFeed\(state\.latestPosts\.slice\(4, 8\)\)\) : feed/, "visitors see the caught-up screen after four Latest posts and can continue into Top Stories");
 assert.match(html, /function renderVisitorCaughtUpContent\(\)[\s\S]*?You’ve all caught up![\s\S]*?data-caught-up-carousel[\s\S]*?data-caught-up-signup[\s\S]*?data-caught-up-top-stories/, "the caught-up screen offers a four-slide member preview and its two visitor actions");
 assert.match(html, /visitorCaughtUpHomepage[\s\S]*?visitorCaughtUpDigest[\s\S]*?visitorCaughtUpBookmarks[\s\S]*?visitorCaughtUpTopStories/, "the caught-up carousel uses all four supplied phone mockups");
 assert.match(html, /function wireCaughtUpCarousel\(root\)[\s\S]*?carousel\.scrollTo/, "feature preview dots move the native horizontal carousel");
+assert.match(html, /function openVisitorTopStories\(\)[\s\S]*?state\.topStoriesExpanded = true;[\s\S]*?state\.latestIndex = firstTopStoryIndex;[\s\S]*?vLatest\.snapCurrent\(true\)/, "Top Stories opens after the caught-up slide without leaving the reader");
 assert.match(html, /onRequireLogin\(\{ type: "bookmark", postId: post\.id \}\)/, "bookmarking asks visitors to sign in");
 assert.match(html, /onRequireLogin\(\{ type: "like", postId: post\.id \}\)/, "liking asks visitors to sign in");
 assert.match(html, /action\.type === "bookmark" \? "Found something worth saving\?" : "Make your daily catch-up more relevant"/, "bookmark sign-up uses saving-focused copy");

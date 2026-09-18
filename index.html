@@ -1958,8 +1958,11 @@
 
     .showing-caught-up .reader-tour-trigger,
     .showing-caught-up .vfeed-dots,
-    .showing-caught-up .reader-likebar,
-    .showing-caught-up .reader-bottombar {
+    .showing-caught-up .reader-likebar {
+      display: none;
+    }
+
+    .showing-caught-up .bottombar-icons {
       display: none;
     }
 
@@ -1991,6 +1994,10 @@
       font-size: 16px;
       font-weight: 325;
       line-height: 1.45;
+    }
+
+    .caught-up-copy-followup {
+      margin-top: 24px;
     }
 
     .caught-up-card {
@@ -3780,10 +3787,10 @@
       visitorBanner: "assets/figma-visitor-banner.png",
       visitorHeadlineFeature: "assets/figma-visitor-headline-feature.png",
       visitorHeadlineSecondary: "assets/figma-visitor-headline-secondary.png",
-      visitorCaughtUpHomepage: "assets/visitor-caught-up/personalised-homepage.svg",
-      visitorCaughtUpDigest: "assets/visitor-caught-up/quick-digest.svg",
-      visitorCaughtUpBookmarks: "assets/visitor-caught-up/bookmarks.svg",
-      visitorCaughtUpTopStories: "assets/visitor-caught-up/top-stories.svg",
+      visitorCaughtUpHomepage: "assets/visitor-caught-up/personalised-homepage.png",
+      visitorCaughtUpDigest: "assets/visitor-caught-up/quick-digest.png",
+      visitorCaughtUpBookmarks: "assets/visitor-caught-up/bookmarks.png",
+      visitorCaughtUpTopStories: "assets/visitor-caught-up/top-stories.png",
     });
 
     const TOOLBAR_BOOKMARK = `<svg class="toolbar-bookmark-icon" viewBox="0 0 36 38" aria-hidden="true" focusable="false">
@@ -4242,19 +4249,21 @@
       </div>`;
       }
 
-      function renderVisitorCaughtUpContent() {
+      function renderVisitorCaughtUpContent(topStories = false) {
         const features = [
           ["Personalised Homepage", ASSETS.visitorCaughtUpHomepage],
           ["Quick Digest", ASSETS.visitorCaughtUpDigest],
           ["Bookmarks", ASSETS.visitorCaughtUpBookmarks],
           ["Top Stories", ASSETS.visitorCaughtUpTopStories],
         ];
+        const cardTitleId = topStories ? "top-stories-caught-up-card-title" : "caught-up-card-title";
         return `
       <div class="caught-up-content">
         <h2 class="caught-up-title">You’ve all caught up!</h2>
-        <p class="caught-up-copy">You’ve reached your 4 free Latest articles for today. Check out this week’s Top Stories or come back tomorrow for more.</p>
-        <section class="caught-up-card" aria-labelledby="caught-up-card-title">
-          <h3 id="caught-up-card-title" class="caught-up-card-title">Get more from GovInsider</h3>
+        <p class="caught-up-copy">${topStories ? "You’ve reached your 4 free Top Stories articles for today." : "You’ve reached your 4 free Latest articles for today. Check out this week’s Top Stories or come back tomorrow for more."}</p>
+        ${topStories ? '<p class="caught-up-copy caught-up-copy-followup">Come back tomorrow for more.</p>' : ""}
+        <section class="caught-up-card" aria-labelledby="${cardTitleId}">
+          <h3 id="${cardTitleId}" class="caught-up-card-title">Get more from GovInsider</h3>
           <p class="caught-up-card-copy">Unlock Quick Digest, personalise your feed, bookmark, and more.</p>
           <div class="caught-up-carousel" data-caught-up-carousel aria-label="GovInsider member features">
             ${features.map(([title, image]) => `<figure class="caught-up-slide"><figcaption class="caught-up-slide-title">${esc(title)}</figcaption><img src="${image}" alt="${esc(title)} preview" draggable="false"></figure>`).join("")}
@@ -4264,7 +4273,7 @@
           </div>
           <button class="caught-up-signup" type="button" data-caught-up-signup>Create your free account</button>
         </section>
-        <button class="caught-up-top-stories" type="button" data-caught-up-top-stories>Read Top stories this week<img class="caught-up-top-stories-icon" src="assets/double-arrow.svg" alt=""></button>
+        ${topStories ? "" : '<button class="caught-up-top-stories" type="button" data-caught-up-top-stories>Read Top stories this week<img class="caught-up-top-stories-icon" src="assets/double-arrow.svg" alt=""></button>'}
         <button class="caught-up-home" type="button" data-back-home>${esc(tr("backHome"))}</button>
       </div>`;
       }
@@ -4317,7 +4326,7 @@
       function renderFeedItem(item, readingMode) {
         if (item.kind === "ad") return renderAdContent(item);
         if (item.kind === "event") return renderEventContent(item);
-        if (item.kind === "caught-up") return renderVisitorCaughtUpContent();
+        if (item.kind === "caught-up" || item.kind === "top-stories-caught-up") return renderVisitorCaughtUpContent(item.kind === "top-stories-caught-up");
         if (item.kind === "summary") return renderSummaryContent(item);
         return renderPostContent(item, readingMode);
       }
@@ -4391,7 +4400,7 @@
             it.className = "vfeed-item" + (item.kind === "ad" || item.kind === "event" ? "" : " scrollable hide-scrollbar");
             it.style.height = h + "px";
             it.innerHTML = renderFeedItem(item, opts.getReadingMode && opts.getReadingMode());
-            if (item.kind === "caught-up") wireCaughtUpCarousel(it);
+            if (item.kind === "caught-up" || item.kind === "top-stories-caught-up") wireCaughtUpCarousel(it);
             tape.appendChild(it);
             itemEls.push(it);
             scrollEls.push(item.kind === "ad" || item.kind === "event" ? null : it);
@@ -4952,6 +4961,8 @@
           coveredTopicCount: 2,
           coveredTopicLabels: ["Guest Column", "Artificial Intelligence"],
           showAllCoveredTopics: false,
+          topStoriesExpanded: false,
+          topStoriesStartIndex: null,
           // Topic cards tapped on the summary slide append their own group of
           // demo posts here (keyed by tab), rendered as normal feed slides
           // before the single summary at the end of the feed.
@@ -4976,8 +4987,12 @@
           };
         }
         function caughtUpItem() { return { kind: "caught-up" }; }
+        function topStoriesCaughtUpItem() { return { kind: "top-stories-caught-up" }; }
         function extendedPosts(tab) { return state.extended[tab].reduce((acc, g) => acc.concat(g.items), []); }
-        function feedLatest() { return buildFeed(VISITOR_FLOW ? filteredLatest().slice(0, 4) : filteredLatest()).concat(extendedPosts("latest")).concat([VISITOR_FLOW ? caughtUpItem() : summaryItem("latest")]); }
+        function feedLatest() {
+          const feed = buildFeed(VISITOR_FLOW ? filteredLatest().slice(0, 4) : filteredLatest()).concat(extendedPosts("latest")).concat([VISITOR_FLOW ? caughtUpItem() : summaryItem("latest")]);
+          return VISITOR_FLOW && state.topStoriesExpanded ? feed.concat(buildFeed(state.latestPosts.slice(4, 8)), [topStoriesCaughtUpItem()]) : feed;
+        }
         function feedCurated() { return buildFeed(filteredCurated()).concat(extendedPosts("curated")).concat([summaryItem("curated")]); }
 
         function currentFeed() { return state.activeTab === "latest" ? feedLatest() : feedCurated(); }
@@ -5169,7 +5184,7 @@
             button.setAttribute("aria-pressed", String(button.dataset.readingMode === screenEl.dataset.readingMode));
           });
           const item = currentItem();
-          const caughtUp = Boolean(item && item.kind === "caught-up");
+          const caughtUp = Boolean(item && (item.kind === "caught-up" || item.kind === "top-stories-caught-up"));
           const caughtUpChanged = screenEl.classList.contains("showing-caught-up") !== caughtUp;
           screenEl.classList.toggle("showing-summary", item && item.kind === "summary");
           screenEl.classList.toggle("showing-caught-up", caughtUp);
@@ -5209,7 +5224,9 @@
               </div>
             </button>`;
             } else {
-              const label = state.storyGroup ? STORY_GROUP_LABELS[state.storyGroup] : tr(state.activeTab);
+              const showingAppendedTopStories = state.storyGroup === "topStoriesWeek" && state.topStoriesExpanded && currentIndex() >= state.topStoriesStartIndex;
+              const showStoryGroup = state.storyGroup && (state.storyGroup !== "topStoriesWeek" || !state.topStoriesExpanded || showingAppendedTopStories);
+              const label = showStoryGroup ? STORY_GROUP_LABELS[state.storyGroup] : tr(state.activeTab);
               bottombarLeft.innerHTML = `
             <button class="topstories-btn" data-open-topstories>
               <span class="label">${esc(label).replace(/(\S+)$/, '$1&nbsp;<img class="topstories-chevron" src="assets/chevron.svg" alt="">')}</span>
@@ -5260,6 +5277,18 @@
           shufflePosts();
           if (state.activeTab === "latest") state.latestIndex = 0; else state.curatedIndex = 0;
           rerenderFeeds();
+        }
+
+        function openVisitorTopStories() {
+          const firstTopStoryIndex = feedLatest().length;
+          state.topStoriesExpanded = true;
+          state.topStoriesStartIndex = firstTopStoryIndex;
+          state.storyGroup = "topStoriesWeek";
+          rerenderFeeds();
+          state.latestIndex = firstTopStoryIndex;
+          vLatest.snapCurrent(true);
+          vLatest.resetScroll(firstTopStoryIndex);
+          refreshBottombar();
         }
 
         const topStories = createTopStoriesPanel(screenEl, state, {
@@ -5448,7 +5477,7 @@
           if (e.target.closest("[data-enter-digest]")) { enterDigest(); return; }
           if (e.target.closest("[data-event-later]")) { goToNextItem(); return; }
           if (e.target.closest("[data-caught-up-signup]")) { onRequireLogin({ type: "signup" }); return; }
-          if (e.target.closest("[data-caught-up-top-stories]")) { selectStoryGroup("topStoriesWeek"); return; }
+          if (e.target.closest("[data-caught-up-top-stories]")) { openVisitorTopStories(); return; }
           const topicCard = e.target.closest("[data-summary-topic]");
           if (topicCard) {
             e.preventDefault();
